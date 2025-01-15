@@ -198,36 +198,12 @@ def process_large_csv(input_path, output_dir, chunksize=10_000):
     all_gene_families = set()
     people_list = None
     regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
+    tensor_data = []
 
-    for chunk_ in pd.read_csv(input_path, chunksize=chunksize):
-        chunk = chunk_[chunk_.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
+    for pre_chunk in pd.read_csv(input_path, chunksize=chunksize):
+
+        chunk = pre_chunk[pre_chunk.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
         chunk[['gene_family', 'Bacteria']] = chunk.iloc[:, 0].str.split('|', expand=True)
-        if people_list is None:
-            people_list = chunk.columns[1:-2]
-        all_bacteria.update(chunk['Bacteria'].unique())
-        all_gene_families.update(chunk['gene_family'].unique())
-
-    bacteria_list = sorted(all_bacteria)
-    gene_families_list = sorted(all_gene_families)
-    bacteria_idx_map = {bacteria: idx for idx, bacteria in enumerate(bacteria_list)}
-    gene_family_idx_map = {gene_family: idx for idx, gene_family in enumerate(gene_families_list)}
-
-    tensor = np.zeros((len(people_list), len(bacteria_list), len(gene_families_list)))
-
-    for chunk in pd.read_csv(input_path, chunksize=chunksize):
-        chunk[['gene_family', 'Bacteria']] = chunk.iloc[:, 0].str.split('|', expand=True)
-        df_array = chunk.to_numpy()
-
-        for row in df_array:
-            bacteria_idx = bacteria_idx_map[row[-1]]
-            gene_family_idx = gene_family_idx_map[row[-2]]
-            for person_idx, person in enumerate(people_list):
-                tensor[person_idx, bacteria_idx, gene_family_idx] += row[person_idx + 1]   
-
-    np.save(os.path.join(output_dir, "tensor.npy"), tensor) 
-    np.save(os.path.join(output_dir, "sample_list.npy"), np.array(people_list))
-    np.save(os.path.join(output_dir, "bacteria_list.npy"), np.array(bacteria_list))
-    np.save(os.path.join(output_dir, "gene_families_list.npy"), np.array(gene_families_list))
 
 def load_pathway_data_from_csv(input_file, output_dir):
     
