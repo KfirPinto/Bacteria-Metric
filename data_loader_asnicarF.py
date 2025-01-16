@@ -140,6 +140,79 @@ def align_tensor(tensor, bacteria_list, pathway_list, bacteria_union, pathway_un
             aligned_tensor[:, new_b_idx, new_p_idx] = tensor[:, b_idx, p_idx]
     return aligned_tensor   
 
+def process_big_data(input_path, output_dir):
+
+    """
+    iterate over the family genes
+    if there is no bacteria with non-zero value at any of the samples -> delete the gene family
+    print the count of non-zero gene families. 
+    """
+
+    pre_df = pd.read_csv(input_path)
+
+    # Filter rows based on the regex pattern
+    regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
+    df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
+
+    # Split the first column into 'gene_family' and 'Bacteria'
+    df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
+    df = df.drop(df.columns[0], axis=1)
+
+    # Extract unique lists for bacteria, gene families, and people (samples)
+    bacteria_list = df['Bacteria'].unique() # df.columns[-1]
+    gene_families_list = df['gene_family'].unique() # df.columns[-2]
+    people_list = df.columns[0:-2]
+
+    # Create mapping dictionaries for indexing
+    bacteria_idx_map = {bacteria: idx for idx, bacteria in enumerate(bacteria_list)}
+    gene_family_idx_map = {gene_family: idx for idx, gene_family in enumerate(gene_families_list)}
+
+    # Convert the DataFrame to a NumPy array
+    df_array = df.to_numpy()
+    filtered_gene_family_idx_map = {}
+
+    for gene_family, idx in gene_family_idx_map.items():
+        filtered_df = df.loc[df['gene_family'] == gene_family]
+        sample_data = filtered_df.iloc[:, :-2]
+        row_sums = sample_data.sum(axis=1)
+        if (row_sums != 0).any():
+            filtered_gene_family_idx_map[gene_family] = idx
+
+    print(f"The size of the dictionary is: {len(filtered_gene_family_idx_map)}")
+
+    indices = []
+    values = []
+
+    # Populate data for sparse representation
+    for row in df.to_numpy():
+        bacteria_idx = bacteria_idx_map[row[-1]]  # 'Bacteria' is the last column
+        gene_family_idx = filtered_gene_family_idx_map[row[-2]]  # 'gene_family' is in the second-to-last column
+        for person_idx, person in enumerate(people_list):
+            value = row[person_idx + 1]
+            if value != 0:  # Only store non-zero values
+                indices.append([person_idx, bacteria_idx, gene_family_idx])
+                values.append(value)
+
+    # Convert indices and values to PyTorch tensors
+    indices = torch.tensor(indices, dtype=torch.long).t()  # Transpose for sparse representation
+    values = torch.tensor(values, dtype=torch.float32)
+
+    # Define the sparse tensor
+    tensor_shape = (len(people_list), len(bacteria_list), len(gene_families_list))
+    sparse_tensor = torch.sparse_coo_tensor(indices, values, size=tensor_shape)
+
+    # Print the sparse tensor details for verification
+    print(f"Sparse tensor shape: {sparse_tensor.shape}")
+    print(f"Number of non-zero elements: {sparse_tensor._nnz()}")
+
+    # Save the sparse tensor and metadata
+    os.makedirs(output_dir, exist_ok=True)
+    torch.save(sparse_tensor, os.path.join(output_dir, "sparse_tensor.pt"))
+    np.save(os.path.join(output_dir, "sample_list.npy"), people_list)
+    np.save(os.path.join(output_dir, "bacteria_list.npy"), bacteria_list)
+    np.save(os.path.join(output_dir, "gene_families_list.npy"), gene_families_list)
+
+
 def load_gene_families_data_from_csv(input_path, output_dir):
 
     pre_df = pd.read_csv(input_path)
@@ -150,11 +223,12 @@ def load_gene_families_data_from_csv(input_path, output_dir):
 
     # Split the first column into 'gene_family' and 'Bacteria'
     df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
+    df = df.drop(df.columns[0], axis=1)
 
     # Extract unique lists for bacteria, gene families, and people (samples)
-    bacteria_list = df['Bacteria'].unique()
-    gene_families_list = df['gene_family'].unique()
-    people_list = df.columns[1:-2]
+    bacteria_list = df['Bacteria'].unique() # df.columns[-1]
+    gene_families_list = df['gene_family'].unique() # df.columns[-2]
+    people_list = df.columns[0:-2]
 
     # Create mapping dictionaries for indexing
     bacteria_idx_map = {bacteria: idx for idx, bacteria in enumerate(bacteria_list)}
@@ -162,7 +236,18 @@ def load_gene_families_data_from_csv(input_path, output_dir):
 
     # Convert the DataFrame to a NumPy array
     df_array = df.to_numpy()
+    filtered_gene_family_idx_map = {}
 
+    for gene_family, idx in gene_family_idx_map.items():
+        filtered_df = df.loc[df['gene_family'] == gene_family]
+        sample_data = filtered_df.iloc[:, :-2]
+        row_sums = sample_data.sum(axis=1)
+        if (row_sums != 0).any():
+            filtered_gene_family_idx_map[gene_family] = idx
+
+    print(f"The size of the dictionary is: {len(filtered_gene_family_idx_map)}")
+
+"""
     # Initialize a tensor with zeros
     tensor = np.zeros((len(people_list), len(bacteria_list), len(gene_families_list)))
 
@@ -183,27 +268,12 @@ def load_gene_families_data_from_csv(input_path, output_dir):
     np.save(os.path.join(output_dir, "bacteria_list.npy"), bacteria_list)
     np.save(os.path.join(output_dir, "gene_families_list.npy"), gene_families_list)
 
-    """
+    
     t1 = np.where(people_list == 'MV_FEI2_t1Q14')[0][0]  
     t2 = bacteria_idx_map['g__Klebsiella.s__Klebsiella_pneumoniae']
     t3 = gene_family_idx_map['UniRef90_J7QIY4']
     print(tensor[t1][t2][t3])
     """
-
-def process_large_csv(input_path, output_dir, chunksize=10_000):
-
-    os.makedirs(output_dir, exist_ok=True)
-
-    all_bacteria = set()
-    all_gene_families = set()
-    people_list = None
-    regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
-    tensor_data = []
-
-    for pre_chunk in pd.read_csv(input_path, chunksize=chunksize):
-
-        chunk = pre_chunk[pre_chunk.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
-        chunk[['gene_family', 'Bacteria']] = chunk.iloc[:, 0].str.split('|', expand=True)
 
 def load_pathway_data_from_csv(input_file, output_dir):
     
