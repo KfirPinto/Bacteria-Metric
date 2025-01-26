@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import torch as torch
 import os
+import csv
 
 def intersect(gene_families_path, pathways_path, output_gene_families, output_pathways):
 
@@ -141,27 +142,49 @@ def align_tensor(tensor, bacteria_list, pathway_list, bacteria_union, pathway_un
     return aligned_tensor   
 
 def process_big_data(input_path, output_dir):
-
-    """
-    iterate over the family genes
-    if there is no bacteria with non-zero value at any of the samples -> delete the gene family
-    print the count of non-zero gene families. 
-    """
-
-    pre_df = pd.read_csv(input_path)
-
-    # Filter rows based on the regex pattern
+       
+    unique_gene_families = set()
     regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
-    df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
+    chunk_size = 10000
+    output_file = os.path.join(output_dir, "edited_data.csv")
+    is_first_chunk = True
 
-    # Split the first column into 'gene_family' and 'Bacteria'
-    df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
-    df = df.drop(df.columns[0], axis=1)
+    with pd.read_csv(input_path, chunksize=chunk_size) as reader:
+        for i, chunk in enumerate(reader):
+            print(f"chunk num: {i}")
+            chunk_filtered = chunk[chunk.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
 
+            # Enumerate through rows and remove those with invalid split_result
+            rows_to_keep = []
+            gene_family = []
+            bacteria = []
+
+            for idx, value in enumerate(chunk_filtered.iloc[:, 0]):
+                split_result = value.split('|')
+                if len(split_result) == 2:
+                    rows_to_keep.append(idx)
+                    gene_family.append(split_result[0])
+                    bacteria.append(split_result[1])
+
+            # Filter chunk_filtered to keep only valid rows
+            chunk_filtered = chunk_filtered.iloc[rows_to_keep].reset_index(drop=True)
+
+            # Add gene_family and bacteria columns to chunk_filtered
+            chunk_filtered['gene_family'] = gene_family
+            chunk_filtered['bacteria'] = bacteria
+            chunk_filtered.to_csv(output_file, mode='a', index=False, header=is_first_chunk)
+            is_first_chunk = False
+            # Update the set with unique gene families
+            unique_gene_families.update(chunk_filtered['gene_family'].dropna().unique())
+
+    df = pd.read_csv(output_file)
+    ### filter the gene families list, update the data frame and continue on ###
+
+    """
     # Extract unique lists for bacteria, gene families, and people (samples)
-    bacteria_list = df['Bacteria'].unique() # df.columns[-1]
+    bacteria_list = df['Bacteria'].unique()  # df.columns[-1]
     gene_families_list = df['gene_family'].unique() # df.columns[-2]
-    people_list = df.columns[0:-2]
+    people_list = df.columns[1:-2]
 
     # Create mapping dictionaries for indexing
     bacteria_idx_map = {bacteria: idx for idx, bacteria in enumerate(bacteria_list)}
@@ -174,12 +197,23 @@ def process_big_data(input_path, output_dir):
     for gene_family, idx in gene_family_idx_map.items():
         filtered_df = df.loc[df['gene_family'] == gene_family]
         sample_data = filtered_df.iloc[:, :-2]
-        row_sums = sample_data.sum(axis=1)
-        if (row_sums != 0).any():
-            filtered_gene_family_idx_map[gene_family] = idx
+        non_zero_count = (sample_data != 0).sum().sum() 
+
+        if (non_zero_count > 0):
+            filtered_gene_family_idx_map[gene_family] = {
+                'index': idx,
+                'non_zero_count': non_zero_count  
+            }
 
     print(f"The size of the dictionary is: {len(filtered_gene_family_idx_map)}")
-
+    output_file = "gene_family_data.csv"
+    with open(output_file, mode="w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["gene_family", "index", "non_zero_count"])
+        
+        for gene_family, data in filtered_gene_family_idx_map.items():
+            writer.writerow([gene_family, data["index"], data["non_zero_count"]])
+    
     indices = []
     values = []
 
@@ -188,10 +222,17 @@ def process_big_data(input_path, output_dir):
         bacteria_idx = bacteria_idx_map[row[-1]]  # 'Bacteria' is the last column
         gene_family_idx = filtered_gene_family_idx_map[row[-2]]  # 'gene_family' is in the second-to-last column
         for person_idx, person in enumerate(people_list):
-            value = row[person_idx + 1]
+            value = row[person_idx]
             if value != 0:  # Only store non-zero values
                 indices.append([person_idx, bacteria_idx, gene_family_idx])
                 values.append(value)
+
+    
+    with open("output.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        for item in values:
+            writer.writerow([item])
+    
 
     # Convert indices and values to PyTorch tensors
     indices = torch.tensor(indices, dtype=torch.long).t()  # Transpose for sparse representation
@@ -211,7 +252,7 @@ def process_big_data(input_path, output_dir):
     np.save(os.path.join(output_dir, "sample_list.npy"), people_list)
     np.save(os.path.join(output_dir, "bacteria_list.npy"), bacteria_list)
     np.save(os.path.join(output_dir, "gene_families_list.npy"), gene_families_list)
-
+    """
 
 def load_gene_families_data_from_csv(input_path, output_dir):
 
@@ -247,7 +288,7 @@ def load_gene_families_data_from_csv(input_path, output_dir):
 
     print(f"The size of the dictionary is: {len(filtered_gene_family_idx_map)}")
 
-"""
+
     # Initialize a tensor with zeros
     tensor = np.zeros((len(people_list), len(bacteria_list), len(gene_families_list)))
 
@@ -273,7 +314,7 @@ def load_gene_families_data_from_csv(input_path, output_dir):
     t2 = bacteria_idx_map['g__Klebsiella.s__Klebsiella_pneumoniae']
     t3 = gene_family_idx_map['UniRef90_J7QIY4']
     print(tensor[t1][t2][t3])
-    """
+    
 
 def load_pathway_data_from_csv(input_file, output_dir):
     
@@ -307,10 +348,10 @@ def load_pathway_data_from_csv(input_file, output_dir):
     np.save(os.path.join(output_dir, "pathway_list.npy"), pathway_list)
     np.save(os.path.join(output_dir, "sample_list.npy"), people_list)
 
-    """
+
     sanity check
     t1 = np.where(people_list =='MV_FEM5_t3Q15')[0][0]
     t2 = np.where(bacteria_list == 'g__Bifidobacterium.s__Bifidobacterium_bifidum')[0][0]
     t3 = np.where(pathway_list == 'UNINTEGRATED')[0][0]
     print(tensor[t1][t2][t3])
-    """
+    
