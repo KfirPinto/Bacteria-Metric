@@ -348,8 +348,6 @@ def load_pathway_data_from_csv(input_file, output_dir):
     np.save(os.path.join(output_dir, "pathway_list.npy"), pathway_list)
     np.save(os.path.join(output_dir, "sample_list.npy"), people_list)
 
-
-    sanity check
     t1 = np.where(people_list =='MV_FEM5_t3Q15')[0][0]
     t2 = np.where(bacteria_list == 'g__Bifidobacterium.s__Bifidobacterium_bifidum')[0][0]
     t3 = np.where(pathway_list == 'UNINTEGRATED')[0][0]
