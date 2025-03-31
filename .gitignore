@@ -1,7 +1,5 @@
-\trial-2021/
 \data/
 \.venv/
 \.idea/
 \__pycache__/
-
-
+data/raw_data/
