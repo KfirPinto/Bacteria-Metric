@@ -1,3 +1,7 @@
-data/
 \trial-2021/
-__pycache__/
+\data/
+\.venv/
+\.idea/
+\__pycache__/
+
+
