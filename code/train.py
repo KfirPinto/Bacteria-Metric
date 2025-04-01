@@ -1,47 +1,60 @@
 import torch
 from torch import nn, optim
+import torch.nn.functional as F
 
-def custom_loss(data_tensor, person_data, bacteria_data, model):
+
+def custom_loss(X, X_reconstructed, H_ij):
     """
-    data_tensor: Original data tensor (bacteria_dim × gene_dim × people_dim)
-    person_data: Tensor of person input data (people_dim × bacteria_dim × gene_dim)
-    bacteria_data: Tensor of bacteria input data (bacteria_dim × people_dim × gene_dim)
-    model: Instance of the SplitAutoencoder
+    X: original input tensor (n, d, gene_dim)
+    X_reconstructed: model output (n, d, gene_dim)
+    H_ij: encoded tensor (n, d, 2b)
     """
-    total_loss = 0.0
 
-    for person_idx in range(person_data.size(0)):
-        # Get person and bacteria inputs
-        person_input = person_data[person_idx]  # Shape: (bacteria_dim × gene_dim)
-        bacteria_input = bacteria_data[:, person_idx, :]  # Shape: (bacteria_dim × gene_dim)
+    n, d, gene_dim = X.shape
+    b = H_ij.shape[-1] // 2
 
-        # Forward pass
-        reconstructed, person_embedding, bacteria_embedding = model(person_input, bacteria_input)
+    # Split H_ij to H_i, H_j
+    H_i = H_ij[..., :b]  # shape: (n, d, b)
+    H_j = H_ij[..., b:]  # shape: (n, d, b)
 
-        # Calculate loss over all bacteria
-        for bacteria_idx in range(bacteria_data.size(0)):
-            gene_expression = data_tensor[bacteria_idx, :, person_idx]  # Original gene expression
-            prediction = reconstructed[bacteria_idx]  # Reconstructed gene expression
-            loss = torch.sum((gene_expression - prediction) ** 2)  # MSE for bacteria i in person j
-            total_loss += loss
+    # 1. reconstruction
+    recon_loss = F.mse_loss(X_reconstructed, X, reduction='mean')  # MSE mean
 
+    # 2. sample consistency 
+    sample_consistency_loss = 0.0
+    for i in range(n):
+        for j in range(d):
+            for k in range(j+1, d):  
+                sample_consistency_loss += torch.norm(H_j[i, j] - H_j[i, k], p=2)
+
+    # 3. bacteria consistency
+    bacteria_consistency_loss = 0.0
+    for j in range(d):
+        for i in range(n):
+            for k in range(i+1, n):
+                bacteria_consistency_loss += torch.norm(H_i[i, j] - H_i[k, j], p=2)
+
+    # normalize by amount of arguments at the summation
+    sample_consistency_loss /= (n * d * (d-1) / 2)  # d choose 2 = d * (d-1)/2
+    bacteria_consistency_loss /= (n * (n-1) / 2 * d)  # n choose 2 = n * (n-1)/2
+
+    # combine all parts of loss function
+    total_loss = recon_loss + sample_consistency_loss + bacteria_consistency_loss
     return total_loss
 
-def train_model(model, data_tensor, person_data, bacteria_data, num_epochs=100, learning_rate=0.001):
+def train_model(model, data_tensor, num_epochs=100, learning_rate=0.001):
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     for epoch in range(num_epochs):
-        model.train()
-        optimizer.zero_grad()
-
-        # Compute loss
-        loss = custom_loss(data_tensor, person_data, bacteria_data, model)
+        model.train()  
+        optimizer.zero_grad()  
+        X_reconstructed, H_ij = model(data_tensor)  
+        loss = custom_loss(data_tensor, X_reconstructed, H_ij)  
         loss.backward()
         optimizer.step()
-
-        # Print loss every 10 epochs
+        
         if (epoch + 1) % 10 == 0:
-            print(f"Epoch {epoch+1}/{num_epochs}, Loss: {loss.item()}")
+            print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {loss.item()}")
 
     return model
 
