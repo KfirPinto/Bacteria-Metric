@@ -42,19 +42,36 @@ def custom_loss(X, X_reconstructed, H_ij):
     total_loss = recon_loss + sample_consistency_loss + bacteria_consistency_loss
     return total_loss
 
-def train_model(model, data_tensor, num_epochs=100, learning_rate=0.001):
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
+def train_model(model, data_tensor, num_epochs=100, learning_rate=0.001):
+    """
+    Training loop for the SplitAutoencoder model.
+
+    Args:
+    - model: the neural network model
+    - data_tensor: input tensor of gene expressions
+    - num_epochs: number of training epochs
+    - learning_rate: optimizer learning rate
+    """
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    
     for epoch in range(num_epochs):
-        model.train()  
-        optimizer.zero_grad()  
-        X_reconstructed, H_ij = model(data_tensor)  
-        loss = custom_loss(data_tensor, X_reconstructed, H_ij)  
+        model.train()
+
+        # Forward pass
+        X = data_tensor
+        X_encoded, X_reconstructed = model(X)
+
+        # Compute the loss
+        loss = custom_loss(X, X_reconstructed, X_encoded)
+
+        # Backward pass
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        
-        if (epoch + 1) % 10 == 0:
-            print(f"Epoch {epoch + 1}/{num_epochs}, Loss: {loss.item()}")
 
+        if (epoch + 1) % 10 == 0:
+            print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}")
+    
     return model
 
