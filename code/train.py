@@ -43,35 +43,41 @@ def custom_loss(X, X_reconstructed, H_ij):
     return total_loss
 
 
-def train_model(model, data_tensor, num_epochs=100, learning_rate=0.001):
+def train_model(model, train_loader, num_epochs=100, learning_rate=0.001):
     """
     Training loop for the SplitAutoencoder model.
 
     Args:
     - model: the neural network model
-    - data_tensor: input tensor of gene expressions
+    - train_loader: DataLoader for the training data 
     - num_epochs: number of training epochs
     - learning_rate: optimizer learning rate
     """
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    
+    model.train()
+
     for epoch in range(num_epochs):
-        model.train()
+        print(f"Epoch {epoch + 1}/{num_epochs}")
+        running_loss = 0.0
+
+        for data in train_loader:
+            X = data  # Get a batch of data (inputs)
+            optimizer.zero_grad()
 
         # Forward pass
-        X = data_tensor
-        X_encoded, X_reconstructed = model(X)
+        X_encoded, X_decoded = model(X) 
 
         # Compute the loss
-        loss = custom_loss(X, X_reconstructed, X_encoded)
+        loss = custom_loss(X, X_decoded, X_encoded)
 
         # Backward pass
-        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-        if (epoch + 1) % 10 == 0:
-            print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}")
+        running_loss += loss.item()
+
+      # Print the loss for the current epoch
+        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {running_loss/len(train_loader)}")
     
     return model
 
