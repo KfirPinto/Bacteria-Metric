@@ -7,38 +7,48 @@ import numpy as np
 
 def main():
     # load data
-    tensor_path = "data/data_files/gene_families/Intersection/tensor.npy"
+    tensor_path = "/home/bcrlab/barsapi1/Bacteria-Metric/data/data_files/gene_families/Intersection/tensor.npy"
     data_tensor = np.load(tensor_path) 
     print(f"Data tensor shape: {data_tensor.shape}")
 
-    # Convert to torch tensor
+    # Convert to torch tensor and shuffle
     data_tensor = torch.tensor(data_tensor, dtype=torch.float32)
+    indices = torch.randperm(data_tensor.size(0)) # Shuffle indices of the *first* dimension
+    data_tensor = data_tensor[indices]
 
     # Split the tensor along the bacteria dimension (dimension 1)
     num_bacteria = data_tensor.shape[1]
-    split_index = int(0.7 * num_bacteria)  # 70% for training
+    split_index_train = int(0.7 * num_bacteria)  # 70% for training
+    split_index_val = int(0.85 * num_bacteria)  # 15% for validation, the remaining 15% for testing
 
-    # Split the tensor into training and testing sets (70-30)
-    train_tensor = data_tensor[:, :split_index, :]  # First 70% of bacteria
-    test_tensor = data_tensor[:, split_index:, :]   # Remaining 30% of bacteria
+    # Split the tensor into training, validation and test sets (70-15-15)
+    # 'x:' from index x to the end
+    # ':x' from the start to index x
+    train_tensor = data_tensor[:, :split_index_train, :] 
+    val_tensor = data_tensor[:, split_index_train:split_index_val, :]   
+    test_tensor = data_tensor[:, split_index_val:, :]
+    np.save("test_tensor.npy", test_tensor.numpy())  # Save the test tensor for performance evaluation
 
-     # Create Dataset instances for training and testing
-    train_dataset = TensorDataset(train_tensor)
-    test_dataset = TensorDataset(test_tensor)
+    # Create Dataset instances for training and testing
+    batch_size = 64  
+    train_dataset = TensorDataset(train_tensor, batch_size)
+    val_dataset = TensorDataset(val_tensor, batch_size)
+    test_dataset = TensorDataset(test_tensor, batch_size)
 
     # Use DataLoader to load batches of data
-    batch_size = 64  # Choose an appropriate batch size
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_dataset, shuffle=True, collate_fn=TensorDataset.custom_collate_fn, num_workers=4)
+    val_loader = DataLoader(val_dataset, shuffle=False, collate_fn=TensorDataset.custom_collate_fn, num_workers=4)
+    test_loader = DataLoader(test_dataset, shuffle=False, collate_fn=TensorDataset.custom_collate_fn, num_workers=4)
 
     # Initialize model
     gene_dim = data_tensor.shape[-1]  # gene dim
-    embedding_dim = 8  # Example embedding size (2b, where b=4) so the decoding would be from dimension 4 to gene_dim
+    embedding_dim = 8  # Example embedding size 
+
     model = SplitAutoencoder(gene_dim=gene_dim, embedding_dim=embedding_dim)
 
     # Train the model
     print("Training model...")
-    trained_model = train_model(model, train_tensor, num_epochs=5, learning_rate=0.001)
+    trained_model = train_model(model, train_loader, val_loader, num_epochs=10, learning_rate=0.001)
 
     # Save trained model
     trained_model_path = "split_autoencoder.pt"

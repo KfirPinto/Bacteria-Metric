@@ -1,6 +1,7 @@
 import torch
 from torch import nn, optim
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
 
 
 def custom_loss(X, X_reconstructed, H_ij):
@@ -43,41 +44,76 @@ def custom_loss(X, X_reconstructed, H_ij):
     return total_loss
 
 
-def train_model(model, train_loader, num_epochs=100, learning_rate=0.001):
+def train_model(model, train_loader, val_loader, num_epochs=100, learning_rate=0.001):
     """
     Training loop for the SplitAutoencoder model.
 
     Args:
     - model: the neural network model
-    - train_loader: DataLoader for the training data 
+    - train_loader: DataLoader for the training data
+    - val loader: DataLoader for the validation data 
     - num_epochs: number of training epochs
     - learning_rate: optimizer learning rate
     """
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    model.train()
+    train_losses = []
+    val_losses = []
 
     for epoch in range(num_epochs):
-        print(f"Epoch {epoch + 1}/{num_epochs}")
+
+        model.train()
         running_loss = 0.0
 
-        for data in train_loader:
-            X = data  # Get a batch of data (inputs)
+        for batch in train_loader:
+            print(f"Batch shape: {batch.shape}")  # Debugging line to check batch shape
             optimizer.zero_grad()
 
-        # Forward pass
-        X_encoded, X_decoded = model(X) 
+            # Forward pass
+            X_encoded, X_decoded = model(batch) 
 
-        # Compute the loss
-        loss = custom_loss(X, X_decoded, X_encoded)
+            # Compute the loss
+            loss = custom_loss(batch, X_decoded, X_encoded)
 
-        # Backward pass
-        loss.backward()
-        optimizer.step()
+            # Backward pass
+            loss.backward()
+            optimizer.step()
 
-        running_loss += loss.item()
+            running_loss += loss.item()
 
-      # Print the loss for the current epoch
-        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {running_loss/len(train_loader)}")
-    
+        model.eval()
+        val_loss = 0.0
+
+        with torch.no_grad():
+            for data in val_loader:
+                X = data
+                X_encoded, X_decoded = model(X)
+                loss = custom_loss(X, X_decoded, X_encoded)
+                val_loss += loss.item()
+
+        avg_train_loss = running_loss / len(train_loader)
+        avg_val_loss = val_loss / len(val_loader)
+
+        train_losses.append(avg_train_loss)
+        val_losses.append(avg_val_loss)
+
+        print(f"Epoch {epoch+1}/{num_epochs}, "
+              f"Train Loss: {avg_train_loss:.4f}, " 
+              f"Validatation Loss: {avg_val_loss:.4f}") 
+        
+    plot_losses(train_losses, val_losses)
+
     return model
 
+# Plotting function to visualize train and validation losses
+def plot_losses(train_losses, val_losses, filename="loss_plot.png"):
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(train_losses, label="Train Loss")
+    plt.plot(val_losses, label="Validation Loss")
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Train and Validation Loss per Epoch')
+    plt.legend()
+    plt.savefig(filename)
+    print(f"Plot saved to {filename}")
+    plt.close()
