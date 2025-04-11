@@ -44,7 +44,7 @@ def custom_loss(X, X_reconstructed, H_ij):
     return total_loss
 
 
-def train_model(model, train_loader, val_loader, num_epochs=100, learning_rate=0.001):
+def train_model(model, train_loader, val_loader, device, num_epochs=100, learning_rate=0.001):
     """
     Training loop for the SplitAutoencoder model.
 
@@ -64,7 +64,8 @@ def train_model(model, train_loader, val_loader, num_epochs=100, learning_rate=0
         model.train()
         running_loss = 0.0
 
-        for batch in train_loader:
+        for batch, _ in train_loader:
+            batch = batch.to(device)  # Move batch to the same device as the model
             print(f"Batch shape: {batch.shape}")  # Debugging line to check batch shape
             optimizer.zero_grad()
 

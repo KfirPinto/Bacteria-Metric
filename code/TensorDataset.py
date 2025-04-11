@@ -3,8 +3,11 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 
 class TensorDataset(Dataset):
-    def __init__(self, tensor, batch_size):    
+    def __init__(self, tensor, samples, bacteria, gene_families, batch_size):    
         self.tensor = tensor
+        self.samples = samples
+        self.bacteria = bacteria
+        self.gene_families = gene_families
         self.batch_size = batch_size
 
     def __len__(self):
@@ -15,8 +18,11 @@ class TensorDataset(Dataset):
         # Retrieve a whole batch of data.
         start_idx = idx * self.batch_size # calculate the start index for the batch
         end_idx = min(start_idx + self.batch_size, self.tensor.size(0)) 
-        batch = self.tensor[start_idx:end_idx]  
-        return batch
+        batch_tensor = self.tensor[start_idx:end_idx]
+        batch_samples = self.samples[start_idx:end_idx]
+        batch_bacteria = self.bacteria[start_idx:end_idx]
+        batch_gene_families = self.gene_families[start_idx:end_idx]
+        return batch_tensor, (batch_samples, batch_bacteria, batch_gene_families)
     
     @staticmethod
     def custom_collate_fn(batch):
