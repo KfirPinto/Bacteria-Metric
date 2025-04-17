@@ -3,7 +3,6 @@ from torch import nn, optim
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
-
 def custom_loss(X, X_reconstructed, H_ij):
     """
     X: original input tensor (n, d, gene_dim)
@@ -64,16 +63,17 @@ def train_model(model, train_loader, val_loader, device, num_epochs=100, learnin
         model.train()
         running_loss = 0.0
 
-        for batch, _ in train_loader:
-            batch = batch.to(device)  # Move batch to the same device as the model
-            print(f"Batch shape: {batch.shape}")  # Debugging line to check batch shape
+        for batch in train_loader:
+            batch_tensor = batch.to(device)  # Move data tensor to the same device as the model
+            print(f"Batch shape: {batch_tensor.shape}")  # Debugging line to check batch shape
+            # expected output of train dataset of intersection data : [64, 205, 27933]
             optimizer.zero_grad()
 
             # Forward pass
-            X_encoded, X_decoded = model(batch) 
+            X_encoded, X_decoded = model(batch_tensor) 
 
             # Compute the loss
-            loss = custom_loss(batch, X_decoded, X_encoded)
+            loss = custom_loss(batch_tensor, X_decoded, X_encoded)
 
             # Backward pass
             loss.backward()
@@ -86,9 +86,9 @@ def train_model(model, train_loader, val_loader, device, num_epochs=100, learnin
 
         with torch.no_grad():
             for data in val_loader:
-                X = data
-                X_encoded, X_decoded = model(X)
-                loss = custom_loss(X, X_decoded, X_encoded)
+                X_tensor = data.to(device)  
+                X_encoded, X_decoded = model(X_tensor)
+                loss = custom_loss(X_tensor, X_decoded, X_encoded)
                 val_loss += loss.item()
 
         avg_train_loss = running_loss / len(train_loader)

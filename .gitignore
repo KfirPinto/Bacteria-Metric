@@ -1,6 +1,7 @@
 data/raw_data/
 data/
 __pycache__/
+venv/
 .idea/
 *.pt
 *.npy

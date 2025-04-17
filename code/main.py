@@ -8,13 +8,13 @@ import numpy as np
 def main():
 
     # Load data
-    data_tensor = np.load("data/data_files/gene_families/AsnicarF_march_2017/tensor.npy") 
+    data_tensor = np.load("../data/data_files/gene_families/Intersection/tensor.npy") 
     print(f"Data tensor shape: {data_tensor.shape}")
 
     # Load labels
-    samples = np.load("data/data_files/gene_families/Intersection/AsnicarF_march_2017.npy", allow_pickle=True)
-    bacteria = np.load("data/data_files/gene_families/Intersection/AsnicarF_march_2017.npy", allow_pickle=True)
-    gene_families = np.load("data/data_files/gene_families/Intersection/AsnicarF_march_2017.npy", allow_pickle=True)
+    samples = np.load("../data/data_files/gene_families/Intersection/sample_list.npy", allow_pickle=True)
+    bacteria = np.load("../data/data_files/gene_families/Intersection/bacteria_list.npy", allow_pickle=True)
+    gene_families = np.load("../data/data_files/gene_families/Intersection/gene_families_list.npy", allow_pickle=True)
 
     # Convert the data tensor to a PyTorch tensor
     data_tensor = torch.tensor(data_tensor, dtype=torch.float32)
@@ -37,28 +37,33 @@ def main():
     test_tensor = data_tensor[:, split_index_val:, :]
 
     # Split the labels corrispondigly
-    train_samples = samples[:, :split_index_train, :]
-    val_samples = samples[:, split_index_train:split_index_val, :]
-    test_samples = samples[:, split_index_val:, :]
+    train_samples = samples[:split_index_train]
+    val_samples = samples[split_index_train:split_index_val]
+    test_samples = samples[split_index_val:]
 
-    train_bacteria = bacteria[:, :split_index_train, :]
-    val_bacteria = bacteria[:, split_index_train:split_index_val, :]
-    test_bacteria = bacteria[:, split_index_val:, :]
+    train_bacteria = bacteria[:split_index_train]
+    val_bacteria = bacteria[split_index_train:split_index_val]
+    test_bacteria = bacteria[split_index_val:]
 
-    train_gene_families = gene_families[:, :split_index_train, :]
-    val_gene_families = gene_families[:, split_index_train:split_index_val, :]
-    test_gene_families = gene_families[:, split_index_val:, :]
+    train_gene_families = gene_families[:split_index_train]
+    val_gene_families = gene_families[split_index_train:split_index_val]
+    test_gene_families = gene_families[split_index_val:]
+
+    # Save the test labels as separate npy files
+    np.save("test_samples.npy", test_samples)
+    np.save("test_bacteria.npy", test_bacteria)
+    np.save("test_genes.npy", test_gene_families)
 
     # Create Dataset instances for training and testing
     batch_size = 64  
-    train_dataset = TensorDataset(train_tensor, train_samples, train_bacteria, train_gene_families, batch_size)
-    val_dataset = TensorDataset(val_tensor, val_samples, val_bacteria, val_gene_families, batch_size)
-    test_dataset = TensorDataset(test_tensor, test_samples, test_bacteria, test_gene_families, batch_size)
+    train_dataset = TensorDataset(train_tensor, batch_size)
+    val_dataset = TensorDataset(val_tensor, batch_size)
+    test_dataset = TensorDataset(test_tensor, batch_size)
 
     # Use DataLoader to load batches of data
-    train_loader = DataLoader(train_dataset, shuffle=True, collate_fn=TensorDataset.custom_collate_fn)
-    val_loader = DataLoader(val_dataset, shuffle=False, collate_fn=TensorDataset.custom_collate_fn)
-    test_loader = DataLoader(test_dataset, shuffle=False, collate_fn=TensorDataset.custom_collate_fn)
+    train_loader = DataLoader(train_dataset, shuffle=True, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
+    val_loader = DataLoader(val_dataset, shuffle=False, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
+    test_loader = DataLoader(test_dataset, shuffle=False, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
 
     # Initialize model
     gene_dim = data_tensor.shape[-1]  # gene dim
