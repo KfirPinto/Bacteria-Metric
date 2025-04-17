@@ -49,18 +49,21 @@ def main():
     val_gene_families = gene_families[split_index_train:split_index_val]
     test_gene_families = gene_families[split_index_val:]
 
-    # Save the test labels as separate npy files
+    # save the test labels and test data (tensor) as separate npy files
+    np.save("test_tensor.npy", test_tensor.numpy())
     np.save("test_samples.npy", test_samples)
     np.save("test_bacteria.npy", test_bacteria)
     np.save("test_genes.npy", test_gene_families)
 
     # Create Dataset instances for training and testing
-    batch_size = 64  
+    # batch_size = 64  
+    batch_size = 32 # tried to reduce to make training faster
     train_dataset = TensorDataset(train_tensor, batch_size)
     val_dataset = TensorDataset(val_tensor, batch_size)
     test_dataset = TensorDataset(test_tensor, batch_size)
 
     # Use DataLoader to load batches of data
+    # noga - added num_workers=4 for parallel data loading
     train_loader = DataLoader(train_dataset, shuffle=True, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
     val_loader = DataLoader(val_dataset, shuffle=False, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
     test_loader = DataLoader(test_dataset, shuffle=False, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
@@ -72,16 +75,18 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SplitAutoencoder(gene_dim=gene_dim, embedding_dim=embedding_dim)
     model = model.to(device)
+    print(f"Running on device: {device}") # Check if GPU is available
 
     # Train the model
     print("Training model...")
-    trained_model = train_model(model, train_loader, val_loader, device, num_epochs=10, learning_rate=0.001)
+    trained_model = train_model(model, train_loader, val_loader, device, num_epochs=100, learning_rate=0.001)
 
     # Save trained model
     trained_model_path = "split_autoencoder.pt"
     torch.save(trained_model, trained_model_path)
 
     # Save validation and test sets with labels
+    # noga - not sure if needed for labels , but keeping it for now
     np.save("data/data_files/val/val_tensor.npy", val_tensor.numpy())
     np.save("data/data_files/test/test_tensor.npy", test_tensor.numpy())
 
