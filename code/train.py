@@ -21,18 +21,31 @@ def custom_loss(X, X_reconstructed, H_ij):
     recon_loss = F.mse_loss(X_reconstructed, X, reduction='mean')  # MSE mean
 
     # 2. sample consistency 
-    sample_consistency_loss = 0.0
+    # H_j: (n, d, b)
+    H_j_diff = H_j.unsqueeze(2) - H_j.unsqueeze(1)  # shape (n, d, d, b)
+    H_j_dist = torch.norm(H_j_diff, dim=-1)  # shape (n, d, d)
+    # Keep only upper triangle (no duplicate pairs, no self-pairs)
+    mask = torch.triu(torch.ones(d, d, device=H_j.device), diagonal=1)
+    sample_consistency_loss = (H_j_dist * mask).sum() / (n * d * (d - 1) / 2)
+    """
     for i in range(n):
         for j in range(d):
             for k in range(j+1, d):  
                 sample_consistency_loss += torch.norm(H_j[i, j] - H_j[i, k], p=2)
+    """
 
     # 3. bacteria consistency
-    bacteria_consistency_loss = 0.0
+    # H_i: (n, d, b)
+    H_i_diff = H_i.unsqueeze(1) - H_i.unsqueeze(0)  # (n, n, d, b)
+    H_i_dist = torch.norm(H_i_diff, dim=-1)  # (n, n, d)
+    mask = torch.triu(torch.ones(n, n, device=H_i.device), diagonal=1)
+    bacteria_consistency_loss = (H_i_dist * mask.unsqueeze(-1)).sum() / (n * (n - 1) / 2 * d)
+    """
     for j in range(d):
         for i in range(n):
             for k in range(i+1, n):
                 bacteria_consistency_loss += torch.norm(H_i[i, j] - H_i[k, j], p=2)
+    """
 
     # normalize by amount of arguments at the summation
     sample_consistency_loss /= (n * d * (d-1) / 2)  # d choose 2 = d * (d-1)/2
@@ -64,9 +77,9 @@ def train_model(model, train_loader, val_loader, device, num_epochs=100, learnin
         running_loss = 0.0
 
         for batch in train_loader:
-            batch_tensor = batch.to(device)  # Move data tensor to the same device as the model
-            print(f"Batch shape: {batch_tensor.shape}")  # Debugging line to check batch shape
-            # expected output of train dataset of intersection data : [64, 205, 27933]
+            batch_tensor = batch.to(device)              # Move data tensor to the same device as the model
+            batch_tensor = batch_tensor.squeeze(0)         
+            print(f"train batch shape: {batch_tensor.shape}")  # Debugging line to check batch shape
             optimizer.zero_grad()
 
             # Forward pass
@@ -87,6 +100,8 @@ def train_model(model, train_loader, val_loader, device, num_epochs=100, learnin
         with torch.no_grad():
             for data in val_loader:
                 X_tensor = data.to(device)  
+                X_tensor = X_tensor.squeeze(0) 
+                print(f"val batch shape: {X_tensor.shape}")
                 X_encoded, X_decoded = model(X_tensor)
                 loss = custom_loss(X_tensor, X_decoded, X_encoded)
                 val_loss += loss.item()

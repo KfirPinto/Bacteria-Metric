@@ -3,26 +3,15 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 
 class TensorDataset(Dataset):
-    def __init__(self, tensor, batch_size):    
+    def __init__(self, tensor, batch_size=128):    
         self.tensor = tensor
         self.batch_size = batch_size
 
     def __len__(self):
-        # Return number of batches in the dataset.
-        return (self.tensor.size(0) + self.batch_size - 1) // self.batch_size
+        return self.tensor.size(0)
     
     def __getitem__(self, idx):
-        # Retrieve a whole batch of data.
-        start_idx = idx * self.batch_size # calculate the start index for the batch
-        end_idx = min(start_idx + self.batch_size, self.tensor.size(0)) 
-        batch_tensor = self.tensor[start_idx:end_idx]
-        return batch_tensor
-
-    @staticmethod
-    def custom_collate_fn(batch):
-        # Batch should already be a list of tensors, we can concatenate them
-        # no labels
-        return torch.cat(batch, dim=0)
+        return self.tensor[idx]
 
 """
 if __name__ == "__main__":

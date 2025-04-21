@@ -8,21 +8,22 @@ import numpy as np
 def main():
 
     # Load data
-    data_tensor = np.load("../data/data_files/gene_families/Intersection/tensor.npy") 
+    data_tensor = np.load("data/data_files/gene_families/Intersection/tensor.npy") 
     print(f"Data tensor shape: {data_tensor.shape}")
 
     # Load labels
-    samples = np.load("../data/data_files/gene_families/Intersection/sample_list.npy", allow_pickle=True)
-    bacteria = np.load("../data/data_files/gene_families/Intersection/bacteria_list.npy", allow_pickle=True)
-    gene_families = np.load("../data/data_files/gene_families/Intersection/gene_families_list.npy", allow_pickle=True)
+    samples = np.load("data/data_files/gene_families/Intersection/sample_list.npy", allow_pickle=True)
+    bacteria = np.load("data/data_files/gene_families/Intersection/bacteria_list.npy", allow_pickle=True)
+    gene_families = np.load("data/data_files/gene_families/Intersection/gene_families_list.npy", allow_pickle=True)
+
 
     # Convert the data tensor to a PyTorch tensor
     data_tensor = torch.tensor(data_tensor, dtype=torch.float32)
 
-    # Shuffle the tensor along the first dimension (samples). same order for tensor and labels. 
-    indices = torch.randperm(data_tensor.size(0)) 
-    data_tensor = data_tensor[indices]
-    samples = samples[indices]
+    # Shuffle the tensor along the bacteria dimension. same order for tensor and labels. 
+    perm = torch.randperm(data_tensor.size(1)) 
+    data_tensor = data_tensor[:, perm, :]
+    bacteria = bacteria[perm]
 
     # Split the tensor along the bacteria dimension (dimension 1)
     num_bacteria = data_tensor.shape[1]
@@ -37,36 +38,27 @@ def main():
     test_tensor = data_tensor[:, split_index_val:, :]
 
     # Split the labels corrispondigly
-    train_samples = samples[:split_index_train]
-    val_samples = samples[split_index_train:split_index_val]
-    test_samples = samples[split_index_val:]
-
     train_bacteria = bacteria[:split_index_train]
     val_bacteria = bacteria[split_index_train:split_index_val]
     test_bacteria = bacteria[split_index_val:]
 
-    train_gene_families = gene_families[:split_index_train]
-    val_gene_families = gene_families[split_index_train:split_index_val]
-    test_gene_families = gene_families[split_index_val:]
-
-    # save the test labels and test data (tensor) as separate npy files
+    # save the test labels and test data (tensor) as separate .npy files
     np.save("test_tensor.npy", test_tensor.numpy())
-    np.save("test_samples.npy", test_samples)
     np.save("test_bacteria.npy", test_bacteria)
-    np.save("test_genes.npy", test_gene_families)
+    np.save("val_tensor.npy", val_tensor.numpy())
+    np.save("val_bacteria.npy", val_bacteria)
+    np.save("samples.npy", samples)
+    np.save("genes.npy", gene_families)
 
     # Create Dataset instances for training and testing
-    # batch_size = 64  
-    batch_size = 32 # tried to reduce to make training faster
-    train_dataset = TensorDataset(train_tensor, batch_size)
-    val_dataset = TensorDataset(val_tensor, batch_size)
-    test_dataset = TensorDataset(test_tensor, batch_size)
+    batch_size = 128 
+    train_dataset = TensorDataset(train_tensor, batch_size=batch_size)
+    val_dataset = TensorDataset(val_tensor, batch_size=batch_size)
 
     # Use DataLoader to load batches of data
     # noga - added num_workers=4 for parallel data loading
-    train_loader = DataLoader(train_dataset, shuffle=True, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
-    val_loader = DataLoader(val_dataset, shuffle=False, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
-    test_loader = DataLoader(test_dataset, shuffle=False, num_workers=4, collate_fn=TensorDataset.custom_collate_fn)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4, pin_memory=True, persistent_workers=True, prefetch_factor=2)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=4, pin_memory=True, persistent_workers=True, prefetch_factor=2)
 
     # Initialize model
     gene_dim = data_tensor.shape[-1]  # gene dim
@@ -75,6 +67,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SplitAutoencoder(gene_dim=gene_dim, embedding_dim=embedding_dim)
     model = model.to(device)
+    #model = torch.compile(model)
     print(f"Running on device: {device}") # Check if GPU is available
 
     # Train the model
@@ -84,20 +77,8 @@ def main():
     # Save trained model
     trained_model_path = "split_autoencoder.pt"
     torch.save(trained_model, trained_model_path)
-
-    # Save validation and test sets with labels
-    # noga - not sure if needed for labels , but keeping it for now
-    np.save("data/data_files/val/val_tensor.npy", val_tensor.numpy())
-    np.save("data/data_files/test/test_tensor.npy", test_tensor.numpy())
-
-    np.save("data/data_files/val/val_samples.npy", val_samples)
-    np.save("data/data_files/test/test_samples.npy", test_samples)
-
-    np.save("data/data_files/val/val_bacteria.npy", val_bacteria)
-    np.save("data/data_files/test/test_bacteria.npy", test_bacteria)
-
-    np.save("data/data_files/val/val_genes.npy", val_gene_families)
-    np.save("data/data_files/test/test_genes.npy", test_gene_families)
+    print(f"Model saved to {trained_model_path}")
+    
 
 if __name__ == "__main__":
     main()
