@@ -3,33 +3,6 @@ from torch import nn, optim
 import torch.nn.functional as F
 import wandb
 
-def sample_constituency_loss(H):
-    n, d, b = H.shape
-    total_loss = 0.0
-    count = 0
-
-    # Pre-generate a different sample index for each i
-    random_offsets = torch.randint(1, n, (n,))
-    random_indices = (torch.arange(n) + random_offsets) % n  # shape: (n,)
-    random_indices = random_indices.to(H.device)
-
-    for i in range(n):
-        sample = H[i]                 # (d, b)
-        other = H[random_indices[i]]  # (d, b)
-
-        for j in range(d):
-            for k in range(j + 1, d):
-                dist_same = F.pairwise_distance(sample[j], sample[k], p=2)
-
-                # Distance to bacterium j in a different sample
-                dist_diff = F.pairwise_distance(sample[j], other[k], p=2)
-
-                ratio = dist_same / (dist_diff + 1e-8)
-                total_loss += ratio
-                count += 1
-
-    return total_loss / count
-
 def vectorize_sample_constituency_loss(H):
     n, d, b = H.shape
 
@@ -50,58 +23,18 @@ def vectorize_sample_constituency_loss(H):
 
     other_H_k = other_H[:, k_idx, :]  # same as H_k but from different sample
 
-    # Step 5: Compute distances (batch-wise pairwise distances)
-    dist_same = torch.norm(H_j - H_k, dim=-1)         # shape: (n, num_pairs)
-    dist_diff = torch.norm(H_j - other_H_k, dim=-1)   # shape: (n, num_pairs)
+    # Step 5: Normalize embeddings for cosine similarity
+    H_j = F.normalize(H_j, dim=-1)
+    H_k = F.normalize(H_k, dim=-1)
+    other_H_k = F.normalize(other_H_k, dim=-1)
 
-    # Step 6: Avoid division by zero
-    dist_diff = torch.where(dist_diff == 0, torch.ones_like(dist_diff) * 1e-8, dist_diff)
+    # Step 6: Cosine similarity (dot product of unit vectors)
+    sim_same = torch.sum(H_j * H_k, dim=-1)           # shape: (n, num_pairs)
+    sim_diff = torch.sum(H_j * other_H_k, dim=-1)     # shape: (n, num_pairs)
 
-    # Step 7: Compute normalized loss and return average
-    loss = (dist_same / dist_diff).mean()
-    return loss
-
-def bacteria_constituency_loss(H):
-    """
-    Computes a loss item intended to enforce that representations
-    of the same bacterium across different samples are closer than representations
-    of different bacteria.
-
-    Parameters:
-        H (torch.Tensor): shape (num_samples, num_bacteria, embedding_dim)
-                          low dimensional representations of bacteria
-
-    Returns:
-        torch.Tensor: scalar loss value
-    """
-    num_samples, num_bacteria, embedding_dim = H.shape
-
-    # Choose a different (random) bacterium index for each bacterium
-    random_offsets = torch.randint(low=1, high=num_bacteria, size=(num_bacteria,))
-    random_indices = (torch.arange(num_bacteria) + random_offsets) % num_bacteria
-    random_indices = random_indices.to(H.device)  # Ensure device compatibility
-
-    total_loss = 0.0
-    num_pairs = 0
-
-    for b in range(num_bacteria):
-        # Representations of bacterium `b` across all samples
-        same_bacterium = H[:, b, :]  # shape: (num_samples, embedding_dim)
-
-        # Representations of a *random other bacterium* across all samples
-        other_bacterium = H[:, random_indices[b], :]  # shape: (num_samples, embedding_dim)
-
-        # Compare all sample pairs j < k
-        for j in range(num_samples):
-            for k in range(j + 1, num_samples):
-                dist_same = F.pairwise_distance(same_bacterium[j], same_bacterium[k], p=2)
-                dist_diff = F.pairwise_distance(same_bacterium[j], other_bacterium[k], p=2)
-
-                ratio = dist_same / (dist_diff + 1e-8)  # Add epsilon to prevent div by zero
-                total_loss += ratio
-                num_pairs += 1
-
-    return total_loss / num_pairs
+    # Step 7: Convert to distance-like and compute ratio
+    loss = (1 - sim_same) / (1 - sim_diff + 1e-8)     # avoid division by zero
+    return loss.mean()
 
 def vectorize_bacteria_constituency_loss(H):
     n, d, b = H.shape  # samples, bacteria, embedding_dim
@@ -116,24 +49,24 @@ def vectorize_bacteria_constituency_loss(H):
     num_pairs = j_idx.shape[0]  # number of sample pairs
 
     # Step 3: Gather same-bacterium representations
-    # shape: (d, num_pairs, b)
     H_j = H[j_idx, torch.arange(d).unsqueeze(1)]       # (d, num_pairs, b)
     H_k = H[k_idx, torch.arange(d).unsqueeze(1)]       # (d, num_pairs, b)
 
     # Step 4: Gather comparison bacterium (random) for the same sample pairs
     H_k_other = H[k_idx, rand_indices.unsqueeze(1)]    # (d, num_pairs, b)
 
-    # Step 5: Compute distances
-    dist_same = torch.norm(H_j - H_k, dim=-1)          # (d, num_pairs)
-    dist_diff = torch.norm(H_j - H_k_other, dim=-1)    # (d, num_pairs)
+    # Step 5: Normalize vectors along the embedding dimension
+    H_j = F.normalize(H_j, dim=-1)
+    H_k = F.normalize(H_k, dim=-1)
+    H_k_other = F.normalize(H_k_other, dim=-1)
 
-    # Step 6: Avoid division by zero
-    dist_diff = torch.where(dist_diff == 0, torch.ones_like(dist_diff) * 1e-8, dist_diff)
+    # Step 6: Cosine similarity
+    sim_same = torch.sum(H_j * H_k, dim=-1)            # (d, num_pairs)
+    sim_diff = torch.sum(H_j * H_k_other, dim=-1)      # (d, num_pairs)
 
-    # Step 7: Compute loss
-    ratio = dist_same / dist_diff                      # (d, num_pairs)
-    loss = ratio.mean()
-    return loss
+    # Step 7: Convert to "distance"
+    loss = (1 - sim_same) / (1 - sim_diff + 1e-8)       # avoid divide-by-zero
+    return loss.mean()
 
 def vectorize_bacteria_constituency_loss_strict(H):
     """
@@ -176,20 +109,22 @@ def vectorize_bacteria_constituency_loss_strict(H):
     loss = (dist_same / dist_diff).mean()
     return loss
 
-
-def custom_loss(X, X_reconstructed, H_ij):
+def custom_loss(X, X_reconstructed, latent, model=None, weight_decay=0.0):
     """
-    X: original input tensor (n, d, gene_dim)
-    X_reconstructed: model output (n, d, gene_dim)
-    H_ij: encoded tensor (n, d, 2b)
+    Parameters:
+        X: original input tensor (n, d, gene_dim)
+        X_reconstructed: model output (n, d, gene_dim)
+        latent: encoded tensor (n, d, 2b)
+        model: optional
+        weight_decay: hyperparameter for weight decay (L2-regularization)
     """
 
     n, d, gene_dim = X.shape
-    b = H_ij.shape[-1] // 2
+    b = latent.shape[-1] // 2
 
     # Split H_ij to H_i, H_j
-    H_i = H_ij[..., :b]  # shape: (n, d, b)
-    H_j = H_ij[..., b:]  # shape: (n, d, b)
+    H_i = latent[..., :b]  # shape: (n, d, b)
+    H_j = latent[..., b:]  # shape: (n, d, b)
 
     # ---- part A - Normalized reconstruction error ----
 
@@ -206,28 +141,49 @@ def custom_loss(X, X_reconstructed, H_ij):
     denominator = torch.where(denominator == 0, torch.ones_like(denominator) * 1e-8, denominator)
 
     # Final normalized reconstruction loss
-    #recon_loss = (numerator / denominator).mean()
-    recon_loss = torch.clamp((numerator / denominator), max=1e3).mean()
+    recon_loss = (numerator / denominator).mean()
 
     # ---- part B - Bacteria consistency ----
-    bacteria_consistency_loss = vectorize_bacteria_constituency_loss_strict(H_i)
+    bacteria_consistency_loss = vectorize_bacteria_constituency_loss(H_i)
 
-    # ---- part C- Sample consistency ----
+    # ---- part C - Sample consistency ----
     sample_consistency_loss = vectorize_sample_constituency_loss(H_j)
+
+    # ---- Part D - Weight Decay (L2 regularization) ----
+    l2_reg = 0.0
+    if model is not None and weight_decay > 0:
+        for param in model.parameters():
+            if param.requires_grad:
+                l2_reg += torch.sum(param ** 2)
+        l2_reg = weight_decay * l2_reg
+    else:
+        l2_reg = torch.tensor(0.0, device=X.device)
     
-    return recon_loss, bacteria_consistency_loss, sample_consistency_loss
+    return recon_loss, bacteria_consistency_loss, sample_consistency_loss, l2_reg
+
+def balanced_loss(loss_list, eps=1e-8):
+    """
+    Returns a balanced total loss 
+    """
+    inverse_weights = [1.0 / (l.item() + eps) for l in loss_list]
+    total_weight = sum(inverse_weights)
+    normalized_weights = [w / total_weight for w in inverse_weights]
+    balanced = sum(w * l for w, l in zip(normalized_weights, loss_list))
+    return balanced
 
 def train_model(model, train_loader, val_loader, device, num_epochs, learning_rate, name):
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     # Initialize wandb
-    wandb.init(project="SplitAutoencoder", config={
+    wandb.init(
+        project="SplitAutoencoder",
+        config={
         "name": name,
         "epochs": num_epochs,
         "learning_rate": learning_rate,
-        "batch_size": train_loader.batch_size if hasattr(train_loader, "batch_size") else None
-    })
+        "batch_size": train_loader.batch_size if hasattr(train_loader, "batch_size") else None,
+        })
 
     for epoch in range(num_epochs):
 
@@ -237,15 +193,16 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
         for batch in train_loader:
             batch_tensor = batch[0].to(device)                    # Move data tensor to the same device as the model
             batch_tensor = batch_tensor.squeeze(0)         
-            print(f"train batch shape: {batch_tensor.shape}")  # Debugging line to check batch shape
+            #print(f"train batch shape: {batch_tensor.shape}")    # Debugging line to check batch shape
             optimizer.zero_grad()
 
             # Forward pass
             encoded, decoded = model(batch_tensor) 
 
-            recon_loss, bact_loss, sample_loss = custom_loss(batch_tensor, decoded, encoded)
-            total_loss = recon_loss + bact_loss + sample_loss
-
+            recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4)
+            core_loss = balanced_loss([recon_loss, bact_loss, sample_loss]) 
+            total_loss = core_loss + wd
+                       
             # Backward pass
             total_loss.backward()
             optimizer.step()
@@ -268,8 +225,9 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
                 batch_tensor = batch[0].to(device)                    
                 batch_tensor = batch_tensor.squeeze(0)   
                 encoded, decoded = model(batch_tensor)
-                recon_loss, bact_loss, sample_loss = custom_loss(batch_tensor, decoded, encoded)  
-                total_loss = recon_loss + bact_loss + sample_loss
+                recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4) 
+                core_loss = balanced_loss([recon_loss, bact_loss, sample_loss]) 
+                total_loss = core_loss + wd
 
                 val_recon += recon_loss.item()
                 val_bact += bact_loss.item()
@@ -293,8 +251,6 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
             "val_bact_loss": avg_val_bact,
             "val_sample_loss": avg_val_sample,
             "val_total_loss": avg_val_total,
-
-            "epoch": epoch + 1
         })
 
     wandb.finish()    
