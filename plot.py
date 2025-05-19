@@ -6,6 +6,53 @@ import torch
 from matplotlib.colors import LinearSegmentedColormap
 import sys
 
+def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
+    # Load data
+    gene_tensor = np.load(gene_tensor)       # shape: (samples, bacteria, gene_families)
+    pathway_tensor = np.load(pathway_tensor) # shape: (samples, bacteria, pathways)
+    bacteria_list = np.load(bacteria_list, allow_pickle=True)   # shape: (bacteria,)
+
+    # === Gene family counts per bacterium ===
+    gene_presence = (gene_tensor != 0).any(axis=0)  # shape: (bacteria, gene_families)
+    gene_counts = gene_presence.sum(axis=1)         # shape: (bacteria,)
+
+    # === Pathway counts per bacterium ===
+    pathway_presence = (pathway_tensor != 0).any(axis=0)  # shape: (bacteria, pathways)
+    pathway_counts = pathway_presence.sum(axis=1)         # shape: (bacteria,)
+
+    # === Sort once, by gene counts ===
+    sort_indices = np.argsort(-gene_counts)
+
+    # Apply the same sort to all vectors
+    sorted_bacteria = bacteria_list[sort_indices]
+    sorted_gene_counts = gene_counts[sort_indices]
+    sorted_pathway_counts = pathway_counts[sort_indices]
+
+    # === Plot Gene Families ===
+    plt.figure(figsize=(20, 10))
+    plt.bar(range(len(sorted_gene_counts)), sorted_gene_counts)
+    plt.title("Number of Gene Families per Bacterium")
+    plt.ylabel("Unique Gene Families")
+    plt.xlabel("Bacterium Index")
+    plt.xticks(rotation=90)
+    plt.tight_layout()
+    plt.savefig('output/plots/genes_per_bacterium')
+
+    # === Plot Pathways (same bacterium order) ===
+    plt.figure(figsize=(20, 10))
+    plt.bar(range(len(sorted_gene_counts)), sorted_pathway_counts, color='orange')
+    plt.title("Number of Pathways per Bacterium (same order as gene family plot)")
+    plt.ylabel("Unique Pathways")
+    plt.xlabel("Bacterium Index")
+    plt.xticks(rotation=90)
+    plt.tight_layout()
+    plt.savefig('output/plots/pathways_per_bacterium')
+
+    threshold = 150
+    for i, count in enumerate(pathway_counts):
+        if count > threshold:
+            print(f"{sorted_bacteria[i]}: {count} pathways")
+    
 def bacteria_count_across_samples():
 
     """
@@ -89,7 +136,6 @@ def create_heatmap():
     plt.close()
 
     """
-
 
 def visualize_set_intersection(file1, file2):
 

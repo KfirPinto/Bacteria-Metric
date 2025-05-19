@@ -49,6 +49,9 @@ def intersect(gene_families_path, pathways_path, output_gene_families, output_pa
     updated_pathways_samples = pathways_samples[pathways_sample_indices]
     updated_pathways_bacteria = pathways_bacteria[pathways_bacteria_indices]
 
+    print(f"Updated gene families tensor shape: {updated_gene_families_tensor.shape}")
+    print(f"Updated pathways tensor shape: {updated_pathways_tensor.shape}")
+
     os.makedirs(output_gene_families, exist_ok=True)
     os.makedirs(output_pathways, exist_ok=True)
 
@@ -268,7 +271,7 @@ def load_gene_families_data(input_path, output_dir):
     print(tensor[t1][t2][t3])
     """
 
-def load_gene_families_threshold(input_path, output_dir, min_occurrences=100):
+def load_gene_families_threshold(input_path, output_dir, top_k=1000):
 
     pre_df = pd.read_csv(input_path)
     regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
@@ -289,8 +292,9 @@ def load_gene_families_threshold(input_path, output_dir, min_occurrences=100):
             if val != 0:
                 gene_family_counter[gene_family].add((person, bacteria))
 
-    # Filter gene families with at least `min_occurrences` unique (sample, bacteria) pairs
-    valid_gene_families = {gf for gf, occurrences in gene_family_counter.items() if len(occurrences) >= min_occurrences}
+    # Keep only the top_k gene families with the most (sample, bacteria) occurrences
+    sorted_gene_families = sorted(gene_family_counter.items(), key=lambda x: len(x[1]), reverse=True)
+    valid_gene_families = set([gf for gf, _ in sorted_gene_families[:top_k]])
 
     # Filter the DataFrame
     df = df[df['gene_family'].isin(valid_gene_families)].copy()
