@@ -9,20 +9,20 @@ class SplitAutoencoder(nn.Module):
         # Encoder: compress from gene_dim down to 2b
         self.encoder = nn.Sequential(
             nn.Linear(gene_dim, 4096),
-            nn.ReLU(),
+            nn.LeakyReLU(negative_slope=0.01),
             nn.Linear(4096, 1024),
-            nn.ReLU(),
+            nn.LeakyReLU(negative_slope=0.01),   
             nn.Linear(1024, embedding_dim)  # where embedding_dim = 2b
         )
 
-        self.activation = nn.ReLU()
+        self.activation = nn.LeakyReLU(negative_slope=0.01)
 
         # Decoder: input is (H_i + H_j) ∈ ℝ^b
         self.decoder = nn.Sequential(
             nn.Linear(embedding_dim // 2, 1024),
-            nn.ReLU(),
+            nn.LeakyReLU(negative_slope=0.01),
             nn.Linear(1024, 4096),
-            nn.ReLU(),
+            nn.LeakyReLU(negative_slope=0.01),
             nn.Linear(4096, gene_dim)
         )
 

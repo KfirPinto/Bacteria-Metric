@@ -6,7 +6,7 @@ GENE_LIST_PATH = "data/data_files/gene_families/Intersection/gene_families_list.
 
 # Output directory for processed data
 NAME = "19/05/2024"
-SERIAL_NUM = 4
+SERIAL_NUM = 5
 EVAL_OUTPUT_DIR = f"eval_data/Run_{SERIAL_NUM}"
 
 # Split ratios
