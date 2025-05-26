@@ -161,15 +161,31 @@ def custom_loss(X, X_reconstructed, latent, model=None, weight_decay=0.0):
     
     return recon_loss, bacteria_consistency_loss, sample_consistency_loss, l2_reg
 
-def balanced_loss(loss_list, eps=1e-8):
+def balanced_loss(loss_history, eps=1e-8):
     """
-    Returns a balanced total loss 
+    Computes balanced weights for loss components from their values across multiple epochs.
+    
+    Args:
+        loss_history (list or Tensor): shape (num_epochs, num_components), e.g., (10, 3)
+        eps (float): small constant to avoid division by zero
+
+    Returns:
+        list of float: normalized inverse weights per component
     """
-    inverse_weights = [1.0 / (l.item() + eps) for l in loss_list]
-    total_weight = sum(inverse_weights)
-    normalized_weights = [w / total_weight for w in inverse_weights]
-    balanced = sum(w * l for w, l in zip(normalized_weights, loss_list))
-    return balanced
+    
+    loss_history = torch.tensor(loss_history) # shape (10, 3)
+
+    # Mean loss per component across epochs → shape (3,)
+    mean_losses = loss_history.mean(dim=0) 
+
+    # Compute inverse weights 
+    inverse_weights = 1.0 / (mean_losses + eps)  # shape (3,)
+
+    # Normalize 
+    normalized_weights = inverse_weights / inverse_weights.sum()  # shape (3,)
+
+    return normalized_weights.tolist()  # Convert to list
+
 
 def train_model(model, train_loader, val_loader, device, num_epochs, learning_rate, name):
 
