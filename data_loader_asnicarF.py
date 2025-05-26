@@ -203,101 +203,41 @@ def filter_based_uniprotkb(input_path, output_dir, uniprotkb_path):
 
             # Append to output file with header only on the first write
             chunk_filtered.to_csv(output_file, mode='a', index=False, header=not os.path.exists(output_file), columns=header)
-          
-def load_gene_families_data(input_path, output_dir):
+        
+def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
 
     pre_df = pd.read_csv(input_path)
-    regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
-
-    # iloc[:,0] used for index based selection
-    # : (before the comma) → Selects all rows
-    # 0 (after the comma) → Selects only the first column
-    df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
-
-    # Split the first column into 'Gene_Family' and 'Bacteria'
-    # expand=True: Splits the string and expands the result into separate columns.
-    # Each new column will contain one of the split parts.
-    df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
-
-    # Extract unique lists for bacteria, gene families, and people (samples)
-    # unique() returns the unique values as a NumPy array
-    bacteria_list = df['Bacteria'].unique() # df.columns[-1]
-    gene_families_list = df['gene_family'].unique() # df.columns[-2]
-    people_list = df.columns[1:-2]
-
-    # Create mapping dictionaries for indexing
-    bacteria_idx_map = {bacteria: idx for idx, bacteria in enumerate(bacteria_list)}
-    gene_family_idx_map = {gene_family: idx for idx, gene_family in enumerate(gene_families_list)}
-
-    print(f"The size of the genes family dictionary is: {len(gene_family_idx_map)}")
-
-    # Initialize a tensor with zeros
-    array = np.zeros((len(people_list), len(bacteria_list), len(gene_families_list)))
-
-    """
-    # Populate the tensor with values from the DataFrame
-    for _, row in df.iterrows:
-        bacteria_idx = bacteria_idx_map[row[-1]]  # 'Bacteria' is the last column
-        gene_family_idx = gene_family_idx_map[row[-2]]  # 'gene_family' is in the second-to-last column
-        for person_idx, person in enumerate(people_list):
-            array[person_idx, bacteria_idx, gene_family_idx] = row.iloc[person_idx+1]
-
-    """
-
-    for row in tqdm(df.itertuples(index=False, name='Pandas'), total=len(df), desc="Processing rows"):
-        bacteria_idx = bacteria_idx_map[row[-1]]  # 'Bacteria' is the last column
-        gene_family_idx = gene_family_idx_map[row[-2]]  # 'gene_family' is in the second-to-last column
-
-        for person_idx, person in enumerate(people_list):
-            array[person_idx, bacteria_idx, gene_family_idx] = getattr(row, person)
-
-    # Print the shape of the tensor for verification
-    tensor = torch.from_numpy(array)
-    print(tensor.shape)
-
-    # Save the outputs to the specified directory
-    os.makedirs(output_dir, exist_ok=True)
-    np.save(os.path.join(output_dir, "tensor.npy"), tensor) 
-    np.save(os.path.join(output_dir, "sample_list.npy"), people_list)
-    np.save(os.path.join(output_dir, "bacteria_list.npy"), bacteria_list)
-    np.save(os.path.join(output_dir, "gene_families_list.npy"), gene_families_list)
-
-    # Sanity check
-    """
-    t1 = np.where(people_list == 'SAMEA7041133')[0][0]  
-    t2 = bacteria_idx_map['g__Parabacteroides.s__Parabacteroides_distasonis']
-    t3 = gene_family_idx_map['UniRef90_A0A069RZ42']
-    torch.set_printoptions(precision=10)
-    print(tensor[t1][t2][t3])
-    """
-
-def load_gene_families_threshold(input_path, output_dir, top_k=1000):
-
-    pre_df = pd.read_csv(input_path)
-    regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
+    #regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
+    regex_pattern = r"^GO:\d+\|g__[^.]+\.s__[^.]+$"
 
     df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
     df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
 
-    people_list = df.columns[1:-2]
+    # Trim sample column names (1:-2) at the first underscore (ERR9830179_Abundance-RPKs → ERR9830179)
+    original_people = df.columns[1:-2]
+    trimmed_people = [col.split('_')[0] for col in original_people]
+    df.columns = list(df.columns[:1]) + trimmed_people + list(df.columns[-2:])
+
+    people_list = trimmed_people
 
     # Count (sample, bacteria) occurrences for each gene_family
     gene_family_counter = defaultdict(set)
 
-    for row in tqdm(df.itertuples(index=False, name='Pandas'), total=len(df), desc="Counting occurrences"):
-        gene_family = row[-2]
-        bacteria = row[-1]
-        for person_idx, person in enumerate(people_list):
-            val = getattr(row, person)
-            if val != 0:
-                gene_family_counter[gene_family].add((person, bacteria))
+    if threshold:
+        for row in tqdm(df.itertuples(index=False, name='Pandas'), total=len(df), desc="Counting occurrences"):
+            gene_family = row[-2]
+            bacteria = row[-1]
+            for person_idx, person in enumerate(people_list):
+                val = getattr(row, person)
+                if val != 0:
+                    gene_family_counter[gene_family].add((person, bacteria))
 
-    # Keep only the top_k gene families with the most (sample, bacteria) occurrences
-    sorted_gene_families = sorted(gene_family_counter.items(), key=lambda x: len(x[1]), reverse=True)
-    valid_gene_families = set([gf for gf, _ in sorted_gene_families[:top_k]])
+        # Optional: Keep only the top_k gene families with the most (sample, bacteria) occurrences
+        sorted_gene_families = sorted(gene_family_counter.items(), key=lambda x: len(x[1]), reverse=True)
+        valid_gene_families = set([gf for gf, _ in sorted_gene_families[:top_k]])
 
-    # Filter the DataFrame
-    df = df[df['gene_family'].isin(valid_gene_families)].copy()
+        # Filter the DataFrame
+        df = df[df['gene_family'].isin(valid_gene_families)].copy()
 
     # Compute index mappings after filtering
     bacteria_list = df['Bacteria'].unique()
@@ -305,8 +245,6 @@ def load_gene_families_threshold(input_path, output_dir, top_k=1000):
     
     bacteria_idx_map = {bacteria: idx for idx, bacteria in enumerate(bacteria_list)}
     gene_family_idx_map = {gene_family: idx for idx, gene_family in enumerate(gene_families_list)}
-
-    print(f"Filtered gene families count: {len(gene_family_idx_map)}")
 
     # Initialize a tensor with zeros
     array = np.zeros((len(people_list), len(bacteria_list), len(gene_families_list)))
@@ -329,9 +267,19 @@ def load_gene_families_threshold(input_path, output_dir, top_k=1000):
     np.save(os.path.join(output_dir, "bacteria_list.npy"), bacteria_list)
     np.save(os.path.join(output_dir, "gene_families_list.npy"), gene_families_list)
 
+    # Sanity check
+    """
+    t1 = np.where(np.array(people_list) == 'ERR9830187')[0][0]
+    t2 = bacteria_idx_map['g__Escherichia.s__Escherichia_coli']
+    t3 = gene_family_idx_map['GO:0000006']
+    print(f"Sanity check for {people_list[t1]}, {bacteria_list[t2]}, {gene_families_list[t3]}")
+    torch.set_printoptions(precision=10)
+    print(tensor[t1][t2][t3])
+    """
+
 def load_pathway_data(input_file, output_dir):
     
-    pre_df = pd.read_csv(input_file)
+    pre_df = pd.read_csv(input_file, sep='\t')
     regex_pattern = r".+\|g__.+\.s__.+"
 
     # iloc[:,0] used for index based selection
@@ -348,9 +296,14 @@ def load_pathway_data(input_file, output_dir):
     bacteria_list = df['Bacteria'].unique()
     pathway_list = df['Pathway'].unique()
 
+    # Trim sample column names (1:-2) at the first underscore (ERR9830179_Abundance-RPKs → ERR9830179)
+    original_people = df.columns[1:-2]
+    trimmed_people = [col.split('_')[0] for col in original_people]
+    df.columns = list(df.columns[:1]) + trimmed_people + list(df.columns[-2:])
+
     # [start_index:end_index]: list slicing syntax. It specifies a range of indices to extract a subset of items.
     # Inclusive start_index, exclusive end_index.
-    people_list = df.columns[1:-2]
+    people_list = trimmed_people 
 
     array = np.zeros((len(people_list), len(bacteria_list), len(pathway_list)))
 
@@ -376,15 +329,15 @@ def load_pathway_data(input_file, output_dir):
     np.save(os.path.join(output_dir, "pathway_list.npy"), pathway_list)
     np.save(os.path.join(output_dir, "sample_list.npy"), people_list)
 
+    # Sanity check 
     """
-    Sanity check for AsnicarF_2021_march
-    t1 = np.where(people_list =='SAMEA7041133')[0][0]
-    t2 = np.where(bacteria_list == 'g__Bacteroides.s__Bacteroides_vulgatus')[0][0]
-    t3 = np.where(pathway_list == 'UNINTEGRATED')[0][0]
+    t1 = np.where(people_list =='ERR9830182')[0][0]
+    t2 = np.where(bacteria_list == 'g__Akkermansia.s__Akkermansia_muciniphila')[0][0]
+    t3 = np.where(pathway_list == '1CMET2-PWY: folate transformations III (E. coli)')[0][0]
     torch.set_printoptions(precision=10)
-    print(tensor[t1][t2][t3])"
+    print(tensor[t1][t2][t3])
     """
-
+    
 def extract_UniRef90_entries(input_path, output_dir):
     """
     A preliminary step aimed at extracting gene families in the raw data
