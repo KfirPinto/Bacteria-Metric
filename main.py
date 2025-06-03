@@ -42,7 +42,7 @@ def main():
     print("Training model...")
     trained_model = train_model(model, train_loader, val_loader, device, num_epochs=config.NUM_EPOCHS,
                                 learning_rate=config.LEARNING_RATE, name=config.NAME)
-
+    
     # Save model
     trained_model_path = f"{config.EVAL_OUTPUT_DIR}/split_autoencoder.pt"
     torch.save(trained_model, trained_model_path)

@@ -186,7 +186,6 @@ def balanced_loss(loss_history, eps=1e-8):
 
     return normalized_weights.tolist()  # Convert to list
 
-
 def train_model(model, train_loader, val_loader, device, num_epochs, learning_rate, name):
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
@@ -216,8 +215,7 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
             encoded, decoded = model(batch_tensor) 
 
             recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4)
-            core_loss = balanced_loss([recon_loss, bact_loss, sample_loss]) 
-            total_loss = core_loss + wd
+            total_loss = recon_loss + bact_loss + sample_loss + wd
                        
             # Backward pass
             total_loss.backward()
@@ -242,8 +240,7 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
                 batch_tensor = batch_tensor.squeeze(0)   
                 encoded, decoded = model(batch_tensor)
                 recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4) 
-                core_loss = balanced_loss([recon_loss, bact_loss, sample_loss]) 
-                total_loss = core_loss + wd
+                total_loss = recon_loss + bact_loss + sample_loss + wd
 
                 val_recon += recon_loss.item()
                 val_bact += bact_loss.item()
