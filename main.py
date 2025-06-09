@@ -41,7 +41,7 @@ def main():
     # Train model
     print("Training model...")
     trained_model = train_model(model, train_loader, val_loader, device, num_epochs=config.NUM_EPOCHS,
-                                learning_rate=config.LEARNING_RATE, name=config.NAME)
+                                learning_rate=config.LEARNING_RATE, name=config.NAME, lambda_weight=config.LAMBDA_WEIGHT)
     
     # Save model
     trained_model_path = f"{config.EVAL_OUTPUT_DIR}/split_autoencoder.pt"
