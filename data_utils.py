@@ -3,11 +3,12 @@ import numpy as np
 def load_data_tensor(path):
     return np.load(path, mmap_mode='r')
 
-def load_metadata(sample_path, bacteria_path, gene_path):
+def load_metadata(sample_path, bacteria_path, gene_path, pathway_path):
     samples = np.load(sample_path, allow_pickle=True)
     bacteria = np.load(bacteria_path, allow_pickle=True)
     genes = np.load(gene_path, allow_pickle=True)
-    return samples, bacteria, genes
+    pathways = np.load(gene_path, allow_pickle=True)
+    return samples, bacteria, genes, pathways
 
 def normalize_tensor(X):
     """

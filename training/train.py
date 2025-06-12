@@ -109,39 +109,23 @@ def vectorize_bacteria_constituency_loss_strict(H):
     loss = (dist_same / dist_diff).mean()
     return loss
 
-def custom_loss(X, X_reconstructed, latent, model=None, weight_decay=0.0):
+def custom_loss(embeddings, pred, target, model=None, weight_decay=0.0):
     """
     Parameters:
-        X: original input tensor (n, d, gene_dim)
-        X_reconstructed: model output (n, d, gene_dim)
-        latent: encoded tensor (n, d, 2b)
+        embeddings: low-dimensional representations (n, d, 2b)
+        pred: pathway predictions (n, d, pathway_dim)
+        target: pathway ground truth (n, d, pathway_dim)
         model: optional
         weight_decay: hyperparameter for weight decay (L2-regularization)
     """
+    # Split H_ij to H_i(bacteria representation), H_j(sample representation)
 
-    n, d, gene_dim = X.shape
-    b = latent.shape[-1] // 2
+    b = embeddings.shape[-1] // 2
+    H_i = embeddings[..., :b]  # shape: (n, d, b)
+    H_j = embeddings[..., b:]  # shape: (n, d, b)
 
-    # Split H_ij to H_i, H_j
-    H_i = latent[..., :b]  # shape: (n, d, b)
-    H_j = latent[..., b:]  # shape: (n, d, b)
-
-    # ---- part A - Normalized reconstruction error ----
-
-    # Calculate mean over samples (axis=0) per bacteria
-    X_mean = X.mean(dim=0, keepdim=True)  # shape: (1, d, gene_dim)
-
-    # Numerator: L2 norm of reconstruction error
-    numerator = torch.norm(X - X_reconstructed, dim=-1)  # shape: (n, d)
-
-    # Denominator: L2 norm of difference from mean
-    denominator = torch.norm(X - X_mean, dim=-1)  # shape: (n, d)
-
-    # Avoid division by zero
-    denominator = torch.where(denominator == 0, torch.ones_like(denominator) * 1e-8, denominator)
-
-    # Final normalized reconstruction loss
-    recon_loss = (numerator / denominator).mean()
+    # ---- part A - MSE ----
+    mse_loss = F.mse_loss(pred, target, reduction='mean')  # shape: scalar
 
     # ---- part B - Bacteria consistency ----
     bacteria_consistency_loss = vectorize_bacteria_constituency_loss(H_i)
@@ -157,34 +141,9 @@ def custom_loss(X, X_reconstructed, latent, model=None, weight_decay=0.0):
                 l2_reg += torch.sum(param ** 2)
         l2_reg = weight_decay * l2_reg
     else:
-        l2_reg = torch.tensor(0.0, device=X.device)
+        l2_reg = torch.tensor(0.0, device=target.device)
     
-    return recon_loss, bacteria_consistency_loss, sample_consistency_loss, l2_reg
-
-def balanced_loss(loss_history, eps=1e-8):
-    """
-    Computes balanced weights for loss components from their values across multiple epochs.
-    
-    Args:
-        loss_history (list or Tensor): shape (num_epochs, num_components), e.g., (10, 3)
-        eps (float): small constant to avoid division by zero
-
-    Returns:
-        list of float: normalized inverse weights per component
-    """
-    
-    loss_history = torch.tensor(loss_history) # shape (10, 3)
-
-    # Mean loss per component across epochs → shape (3,)
-    mean_losses = loss_history.mean(dim=0) 
-
-    # Compute inverse weights 
-    inverse_weights = 1.0 / (mean_losses + eps)  # shape (3,)
-
-    # Normalize 
-    normalized_weights = inverse_weights / inverse_weights.sum()  # shape (3,)
-
-    return normalized_weights.tolist()  # Convert to list
+    return mse_loss, bacteria_consistency_loss, sample_consistency_loss, l2_reg
 
 def train_model(model, train_loader, val_loader, device, num_epochs, learning_rate, name, lambda_weight=None):
 
@@ -201,58 +160,69 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
         })
 
     for epoch in range(num_epochs):
-
+        i = 0
         model.train()
-        running_recon, running_bact, running_sample, running_total = 0.0, 0.0, 0.0, 0.0
+        running_mse, running_bact, running_sample, running_total = 0.0, 0.0, 0.0, 0.0
 
-        for batch in train_loader:
-            batch_tensor = batch[0].to(device)                    # Move data tensor to the same device as the model
-            batch_tensor = batch_tensor.squeeze(0)         
+        for gene_batch, pathway_batch in train_loader:
+            i += 1
+            print(f"Processing batch {i} in epoch {epoch+1}/{num_epochs}")  # Debugging line to track progress
+            gene_batch = gene_batch.to(device)  
+            pathway_batch = pathway_batch.to(device)  
+
             #print(f"train batch shape: {batch_tensor.shape}")    # Debugging line to check batch shape
             optimizer.zero_grad()
 
             # Forward pass
-            encoded, decoded = model(batch_tensor) 
+            embeddings, predictions = model(gene_batch)  # shape: (n, d, embedding_dim), (n, d, pathway_dim)
 
-            recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4)
+            mse_loss, bact_loss, sample_loss, wd = custom_loss(embeddings, predictions, pathway_batch, model=model, weight_decay=1e-4)
             if lambda_weight is not None:
                 # Use balanced weights if provided
-                recon_loss *= lambda_weight[0]
+                mse_loss *= lambda_weight[0]
                 bact_loss *= lambda_weight[1]
                 sample_loss *= lambda_weight[2]
-            total_loss = recon_loss + bact_loss + sample_loss + wd
+            total_loss = mse_loss + bact_loss + sample_loss + wd
                        
             # Backward pass
             total_loss.backward()
             optimizer.step()
 
-            running_recon += recon_loss.item()
+            running_mse += mse_loss.item()
             running_bact += bact_loss.item()
             running_sample += sample_loss.item()
             running_total += total_loss.item()
 
-        avg_train_recon = running_recon / len(train_loader)
+        # Average loss per batch
+        avg_train_mse = running_mse / len(train_loader) 
         avg_train_bact = running_bact / len(train_loader)
         avg_train_sample = running_sample / len(train_loader)
         avg_train_total = running_total / len(train_loader)
 
         model.eval()
-        val_recon, val_bact, val_sample, val_total = 0.0, 0.0, 0.0, 0.0
+        val_mse, val_bact, val_sample, val_total = 0.0, 0.0, 0.0, 0.0
 
         with torch.no_grad():
-            for batch in val_loader:
-                batch_tensor = batch[0].to(device)                    
-                batch_tensor = batch_tensor.squeeze(0)   
-                encoded, decoded = model(batch_tensor)
-                recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4) 
-                total_loss = recon_loss + bact_loss + sample_loss + wd
+            for gene_batch, pathway_batch  in val_loader:
+                gene_batch = gene_batch.to(device)  
+                pathway_batch = pathway_batch.to(device)  
 
-                val_recon += recon_loss.item()
+                embeddings, predictions = model(gene_batch)
+                mse_loss, bact_loss, sample_loss, wd = custom_loss(embeddings, predictions, pathway_batch, model=model, weight_decay=1e-4) 
+                if lambda_weight is not None:
+                    # Use balanced weights if provided
+                    mse_loss *= lambda_weight[0]
+                    bact_loss *= lambda_weight[1]
+                    sample_loss *= lambda_weight[2]
+                total_loss = mse_loss + bact_loss + sample_loss + wd
+
+                val_mse += mse_loss.item()
                 val_bact += bact_loss.item()
                 val_sample += sample_loss.item()
                 val_total += total_loss.item()
 
-        avg_val_recon = val_recon / len(val_loader)
+        # Average loss per batch
+        avg_val_mse = val_mse / len(val_loader)
         avg_val_bact = val_bact / len(val_loader)
         avg_val_sample = val_sample / len(val_loader)
         avg_val_total = val_total / len(val_loader)
@@ -260,12 +230,12 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
         # Log metrics to wandb
         wandb.log({
             "epoch": epoch,
-            "train_recon_loss": avg_train_recon,
+            "train_mse_loss": avg_train_mse,
             "train_bact_loss": avg_train_bact,
             "train_sample_loss": avg_train_sample,
             "train_total_loss": avg_train_total,
 
-            "val_recon_loss": avg_val_recon,
+            "val_mse_loss": avg_val_mse,
             "val_bact_loss": avg_val_bact,
             "val_sample_loss": avg_val_sample,
             "val_total_loss": avg_val_total,
