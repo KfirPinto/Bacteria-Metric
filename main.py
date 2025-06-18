@@ -13,8 +13,12 @@ def main():
     samples, bacteria, gene_families = load_metadata(
         config.SAMPLE_LIST_PATH,
         config.BACTERIA_LIST_PATH,
+        config.UNANNOTATED_BACTERIA_LIST_PATH,
         config.GENE_LIST_PATH
     )
+
+    # Load additional bacteria, whose don't have pathways, and use them to train the model
+    additional_bacteria = load_metadata
 
     # Normalize
     data = normalize_tensor(data)
