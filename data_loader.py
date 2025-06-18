@@ -76,6 +76,8 @@ def intersect(gene_families_path, pathways_path, output_gene_families, output_pa
     np.save(os.path.join(output_pathways, "pathway_list.npy"), pathways_pathways)
 
     np.save(os.path.join(output_gene_families, "bacteria_complementary_list.npy"), bacteria_complementary)
+    np.save(os.path.join(output_gene_families, "complementary_tensor.npy"), complementary_tensor)
+
 
 def filter_zero_samples(input_path, output_dir):
 
