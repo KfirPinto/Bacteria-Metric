@@ -33,6 +33,9 @@ def intersect(gene_families_path, pathways_path, output_gene_families, output_pa
     pathways_sample_indices = np.isin(pathways_samples, intersected_samples)
     pathways_bacteria_indices = np.isin(pathways_bacteria, intersected_bacteria)
 
+    # Find bacteria indices at gene families abundance table whose are *not* in the intersection
+    bacteria_complementary_indices = np.where(~np.isin(gene_families_bacteria, intersected_bacteria))[0]
+
     # Filter tensors
     updated_gene_families_tensor = gene_families_tensor[
         np.ix_(gene_families_sample_indices, gene_families_bacteria_indices, np.arange(gene_families_tensor.shape[2]))
@@ -42,6 +45,9 @@ def intersect(gene_families_path, pathways_path, output_gene_families, output_pa
         np.ix_(pathways_sample_indices, pathways_bacteria_indices, np.arange(pathways_tensor.shape[2]))
     ]
 
+    complementary_tensor = gene_families_tensor[
+        np.ix_(gene_families_sample_indices, bacteria_complementary_indices, np.arange(gene_families_tensor.shape[2]))]
+
     # Filter and update lists
     updated_gene_families_samples = gene_families_samples[gene_families_sample_indices]
     updated_gene_families_bacteria = gene_families_bacteria[gene_families_bacteria_indices]
@@ -49,8 +55,11 @@ def intersect(gene_families_path, pathways_path, output_gene_families, output_pa
     updated_pathways_samples = pathways_samples[pathways_sample_indices]
     updated_pathways_bacteria = pathways_bacteria[pathways_bacteria_indices]
 
-    print(f"Updated gene families tensor shape: {updated_gene_families_tensor.shape}")
-    print(f"Updated pathways tensor shape: {updated_pathways_tensor.shape}")
+    bacteria_complementary = gene_families_bacteria[bacteria_complementary_indices]
+
+    print(f"Intersected gene families tensor shape: {updated_gene_families_tensor.shape}")
+    print(f"Complementary gene families tensor shape: {complementary_tensor.shape}")
+    print(f"Intersected pathways tensor shape: {updated_pathways_tensor.shape}")
 
     os.makedirs(output_gene_families, exist_ok=True)
     os.makedirs(output_pathways, exist_ok=True)
@@ -65,6 +74,8 @@ def intersect(gene_families_path, pathways_path, output_gene_families, output_pa
     np.save(os.path.join(output_pathways, "sample_list.npy"), updated_pathways_samples)
     np.save(os.path.join(output_pathways, "bacteria_list.npy"), updated_pathways_bacteria)
     np.save(os.path.join(output_pathways, "pathway_list.npy"), pathways_pathways)
+
+    np.save(os.path.join(output_gene_families, "bacteria_complementary_list.npy"), bacteria_complementary)
 
 def filter_zero_samples(input_path, output_dir):
 
