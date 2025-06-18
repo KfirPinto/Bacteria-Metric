@@ -129,20 +129,22 @@ def custom_loss(X, X_reconstructed, latent, model=None, weight_decay=0.0):
     # ---- part A - Normalized reconstruction error ----
 
     # Calculate mean over samples (axis=0) per bacteria
-    X_mean = X.mean(dim=0, keepdim=True)  # shape: (1, d, gene_dim)
+    #X_mean = X.mean(dim=0, keepdim=True)  # shape: (1, d, gene_dim)
 
     # Numerator: L2 norm of reconstruction error
-    numerator = torch.norm(X - X_reconstructed, dim=-1)  # shape: (n, d)
+    #numerator = torch.norm(X - X_reconstructed, dim=-1)  # shape: (n, d)
 
     # Denominator: L2 norm of difference from mean
-    denominator = torch.norm(X - X_mean, dim=-1)  # shape: (n, d)
+    #denominator = torch.norm(X - X_mean, dim=-1)  # shape: (n, d)
 
     # Avoid division by zero
-    denominator = torch.where(denominator == 0, torch.ones_like(denominator) * 1e-8, denominator)
+    #denominator = torch.where(denominator == 0, torch.ones_like(denominator) * 1e-8, denominator)
 
     # Final normalized reconstruction loss
-    recon_loss = (numerator / denominator).mean()
+    #recon_loss = (numerator / denominator).mean()
 
+    MSE = torch.norm(X - X_reconstructed, dim=-1).mean()
+    
     # ---- part B - Bacteria consistency ----
     bacteria_consistency_loss = vectorize_bacteria_constituency_loss(H_i)
 
@@ -159,7 +161,7 @@ def custom_loss(X, X_reconstructed, latent, model=None, weight_decay=0.0):
     else:
         l2_reg = torch.tensor(0.0, device=X.device)
     
-    return recon_loss, bacteria_consistency_loss, sample_consistency_loss, l2_reg
+    return MSE, bacteria_consistency_loss, sample_consistency_loss, l2_reg
 
 def balanced_loss(loss_history, eps=1e-8):
     """
@@ -186,7 +188,7 @@ def balanced_loss(loss_history, eps=1e-8):
 
     return normalized_weights.tolist()  # Convert to list
 
-def train_model(model, train_loader, val_loader, device, num_epochs, learning_rate, name, lambda_weight=None):
+def train_model(model, train_loader, device, num_epochs, learning_rate, name, lambda_weight=None, weight_decay=0.0):
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
@@ -209,12 +211,14 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
             batch_tensor = batch[0].to(device)                    # Move data tensor to the same device as the model
             batch_tensor = batch_tensor.squeeze(0)         
             #print(f"train batch shape: {batch_tensor.shape}")    # Debugging line to check batch shape
+            #print the max and min values of the batch tensor
+            #print(f"train batch max: {batch_tensor.max()}, min: {batch_tensor.min()}")  # Debugging line to check values
             optimizer.zero_grad()
-
+            
             # Forward pass
             encoded, decoded = model(batch_tensor) 
 
-            recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4)
+            recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=weight_decay)
             if lambda_weight is not None:
                 # Use balanced weights if provided
                 recon_loss *= lambda_weight[0]
@@ -224,7 +228,11 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
                        
             # Backward pass
             total_loss.backward()
+            #torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)  
             optimizer.step()
+
+            #for name, param in model.named_parameters():
+                #print(name, param.data.norm())
 
             running_recon += recon_loss.item()
             running_bact += bact_loss.item()
@@ -236,27 +244,6 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
         avg_train_sample = running_sample / len(train_loader)
         avg_train_total = running_total / len(train_loader)
 
-        model.eval()
-        val_recon, val_bact, val_sample, val_total = 0.0, 0.0, 0.0, 0.0
-
-        with torch.no_grad():
-            for batch in val_loader:
-                batch_tensor = batch[0].to(device)                    
-                batch_tensor = batch_tensor.squeeze(0)   
-                encoded, decoded = model(batch_tensor)
-                recon_loss, bact_loss, sample_loss, wd = custom_loss(batch_tensor, decoded, encoded, model=model, weight_decay=1e-4) 
-                total_loss = recon_loss + bact_loss + sample_loss + wd
-
-                val_recon += recon_loss.item()
-                val_bact += bact_loss.item()
-                val_sample += sample_loss.item()
-                val_total += total_loss.item()
-
-        avg_val_recon = val_recon / len(val_loader)
-        avg_val_bact = val_bact / len(val_loader)
-        avg_val_sample = val_sample / len(val_loader)
-        avg_val_total = val_total / len(val_loader)
-
         # Log metrics to wandb
         wandb.log({
             "epoch": epoch,
@@ -264,11 +251,6 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
             "train_bact_loss": avg_train_bact,
             "train_sample_loss": avg_train_sample,
             "train_total_loss": avg_train_total,
-
-            "val_recon_loss": avg_val_recon,
-            "val_bact_loss": avg_val_bact,
-            "val_sample_loss": avg_val_sample,
-            "val_total_loss": avg_val_total,
         })
 
     wandb.finish()    

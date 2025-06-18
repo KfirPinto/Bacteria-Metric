@@ -6,3 +6,4 @@ venv/
 *.pt
 *.npy
 wandb/
+config.py
