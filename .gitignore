@@ -5,3 +5,4 @@
 data/raw_data/
 \eval_data
 \wandb
+config.py
