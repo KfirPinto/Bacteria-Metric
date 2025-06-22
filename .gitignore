@@ -1,8 +1,10 @@
-\data/
-\.venv/
-\.idea/
-\__pycache__/
+data/
 data/raw_data/
-\eval_data
-\wandb
+__pycache__/
+.venv/
+.idea/
+wandb/
+*.pt
+*.npy
+eval_data
 config.py
