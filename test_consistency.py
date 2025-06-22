@@ -1,11 +1,6 @@
 import torch
 import numpy as np
-import sys
 import os
-# Add the autoencoder_model directory to Python path so torch.load can find the training module
-sys.path.append(os.path.join(os.path.dirname(__file__), 'autoencoder_model'))
-from autoencoder_model.training.model import SplitAutoencoder
-#from autoencoder_model.training.model import SplitAutoencoder  ########## check import path
 import matplotlib.pyplot as plt
 from sklearn.metrics import pairwise_distances
 from scipy.stats import spearmanr, pearsonr
@@ -13,6 +8,10 @@ import seaborn as sns
 from skbio.stats.ordination import pcoa
 import pandas as pd
 import argparse
+import importlib.util
+import sys
+sys.path.append(".")
+
 
 # Device setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -23,18 +22,23 @@ def load_input_data(input_file):
     input_tensor = torch.tensor(input_tensor, dtype=torch.float32)
     return input_tensor
 
-def load_model(model_path):
-    model = torch.load(model_path, map_location=device, weights_only=False)
-    model.eval()  # Set the model to evaluation mode
+def load_model(model_path, model_class, gene_dim, embedding_dim):
+    model = model_class(gene_dim=gene_dim, embedding_dim=embedding_dim)
+    model.load_state_dict(torch.load(model_path, map_location=device))
+    model.to(device)
+    model.eval()
     return model
 
 # Apply a model to the input bacteria to get the encoded representation of them by that model
-def encode_data(model, input_data):
+def encode_data(model, input_data, model_type="SplitAutoencoder"):
     with torch.no_grad():
         # Apply the encoder part of the model
-        x_encoded = model.encoder(input_data)  # shape: (num_samples, num_bacteria, 2b)
-        x_encoded = model.activation(x_encoded)
-        
+        if model_type == "SplitAutoencoder":
+            x_encoded, _ = model.encoder(input_data.to(device))  # shape: (num_samples, num_bacteria, 2b)
+            x_encoded = model.activation(x_encoded)
+        elif model_type == "SplitVAE":
+            x_encoded, x_reconstruction, mu, logvar = model.forward(input_data.to(device))  # shape: (num_samples, num_bacteria, 2b)
+
         b = x_encoded.shape[-1] // 2
         encoded_data = x_encoded[:, :, :b]  # first half of embedding
         
@@ -294,8 +298,29 @@ def parse_arguments():
                        default="non-normal",
                        help="Assumption about data normality for correlation analysis (default: non-normal)")
 
-    
+    parser.add_argument("--model-file",
+    type=str,
+    required=True,
+    help="Path to the model.py file that defines the model architecture.")
+
+    parser.add_argument("--model-class",
+    type=str,
+    default="SplitAutoencoder",
+    help="Name of the model class to import from the model file (default: SplitAutoencoder)")
+
+    parser.add_argument("--embedding-dim",
+    type=int,
+    default=32,
+    help="Dimensionality of the embedding space (default: 32)")
+
     return parser.parse_args()
+
+
+def load_model_class(model_file_path, class_name):
+    spec = importlib.util.spec_from_file_location("model_module", model_file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return getattr(module, class_name)
 
 def main():
     # Parse command line arguments
@@ -335,11 +360,11 @@ def main():
         if not os.path.exists(model_path):
             print(f"Warning: Model file {model_path} not found, skipping...")
             continue
-            
-        model = load_model(model_path)
-        encodings = encode_data(model, input_data)
+        ModelClass = load_model_class(args.model_file, args.model_class)
+        model = load_model(model_path, ModelClass, gene_dim=input_data.shape[-1], embedding_dim=args.embedding_dim)  
+        encodings = encode_data(model, input_data, model_type=args.model_class)
         all_encodings.append(encodings)
-    
+
     if not all_encodings:
         print("Error: No valid models found!")
         return
