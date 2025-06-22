@@ -8,3 +8,4 @@ wandb/
 *.npy
 eval_data
 config.py
+results/

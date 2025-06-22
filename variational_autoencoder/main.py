@@ -68,7 +68,7 @@ def main():
         
         # Save model
         trained_model_path = os.path.join(out_dir, f"split_autoencoder.pt")
-        torch.save(trained_model, trained_model_path)
+        torch.save(trained_model.state_dict(), trained_model_path)
         print(f"Model saved to {trained_model_path}")
 
 if __name__ == "__main__":
