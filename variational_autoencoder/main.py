@@ -1,7 +1,7 @@
 import torch
 from data_utils import load_data_tensor, load_metadata, normalize_tensor
 from preprocess import shuffle_bacteria, split_tensor, save_eval_data
-from training.model import SplitAutoencoder
+from training.model import SplitVAE
 from training.dataset import create_dataloaders
 from training.train import train_model
 import config as config
@@ -48,7 +48,7 @@ def main():
 
         # Create DataLoaders
         train_loader = create_dataloaders(
-            split["train_tensor"], batch_size=64
+            split["train_tensor"], batch_size=config.BATCH_SIZE
         )
 
         # Initialize model
@@ -58,7 +58,7 @@ def main():
         model_seed = random.randint(0, 99999) # random seed for model weight initialization
         torch.manual_seed(model_seed)
 
-        model = SplitAutoencoder(gene_dim=gene_dim, embedding_dim=config.EMBEDDING_DIM).to(device)
+        model = SplitVAE(gene_dim=gene_dim, embedding_dim=config.EMBEDDING_DIM).to(device)
         print(f"Running on device: {device}")
 
         # Train model
