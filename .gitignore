@@ -6,5 +6,6 @@ __pycache__/
 wandb/
 *.pt
 *.npy
+*.png
 eval_data
 config.py
