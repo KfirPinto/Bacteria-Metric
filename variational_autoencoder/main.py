@@ -4,10 +4,12 @@ from preprocess import shuffle_bacteria, split_tensor, save_eval_data
 from training.model import SplitVAE
 from training.dataset import create_dataloaders
 from training.train import train_model
-import config as config
-import random
+import sys
 import os
-
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
+import config
+import random
 def main():
 
     # ----- Load data and metadata -----
@@ -34,7 +36,7 @@ def main():
     data_tensor = torch.tensor(data_norm, dtype=torch.float32)
     unannotated_data_tensor = torch.tensor(unannotated_data_norm, dtype=torch.float32)
 
-    for i in range (11):
+    for i in range (10):
 
         out_dir = f"{config.EVAL_OUTPUT_DIR}/Run_{i}/"
         os.makedirs(out_dir, exist_ok=True)
