@@ -1,3 +1,4 @@
+import argparse
 from Bio import Entrez
 import pandas as pd
 import csv
@@ -193,8 +194,26 @@ def get_all_unique_ranks(all_lineage_data):
 
 # Main execution
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process species data and taxonomic ranks.")
+    parser.add_argument(
+        '--input_csv', 
+        type=str, 
+        required=True, 
+        help='Path to the CSV file containing the test bacteria names'
+    )
+    parser.add_argument(
+        '--output_csv', 
+        type=str, 
+        required=True, 
+        help='Path to save the formatted CSV output containing the linage of each bacteria'
+    )
+    args = parser.parse_args()
+
     # Extract species from CSV file
-    csv_file_path = 'test_bacteria.csv'  # Replace with your actual CSV file path
+    csv_file_path = args.input_csv  # Get the input CSV path from arguments
+
+    # # Extract species from CSV file
+    # csv_file_path = 'test_bacteria.csv'  
 
     try:
         bacteria_list = extract_species_from_csv(csv_file_path)
@@ -255,7 +274,8 @@ if __name__ == "__main__":
 
     # Create formatted output file
     formatted_df = create_formatted_output(df, all_ranks)
-    formatted_csv_path = "bacterial_lineage_formatted_2.csv"
+    formatted_csv_path = args.output_csv  # Get the output path from arguments
+    # formatted_csv_path = "bacterial_lineage_formatted.csv"
     formatted_df.to_csv(formatted_csv_path, index=False)
 
     # Show rank distribution
