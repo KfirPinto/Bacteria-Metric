@@ -12,7 +12,6 @@ import importlib.util
 import sys
 sys.path.append(".")
 
-
 # Device setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -298,20 +297,21 @@ def parse_arguments():
                        default="non-normal",
                        help="Assumption about data normality for correlation analysis (default: non-normal)")
 
+    # Sapir Additions
     parser.add_argument("--model-file",
-    type=str,
-    required=True,
-    help="Path to the model.py file that defines the model architecture.")
+                        type=str,
+                        required=True,
+                        help="Path to the model.py file that defines the model architecture.")
 
     parser.add_argument("--model-class",
-    type=str,
-    default="SplitAutoencoder",
-    help="Name of the model class to import from the model file (default: SplitAutoencoder)")
+                        type=str,
+                        default="SplitAutoencoder",
+                        help="Name of the model class to import from the model file (default: SplitAutoencoder)")
 
     parser.add_argument("--embedding-dim",
-    type=int,
-    default=32,
-    help="Dimensionality of the embedding space (default: 32)")
+                        type=int,
+                        default=32,
+                        help="Dimensionality of the embedding space (default: 32)")
 
     return parser.parse_args()
 
