@@ -48,4 +48,11 @@ After running the script, the following output files will be generated in the sp
 
 - **Clustering Metrics**: Plots of purity and silhouette scores for different values of k are saved to the output directory (`./plots` by default).
 - **Cluster Visualizations**: Visualizations of bacterial clusters based on taxonomic family and order will be saved as PNG files (`plot_clustered_family.png`, `plot_clustered_order.png`, etc.).
+- **Purity Significance**: Plots of purity significance saved to the output directory (`./plots` by default).
+
+| Metric          | Based On        | Purpose                                       |
+| --------------- | --------------- | --------------------------------------------- |
+| `actual_purity` | real labels     | What purity do I get from my actual taxonomy? |
+| `null_purities` | shuffled labels | What purity do I get just by random chance?   |
+
 - **Family Distribution**: A bar plot showing the distribution of bacteria across different families is also saved (`family_distribution.png`).

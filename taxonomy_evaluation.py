@@ -204,6 +204,87 @@ def calculate_purity_score(cluster_labels, true_labels):
     
     return purity
 
+def test_purity_significance(encoded_data, cluster_labels, true_labels, n_permutations=100, random_seed=42):
+
+    # Set random seed for reproducibility
+    np.random.seed(random_seed)
+    
+    # Calculate actual purity score
+    actual_purity = calculate_purity_score(cluster_labels, true_labels)
+    
+    # Generate null distribution by permuting labels
+    null_purities = []
+    
+    print(f"Testing significance with {n_permutations} random permutations...")
+    
+    for i in range(n_permutations):
+        if (i + 1) % 100 == 0:
+            print(f"  Permutation {i + 1}/{n_permutations}")
+        
+        # Randomly shuffle the true labels
+        shuffled_labels = np.random.permutation(true_labels)
+        
+        # Calculate purity with shuffled labels
+        null_purity = calculate_purity_score(cluster_labels, shuffled_labels)
+        null_purities.append(null_purity)
+    
+    null_purities = np.array(null_purities)
+    
+    # Calculate p-value (fraction of null purities >= actual purity)
+    p_value = (null_purities >= actual_purity).sum() / n_permutations
+    
+    # Calculate statistics
+    null_mean = np.mean(null_purities)
+    null_std = np.std(null_purities)
+    z_score = (actual_purity - null_mean) / null_std if null_std > 0 else 0
+    
+    # Calculate percentile rank
+    percentile = (null_purities < actual_purity).sum() / n_permutations * 100
+    
+    results = {
+        'actual_purity': actual_purity,
+        'null_mean': null_mean,
+        'null_std': null_std,
+        'null_purities': null_purities,
+        'p_value': p_value,
+        'z_score': z_score,
+        'percentile': percentile,
+        'n_permutations': n_permutations,
+        'is_significant_05': p_value < 0.05,
+        'is_significant_01': p_value < 0.01,
+        'is_significant_001': p_value < 0.001
+    }
+    
+    return results
+
+def plot_significance_test(sig_results, label_type="Family", save_path="purity_significance.png"):
+
+    fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+    
+    # Plot histogram of null distribution
+    ax.hist(sig_results['null_purities'], bins=50, alpha=0.7, color='lightblue', 
+            edgecolor='black', label='Null distribution')
+    
+    # Add vertical line for actual purity
+    ax.axvline(sig_results['actual_purity'], color='red', linestyle='--', linewidth=2,
+               label=f'Actual purity = {sig_results["actual_purity"]:.3f}')
+    
+    # Add vertical line for null mean
+    ax.axvline(sig_results['null_mean'], color='blue', linestyle=':', linewidth=2,
+               label=f'Null mean = {sig_results["null_mean"]:.3f}')
+    
+    ax.set_xlabel('Purity Score')
+    ax.set_ylabel('Frequency')
+    ax.set_title(f'Purity Score Significance Test ({label_type})\n'
+                f'p-value = {sig_results["p_value"]:.4f}, '
+                f'Percentile = {sig_results["percentile"]:.1f}%')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
 def evaluate_clustering(encoded_data, cluster_labels, true_labels, label_type="Family"):
     purity = calculate_purity_score(cluster_labels, true_labels)
     silhouette_avg = silhouette_score(encoded_data, cluster_labels)
@@ -488,8 +569,8 @@ def main():
     best_k_order = max(order_results.keys(), 
                       key=lambda k: order_results[k]['Purity'])
     
-    print(f"\nBest k for Family clustering: {best_k_family} (Purity: {family_results[best_k_family]['Purity']:.4f})")
-    print(f"Best k for Order clustering: {best_k_order} (Purity: {order_results[best_k_order]['Purity']:.4f})")
+    print(f"\nBest k for Family clustering: {best_k_family}")
+    print(f"Best k for Order clustering: {best_k_order}")
 
     # Apply KMeans in original (high-dimensional) space
     kmeans_labels_family = apply_kmeans(all_encoded, num_clusters=best_k_family)
@@ -502,6 +583,25 @@ def main():
     # Evaluate order clustering
     order_eval = evaluate_clustering(all_encoded, kmeans_labels_order, order_labels, "Order")
     print_evaluation_results(order_eval)
+
+    # Test statistical significance of purity scores
+    print("\n" + "="*60)
+    print("TESTING STATISTICAL SIGNIFICANCE OF CLUSTERING RESULTS")
+    print("="*60)
+    
+    # Test family clustering significance
+    family_sig_results = test_purity_significance(
+        all_encoded, kmeans_labels_family, family_labels, 100
+    )
+    
+    # Test order clustering significance
+    order_sig_results = test_purity_significance(
+        all_encoded, kmeans_labels_order, order_labels, 100
+    )
+
+    # Plot significance results
+    plot_significance_test(family_sig_results, "Family", os.path.join(output_dir, "family_purity_significance.png"))
+    plot_significance_test(order_sig_results, "Order", os.path.join(output_dir, "order_purity_significance.png"))
     
     # Generate plots
     plot_clustering_metrics(family_results, "family_clustering_metrics.png")
