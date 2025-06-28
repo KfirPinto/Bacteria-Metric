@@ -7,6 +7,61 @@ from tqdm import tqdm
 from collections import defaultdict
 import requests
 from io import BytesIO
+import pyreadr
+from scipy.io import mmread
+
+def load_from_rds(rds_file, output_path):
+    # Read the RDS file using pyreadr
+    result = pyreadr.read_r(rds_file)
+
+    # Extract the first object from the RDS file
+    df = None
+    for key in result.keys():
+        df = result[key]
+        break
+    
+    if df is None:
+        raise ValueError("No data found in RDS file.")
+
+    # Ensure it's a DataFrame (in case it's imported as matrix)
+    if not isinstance(df, pd.DataFrame):
+        df = pd.DataFrame(df)
+    
+    # Optionally save as CSV
+    if output_path is not None:
+        df.to_csv(output_path)
+        print(f"Saved DataFrame to {output_path}")
+
+    return df
+
+def load_from_mtx(mtx_file, cols_names_file, rows_names_file, output_path):
+
+    # Read the mtx file using scipy
+    matrix = mmread(mtx_file).toarray()
+    print("convert done")
+    row_names = []
+    col_names = []
+
+    # Read row and column names
+    with open(rows_names_file, "r") as f:
+        row_names = [line.strip() for line in f]
+
+    with open(cols_names_file, "r") as f:
+        col_names=[line.strip() for line in f]
+        
+    # Check dimensions for safety
+    if matrix.shape[0] != len(row_names):
+        raise ValueError(f"Number of rows in matrix ({matrix.shape[0]}) does not match number of row names ({len(row_names)})")
+
+    if matrix.shape[1] != len(col_names):
+        raise ValueError(f"Number of columns in matrix ({matrix.shape[1]}) does not match number of column names ({len(col_names)})")
+
+    # Convert to DataFrame
+    df = pd.DataFrame(matrix, index=row_names, columns=col_names)
+
+    # Save as CSV
+    df.to_csv(output_path)
+
 
 def intersect(gene_families_path, pathways_path, output_gene_families, output_pathways):
 
