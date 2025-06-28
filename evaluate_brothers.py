@@ -44,7 +44,7 @@ def parse_args():
     parser.add_argument('--model_class', type=str, default='SplitAutoencoder', help="Model class name")
     parser.add_argument('--model_path', type=str, required=True, help="Path to trained model .pt")
     parser.add_argument('--embedding_dim', type=int, default=32, help="Embedding dimension")
-    parser.add_argument('--label_type', type=str, default='Order', choices=['Order', 'Family', 'Class'], help="Taxonomic level")
+    parser.add_argument('--label_type', type=str, default='Class', choices=['Order', 'Family', 'Class'], help="Taxonomic level")
     parser.add_argument('--distance', type=str, default='cosine', choices=['cosine', 'euclidean'], help="Distance metric")
     parser.add_argument('--output_dir', type=str, default='.', help="Directory to save plots")
     parser.add_argument('--avoid_duplicates', action='store_true', help="Avoid duplicate pairs in evaluation")
@@ -57,19 +57,9 @@ def load_model_class(model_file_path, class_name):
     spec.loader.exec_module(module)
     return getattr(module, class_name)
 
-def evaluate_taxonomic_brothers(embeddings, labels, distance_metric='cosine', avoid_duplicates=False):
-    """
-    Evaluate if nearest neighbors are 'taxonomic brothers' (same taxonomic label).
-    
-    Args:
-        embeddings: numpy array of shape (n_bacteria, embedding_dim)
-        labels: numpy array of taxonomic labels
-        distance_metric: 'cosine' or 'euclidean'
-        avoid_duplicates: if True, only evaluate each unique pair once
-    
-    Returns:
-        results dict with accuracy, correct pairs, total pairs, and detailed results
-    """
+def evaluate_taxonomic_brothers(embeddings, labels, distance_metric='cosine', avoid_duplicates=True):
+    # Evaluate if nearest neighbors are 'taxonomic brothers' (same taxonomic label).
+
     n_bacteria = len(embeddings)
     
     # Compute pairwise distances or similarities
