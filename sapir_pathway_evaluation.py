@@ -358,6 +358,16 @@ def main():
     #embedding_sim = normalize_similarities(embedding_sim)
     #pathway_sim = normalize_similarities(pathway_sim)
 
+    bacteria_names = list(embeddings.keys())
+    n = len(bacteria_names)
+    print("Pairs with embedding similarity > 0.6 or pathway similarity > 0.4:")
+    for i in range(n):
+        for j in range(i + 1, n):
+            emb_sim = embedding_sim[i, j]
+            path_sim = pathway_sim[i, j]
+            if emb_sim > 0.6 or path_sim > 0.4:
+                print(f"{bacteria_names[i]} - {bacteria_names[j]}: embedding_sim={emb_sim:.3f}, pathway_sim={path_sim:.3f}")
+
     # Calculate correlations
     pearson_corr, spearman_corr, mantel_corr, mantel_p_value = calculate_correlations(embedding_sim, pathway_sim)
     print(f"Pearson Correlation: {pearson_corr:.4f}, Spearman Correlation: {spearman_corr:.4f}, Mantel Correlation: {mantel_corr:.4f}, Mantel p-value: {mantel_p_value:.4f}")
@@ -366,6 +376,5 @@ def main():
     save_path = get_save_path(args.output_dir, args.method_embeddings, args.method_pathways, args.normalized_embeddings)
     plot_similarities(embedding_sim, pathway_sim, pearson_corr, spearman_corr, mantel_corr, mantel_p_value, save_path)
 
-    # add mehanbolis 
 if __name__ == "__main__":
     main()
