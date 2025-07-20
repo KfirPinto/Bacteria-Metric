@@ -1,12 +1,10 @@
 data/
-data/raw_data/
 __pycache__/
 .venv/
 .idea/
 wandb/
 *.pt
 *.npy
-*.png
 eval_data
 config.py
 results/
