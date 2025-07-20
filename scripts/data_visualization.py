@@ -36,7 +36,7 @@ def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     plt.xlabel("Bacterium Index")
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig('output/plots/genes_per_bacterium')
+    plt.savefig('genes_per_bacterium')
 
     # === Plot Pathways (same bacterium order) ===
     plt.figure(figsize=(20, 10))
@@ -46,12 +46,17 @@ def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     plt.xlabel("Bacterium Index")
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig('output/plots/pathways_per_bacterium')
+    plt.savefig('pathways_per_bacterium')
 
     threshold = 150
-    for i, count in enumerate(pathway_counts):
+    for i, count in enumerate(sorted_pathway_counts):
         if count > threshold:
             print(f"{sorted_bacteria[i]}: {count} pathways")
+
+    threshold = 3000
+    for i, count in enumerate(sorted_gene_counts):
+        if count > threshold:
+            print(f"{sorted_bacteria[i]}: {count} genes")
     
 def bacteria_count_across_samples():
 
@@ -59,8 +64,8 @@ def bacteria_count_across_samples():
     This function returns the numbers of bacteria appears at each sample
     """
 
-    tensor = np.load("data/data_files/pathways/Union/tensor.npy")  
-    sample_list = np.load("data/data_files/pathways/Union/samples.npy", allow_pickle=True)
+    tensor = np.load("../data/HMP_2012/genefamilies/after_intersection/tensor.npy")  
+    sample_list = np.load("../data/HMP_2012/genefamilies/after_intersection/sample_list.npy", allow_pickle=True)
     tensor = torch.tensor(tensor)
 
     flattened_tensor = torch.sum(tensor, dim=2) # tensor shape: (samples, bacteria)
@@ -71,11 +76,11 @@ def bacteria_count_across_samples():
 
     plt.figure(figsize=(40, 100))
     plt.barh(sorted_samples, sorted_counts)  
-    plt.xlabel('Count of microbes', fontsize=50)
-    plt.title('Count of microbes per sample', fontsize=50)
+    plt.xlabel('Count of microbes', fontsize=100)
+    plt.title('Count of microbes per sample', fontsize=100)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('output/plots/Union/bacteria_count')
+    plt.savefig('bacteria_count')
     plt.close()
 
      # Pie chart for samples with at least one microbe
@@ -88,12 +93,12 @@ def bacteria_count_across_samples():
     plt.figure(figsize=(7, 7))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
     plt.title('Proportion of samples with at least one microbe', fontsize=20)
-    plt.savefig('output/plots/Union/pie_chart_bacteria')
+    plt.savefig('pie_chart_bacteria')
     plt.close()
 
 def create_heatmap():
        
-    tensor = np.load("data/data_files/pathways/Union/filtered_tensor.npy") 
+    tensor = np.load("../data/HMP_2012/pathabundance/after_intersection/tensor.npy") 
     tensor = torch.tensor(tensor)
 
     flattened_pathways = torch.sum(tensor, dim=2).detach().numpy()
@@ -102,27 +107,25 @@ def create_heatmap():
     plt.figure(figsize=(20, 20))
     ax = sns.heatmap(flattened_pathways_log, cmap=white_to_red, annot=False, vmin=np.min(flattened_pathways_log), vmax=0.001)
     ax.set_xlabel("bacteria", fontsize=30)  
-    ax.set_ylabel("non-zero samples", fontsize=30) 
+    ax.set_ylabel("samples", fontsize=30) 
     ax.set_title("Pathways Flattened", fontsize=30)
     plt.tight_layout()
-    plt.savefig('output/plots/Union/pathways_flattened.png')
+    plt.savefig('heatmap_pathways_flattened.png')
     plt.close()
 
-    """
 
     flattened_bacteria = torch.sum(tensor, dim=1).detach().numpy()
     flattened_sample_log = np.log1p(flattened_bacteria) 
-    plt.figure(figsize=(8, 6))
-    ax = sns.heatmap(flattened_sample_log, cmap="viridis", annot=False, cbar=True, vmin=np.min(flattened_sample_log), vmax=0.00175)
-    ax.set_xlabel("pathways")  
-    ax.set_ylabel("samples") 
-    ax.set_xticks([])  
-    ax.set_yticks([])
-    ax.set_title("Bacterium Flattened")
+    plt.figure(figsize=(20, 20))
+    ax = sns.heatmap(flattened_sample_log, cmap=white_to_red, annot=False, cbar=True, vmin=np.min(flattened_sample_log), vmax=0.001)
+    ax.set_xlabel("pathways", fontsize=30)  
+    ax.set_ylabel("samples", fontsize=30) 
+    ax.set_title("Bacterium Flattened", fontsize=30)
     plt.tight_layout()
-    plt.savefig('output/plots/bacterium_flattened.png')
+    plt.savefig('heatmap_bacterium_flattened.png')
     plt.close()
 
+"""
     flattened_pathway = torch.sum(tensor, dim=2).detach().numpy()
     flattened_pathway_log = np.log1p(flattened_pathway) 
     print(f"Max: {np.max(flattened_pathway_log)}")
@@ -132,11 +135,9 @@ def create_heatmap():
     ax.set_ylabel("samples") 
     ax.set_title("Pathway Flattened")
     plt.tight_layout()
-    plt.savefig('output/plots/pathway_flattened.png')
+    plt.savefig('pathway_flattened.png')
     plt.close()
-
-    """
-
+"""
 def visualize_set_intersection(file1, file2):
 
      # Load sets from .npy files
@@ -321,3 +322,6 @@ def non_zero_samples():
     # Step 6: save the plot
     plt.savefig('non_zero_samples')
     plt.close()
+
+if __name__ == "__main__":
+    create_heatmap()

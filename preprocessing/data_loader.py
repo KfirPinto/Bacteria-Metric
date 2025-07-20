@@ -5,63 +5,8 @@ import os
 import csv
 from tqdm import tqdm
 from collections import defaultdict
-import requests
+#import requests
 from io import BytesIO
-import pyreadr
-from scipy.io import mmread
-
-def load_from_rds(rds_file, output_path):
-    # Read the RDS file using pyreadr
-    result = pyreadr.read_r(rds_file)
-
-    # Extract the first object from the RDS file
-    df = None
-    for key in result.keys():
-        df = result[key]
-        break
-    
-    if df is None:
-        raise ValueError("No data found in RDS file.")
-
-    # Ensure it's a DataFrame (in case it's imported as matrix)
-    if not isinstance(df, pd.DataFrame):
-        df = pd.DataFrame(df)
-    
-    # Optionally save as CSV
-    if output_path is not None:
-        df.to_csv(output_path)
-        print(f"Saved DataFrame to {output_path}")
-
-    return df
-
-def load_from_mtx(mtx_file, cols_names_file, rows_names_file, output_path):
-
-    # Read the mtx file using scipy
-    matrix = mmread(mtx_file).toarray()
-    print("convert done")
-    row_names = []
-    col_names = []
-
-    # Read row and column names
-    with open(rows_names_file, "r") as f:
-        row_names = [line.strip() for line in f]
-
-    with open(cols_names_file, "r") as f:
-        col_names=[line.strip() for line in f]
-        
-    # Check dimensions for safety
-    if matrix.shape[0] != len(row_names):
-        raise ValueError(f"Number of rows in matrix ({matrix.shape[0]}) does not match number of row names ({len(row_names)})")
-
-    if matrix.shape[1] != len(col_names):
-        raise ValueError(f"Number of columns in matrix ({matrix.shape[1]}) does not match number of column names ({len(col_names)})")
-
-    # Convert to DataFrame
-    df = pd.DataFrame(matrix, index=row_names, columns=col_names)
-
-    # Save as CSV
-    df.to_csv(output_path)
-
 
 def intersect(gene_families_path, pathways_path, output_gene_families, output_pathways):
 
@@ -274,11 +219,14 @@ def filter_based_uniprotkb(input_path, output_dir, uniprotkb_path):
         
 def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
 
-    pre_df = pd.read_csv(input_path)
+    pre_df = pd.read_csv(input_path, sep='\t')
     #regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
     regex_pattern = r"^GO:\d+\|g__[^.]+\.s__[^.]+$"
 
     df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
+    # print the first column to verify the regex pattern
+    print(df.iloc[:, 0])
+
     df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
 
     # Trim sample column names (1:-2) at the first underscore (ERR9830179_Abundance-RPKs → ERR9830179)
@@ -336,18 +284,18 @@ def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
     np.save(os.path.join(output_dir, "gene_families_list.npy"), gene_families_list)
 
     # Sanity check
-    """
-    t1 = np.where(np.array(people_list) == 'ERR9830187')[0][0]
-    t2 = bacteria_idx_map['g__Escherichia.s__Escherichia_coli']
-    t3 = gene_family_idx_map['GO:0000006']
-    print(f"Sanity check for {people_list[t1]}, {bacteria_list[t2]}, {gene_families_list[t3]}")
-    torch.set_printoptions(precision=10)
-    print(tensor[t1][t2][t3])
-    """
+    
+    #t1 = np.where(np.array(people_list) == 'ERR9830187')[0][0]
+    #t2 = bacteria_idx_map['g__Escherichia.s__Escherichia_coli']
+    #t3 = gene_family_idx_map['GO:0000006']
+    #print(f"Sanity check for {people_list[t1]}, {bacteria_list[t2]}, {gene_families_list[t3]}")
+    #torch.set_printoptions(precision=10)
+    #print(tensor[t1][t2][t3])
+    
 
 def load_pathway_data(input_file, output_dir):
     
-    pre_df = pd.read_csv(input_file, sep='\t')
+    pre_df = pd.read_csv(input_file, quotechar='"')
     regex_pattern = r".+\|g__.+\.s__.+"
 
     # iloc[:,0] used for index based selection
