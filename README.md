@@ -10,7 +10,7 @@ Make sure you have the following files ready:
 - `test_tensor.npy`: The test data containing bacterial embeddings.
 - `test_bacteria.npy`: The test labels, representing the bacteria names corresponding to the embeddings.
 - `split_autoencoder.pt`: A pre-trained model to load the encoder.
-- `bacterial_lineage_formatted.csv`: A CSV file containing the taxonomy information for bacteria (columns: Original Name, Family, Order, Class).
+- `bacterial_lineage_formatted.csv`: A CSV file containing the taxonomy information for bacteria (columns: Original Name, Family, Order, Class). This is a file that is gotten as an output from running the script `create_lineage.py`
 
 You can either place these files in the same directory as the script or specify their paths using command-line arguments.
 
