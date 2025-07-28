@@ -219,13 +219,12 @@ def filter_based_uniprotkb(input_path, output_dir, uniprotkb_path):
         
 def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
 
-    pre_df = pd.read_csv(input_path, sep='\t')
+    pre_df = pd.read_csv(input_path)
     #regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
-    regex_pattern = r"^GO:\d+\|g__[^.]+\.s__[^.]+$"
+    #regex_pattern = r"^GO:\d+\|g__[^.]+\.s__[^.]+$"
+    regex_pattern = r"^\d+\.\d+\.\d+\.\d+\|g__.+\.s__.+$"
 
     df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
-    # print the first column to verify the regex pattern
-    print(df.iloc[:, 0])
 
     df[['gene_family', 'Bacteria']] = df.iloc[:, 0].str.split('|', expand=True)
 
@@ -274,7 +273,20 @@ def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
 
     # Print the shape of the tensor for verification
     tensor = torch.from_numpy(array)
-    print(tensor.shape)
+    print(f"Tensor shape before normalization: {tensor.shape}")
+    
+    # Normalize each sample (first dimension) so that all values sum to 1
+    # Sum across bacteria and gene families dimensions (dim=1 and dim=2)
+    sample_sums = tensor.sum(dim=(1, 2), keepdim=True)
+    
+    # Avoid division by zero - set sum to 1 for samples with zero total
+    sample_sums = torch.where(sample_sums == 0, torch.ones_like(sample_sums), sample_sums)
+    
+    # Normalize to proportional abundances
+    tensor = tensor / sample_sums
+    
+    print(f"Tensor shape after normalization: {tensor.shape}")
+    print(f"Sample sums after normalization (should all be 1.0): {tensor.sum(dim=(1, 2))[:5]}")  # Show first 5 samples
 
     # Save outputs
     os.makedirs(output_dir, exist_ok=True)
