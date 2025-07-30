@@ -1,9 +1,8 @@
 import torch
 import numpy as np
 import pandas as pd
-import sys, os, collections, argparse
+import sys, os, collections, argparse, umap
 import importlib.util
-import umap
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score, silhouette_score
@@ -383,6 +382,17 @@ def plot_embeddings_with_cluster_boundaries(reduced_dict, kmeans_labels, evaluat
     # Extract data
     reduced_data = np.array([entry['reduced_encoding'] for entry in reduced_dict.values()])
     tax_labels = [entry[taxonomic_level] for entry in reduced_dict.values()]
+
+    # If the taxonomic level is "family", filter to top 15 most frequent families
+    if taxonomic_level.lower() == 'family':
+        family_counts = collections.Counter(tax_labels)
+        most_frequent_families = [family for family, count in family_counts.most_common(15)]
+
+        reduced_data = [entry['reduced_encoding'] for entry in reduced_dict.values() if entry[taxonomic_level] in most_frequent_families]
+        tax_labels = [entry[taxonomic_level] for entry in reduced_dict.values() if entry[taxonomic_level] in most_frequent_families]
+    else:
+        reduced_data = [entry['reduced_encoding'] for entry in reduced_dict.values()]
+        tax_labels = [entry[taxonomic_level] for entry in reduced_dict.values()]
     
     # Set up colors for taxonomic groups
     unique_taxa = sorted(set(tax_labels))
@@ -465,22 +475,26 @@ def plot_by_taxonomy(reduced_dict, evaluation_results,
     taxonomic_labels = [entry.get(taxonomic_level, 'Unknown') for entry in reduced_dict.values()]
     reduced_data = np.array([entry['reduced_encoding'] for entry in reduced_dict.values()])
     
-    # Get unique taxonomic groups (filter out None/NaN values)
-    unique_taxa = sorted([taxa for taxa in set(taxonomic_labels) 
-                         if taxa is not None and str(taxa) != 'nan' and str(taxa) != 'Unknown'])
-    
-    # Add 'Unknown' category if it exists in the data
-    if 'Unknown' in taxonomic_labels or None in taxonomic_labels:
-        unique_taxa.append('Unknown')
-    
-    # Create color mapping
+    # If the taxonomic level is "family", filter to top 15 most frequent families
+    if taxonomic_level.lower() == 'family':
+        family_counts = collections.Counter(taxonomic_labels)
+        most_frequent_families = [family for family, count in family_counts.most_common(15)]
+        
+        filtered_labels = [label for label in taxonomic_labels if label in most_frequent_families]
+        filtered_data = reduced_data[:len(filtered_labels)] 
+    else:
+        filtered_labels = taxonomic_labels
+        filtered_data = reduced_data
+
+    # Create color mapping for the families
+    unique_taxa = sorted(set(filtered_labels))
     taxa_to_color = {taxa: idx for idx, taxa in enumerate(unique_taxa)}
-    colors = [taxa_to_color.get(taxa, taxa_to_color.get('Unknown', 0)) for taxa in taxonomic_labels]
-    
+    colors = [taxa_to_color.get(taxa, taxa_to_color.get('Unknown', 0)) for taxa in filtered_labels]
+
     # Create the plot
     plt.figure(figsize=(14, 12))
     scatter = plt.scatter(
-        reduced_data[:, 0], reduced_data[:, 1],
+        filtered_data[:, 0], filtered_data[:, 1],
         c=colors, cmap='tab20', edgecolors='k', s=100, alpha=0.8
     )
     
@@ -490,7 +504,7 @@ def plot_by_taxonomy(reduced_dict, evaluation_results,
                           markerfacecolor=scatter.cmap(taxa_to_color[taxa] / max(len(unique_taxa)-1, 1)), 
                           markersize=10)
                for taxa in unique_taxa]
-    plt.legend(handles=handles, title=taxonomic_level.capitalize(), 
+    plt.legend(handles=handles, title=f"{taxonomic_level.capitalize()}", 
                bbox_to_anchor=(1.05, 1), loc='upper left')
     
     # Set title and labels
