@@ -1,26 +1,16 @@
 # Bacterial Taxonomic Clustering Analysis
 
 ## Overview
-This tool performs clustering analysis on bacterial embeddings and evaluates how well the clusters align with taxonomic classifications. It supports multiple dimensionality reduction methods and provides various visualization options to assess clustering quality. The tool can work with either model-based embeddings or external pre-computed embeddings.
+This tool performs clustering analysis on bacterial embeddings and evaluates how well the clusters align with taxonomic classifications. It supports multiple dimensionality reduction methods and provides various visualization options to assess clustering quality. The tool works with pre-computed embeddings and their corresponding bacterial labels.
 
 ## How to Run
 
 ### 1. Prepare the Files
 
-#### For Model-Based Analysis
 Make sure you have the following files ready:
-- `test_tensor.npy`: The test data containing bacterial gene expression data
-- `test_bacteria.npy`: The test labels, representing the bacteria names corresponding to the data
-- `split_autoencoder.pt`: A pre-trained model to load the encoder
-- `bacterial_lineage_formatted.csv`: A CSV file containing the taxonomy information for bacteria (columns: Original Name, Family, Order, Class). This is a file that is gotten as an output from running the script `create_lineage.py`
-- `model.py`: Python file containing the model architecture definition
-
-#### For External Embeddings Analysis
-Make sure you have the following files ready:
-- `embeddings.npy`: Pre-computed bacterial embeddings
-- `projection_matrix.npy` (optional): Projection matrix to apply to embeddings
-- `test_bacteria.npy`: The bacteria names corresponding to the embeddings
-- `bacterial_lineage_formatted.csv`: A CSV file containing the taxonomy information
+- `embeddings.npy`: Pre-computed bacterial embeddings (numpy array)
+- `embeddings_labels.csv`: CSV file containing bacterial names corresponding to the embeddings
+- `bacterial_lineage.csv`: CSV file containing taxonomy information for bacteria with columns: `Original Name`, `Family`, `Order`, `Class`, `Phylum`
 
 You can either place these files in the same directory as the script or specify their paths using command-line arguments.
 
@@ -32,26 +22,19 @@ pip install torch numpy scikit-learn matplotlib pandas adjustText umap-learn sci
 
 ### 3. Run the Script
 
-#### Model-Based Analysis
-To run the script using a trained model to generate embeddings:
+**Basic Usage:**
 ```bash
-python taxonomy_evaluation.py --test_data <path-to-test-data> --test_labels <path-to-test-labels> --model_path <path-to-model> --taxonomy_file <path-to-taxonomy-file> --output_dir <output-directory> --model-file <path-to-model-file> --model-class <model-class-name> --embedding-dim <embedding-dimension> --reduction_method <method>
+python taxonomy_evaluation.py
+```
+
+**With Custom Parameters:**
+```bash
+python taxonomy_evaluation.py --embeddings <path-to-embeddings> --embeddings_labels <path-to-labels> --taxonomy_file <path-to-taxonomy-file> --output_dir <output-directory> --reduction_method <method> --taxonomic_levels <levels>
 ```
 
 **Example:**
 ```bash
-python taxonomy_evaluation.py --test_data test_tensor.npy --test_labels test_bacteria.npy --model_path split_autoencoder.pt --taxonomy_file bacterial_lineage_formatted.csv --output_dir ./plots --model-file variational_autoencoder/training/model.py --model-class SplitVAE --embedding-dim 32 --min_k 2 --max_k 20 --reduction_method umap
-```
-
-#### External Embeddings Analysis
-To run the script using pre-computed embeddings:
-```bash
-python taxonomy_evaluation.py --external_embeddings <path-to-embeddings> --test_labels <path-to-test-labels> --taxonomy_file <path-to-taxonomy-file> --output_dir <output-directory> --reduction_method <method>
-```
-
-**Example:**
-```bash
-python taxonomy_evaluation.py --external_embeddings bacterial_embeddings.npy --projection_matrix projection_matrix.npy --test_labels test_bacteria.npy --taxonomy_file bacterial_lineage_formatted.csv --output_dir ./plots --min_k 2 --max_k 20 --reduction_method pca
+python taxonomy_evaluation.py --embeddings bacterial_embeddings.npy --embeddings_labels bacteria_names.csv --taxonomy_file bacterial_lineage.csv --output_dir ./results --min_k 2 --max_k 20 --reduction_method umap --taxonomic_levels "family,order,class"
 ```
 
 ### 4. Command-Line Arguments
@@ -59,19 +42,9 @@ python taxonomy_evaluation.py --external_embeddings bacterial_embeddings.npy --p
 #### Input Files
 | Argument | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `--test_data` | Path to test data numpy file (.npy) | `test_tensor.npy` | For model-based analysis |
-| `--test_labels` | Path to test bacteria labels numpy file (.npy) | `test_bacteria.npy` | Yes |
-| `--model_path` | Path to trained model file (.pt) | `split_autoencoder.pt` | For model-based analysis |
-| `--taxonomy_file` | Path to bacterial taxonomy CSV file | `bacterial_lineage.csv` | Yes |
-| `--external_embeddings` | Path to external embeddings numpy file (.npy) | `None` | For external embeddings analysis |
-| `--projection_matrix` | Path to projection matrix numpy file (.npy) | `None` | Optional with external embeddings |
-
-#### Model Configuration (for model-based analysis)
-| Argument | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `--model-file` | Path to model.py file defining model architecture | - | For model-based analysis |
-| `--model-class` | Name of model class to import from model file | `SplitAutoencoder` | No |
-| `--embedding-dim` | Dimensionality of the embedding space | `32` | No |
+| `--embeddings` | Path to embeddings numpy file (.npy) | `embeddings.npy` | No |
+| `--embeddings_labels` | Path to embeddings labels CSV file | `embeddings_labels.csv` | No |
+| `--taxonomy_file` | Path to bacterial taxonomy CSV file | `bacterial_lineage.csv` | No |
 
 #### Analysis Parameters
 | Argument | Description | Default | Options |
@@ -80,57 +53,67 @@ python taxonomy_evaluation.py --external_embeddings bacterial_embeddings.npy --p
 | `--min_k` | Minimum number of clusters to test | `2` | - |
 | `--max_k` | Maximum number of clusters to test | `15` | - |
 | `--reduction_method` | Dimensionality reduction method for visualization | `pca` | `pca`, `tsne`, `umap`, `pcoa` |
+| `--taxonomic_levels` | Comma-separated taxonomic levels to analyze | `family,order,class,phylum` | Any combination of: `family`, `order`, `class`, `phylum` |
 
-### 5. Analysis Modes
+### 5. Data Processing
 
-#### Model-Based Analysis
-- Uses a trained neural network model to encode bacterial gene expression data
-- Requires test data, model file, and model architecture definition
-- Generates embeddings by passing data through the model's encoder
-- Supports both `SplitAutoencoder` and `SplitVAE` model types
+#### Taxonomic Level Processing
+For each specified taxonomic level, the script:
+1. Filters data to include only the top 15 most frequent taxonomic groups
+2. Tests clustering with k values from `min_k` to `max_k`
+3. Selects the optimal k based on highest purity score
+4. Applies dimensionality reduction for visualization
+5. Generates comprehensive plots and statistical analysis
 
-#### External Embeddings Analysis
-- Uses pre-computed embeddings from any source
-- Optionally applies a projection matrix to transform embeddings
-- Useful for analyzing embeddings from different models or methods
-- Requires only the embeddings file and taxonomy information
 
-### 6. Dimensionality Reduction Methods
+### 6. Output Structure
 
-The tool supports four different dimensionality reduction methods for 2D visualization:
+The script creates separate subdirectories for each taxonomic level within the main output directory:
 
-- **PCA** (`pca`): Principal Component Analysis - Linear method, preserves global structure
-- **t-SNE** (`tsne`): t-Distributed Stochastic Neighbor Embedding - Non-linear, good for local structure  
-- **UMAP** (`umap`): Uniform Manifold Approximation and Projection - Preserves both local and global structure
-- **PCoA** (`pcoa`): Principal Coordinate Analysis - Distance-based method
+```
+output_dir/
+├── Family/
+│   ├── family_clustering_metrics.png
+│   ├── family_purity_significance.png
+│   ├── family_distribution.png
+│   ├── plot_family_{reduction_method}.png
+│   └── plot_family_cluster_boundaries_{reduction_method}.png
+├── Order/
+│   ├── order_clustering_metrics.png
+│   ├── order_purity_significance.png
+│   ├── order_distribution.png
+│   ├── plot_order_{reduction_method}.png
+│   └── plot_order_cluster_boundaries_{reduction_method}.png
+└── [Additional taxonomic levels...]
+```
 
-### 7. Output Files
+### 7. Generated Output Files
 
-After running the script, the following output files will be generated in the specified output directory:
+For each taxonomic level, the following files are created:
 
 #### Clustering Performance Analysis
-- **`family_clustering_metrics.png`**: Purity and silhouette scores vs. number of clusters for family-level clustering
-- **`order_clustering_metrics.png`**: Purity and silhouette scores vs. number of clusters for order-level clustering
-- **`family_purity_significance.png`**: Statistical significance test for family clustering purity
-- **`order_purity_significance.png`**: Statistical significance test for order clustering purity
+- **`{level}_clustering_metrics.png`**: Purity and silhouette scores vs. number of clusters
+- **`{level}_purity_significance.png`**: Statistical significance test results with null distribution histogram
 
-#### Visualization Plots (with selected dimensionality reduction method)
-- **`plot_clustered_family_{method}.png`**: 2D visualization with family colors and cluster number labels
-- **`plot_clustered_order_{method}.png`**: 2D visualization with order colors and cluster number labels
-- **`plot_family_cluster_boundaries_{method}.png`**: Family-colored dots with light grey cluster boundaries
-- **`plot_order_cluster_boundaries_{method}.png`**: Order-colored dots with light grey cluster boundaries
-
-#### Distribution Analysis
-- **`family_distribution.png`**: Bar plot showing the distribution of bacteria across different families
+#### Visualization Plots
+- **`plot_{level}_{method}.png`**: 2D scatter plot colored by taxonomic groups
+- **`plot_{level}_cluster_boundaries_{method}.png`**: Taxonomic groups with cluster boundaries overlay
+- **`{level}_distribution.png`**: Bar chart showing frequency distribution of taxonomic groups
 
 ### 8. Statistical Analysis
 
-The tool performs statistical significance testing for clustering purity:
+#### Clustering Evaluation Metrics
+- **Purity Score**: Measures how "pure" each cluster is with respect to true taxonomic labels
+- **Silhouette Score**: Measures how well-separated the clusters are
 
-| Metric          | Based On        | Purpose                                       |
-| --------------- | --------------- | --------------------------------------------- |
-| `actual_purity` | real labels     | What purity do I get from my actual taxonomy? |
-| `null_purities` | shuffled labels | What purity do I get just by random chance?   |
+#### Significance Testing
+The tool performs permutation testing (100 iterations) to determine if clustering purity is significantly better than random chance:
 
-The significance test uses permutation testing with 100 random shuffles to determine if the observed clustering purity is significantly better than random chance.
+| Metric | Description |
+|--------|-------------|
+| `actual_purity` | Purity score using real taxonomic labels |
+| `null_purities` | Distribution of purity scores from randomly shuffled labels |
+| `p_value` | Probability that observed purity occurred by chance |
+| `z_score` | Standard deviations above null distribution mean |
+| `percentile` | Percentile rank of actual purity in null distribution |
 
