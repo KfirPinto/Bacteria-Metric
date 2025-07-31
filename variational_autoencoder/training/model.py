@@ -3,12 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class SplitVAE(nn.Module):
-    def __init__(self, gene_dim, embedding_dim=128):
+    def __init__(self, input_dim, embedding_dim=128):
         super(SplitVAE, self).__init__()
 
         # Encoder layers
         self.encoder = nn.Sequential(
-            nn.Linear(gene_dim, 4096),
+            nn.Linear(input_dim, 4096),
             nn.LeakyReLU(0.01),
             nn.Linear(4096, 1024),
             nn.LeakyReLU(0.01)
@@ -24,7 +24,7 @@ class SplitVAE(nn.Module):
             nn.LeakyReLU(0.01),
             nn.Linear(1024, 4096),
             nn.LeakyReLU(0.01),
-            nn.Linear(4096, gene_dim)
+            nn.Linear(4096, input_dim)
         )
 
     def reparameterize(self, mu, logvar):
