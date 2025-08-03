@@ -221,8 +221,8 @@ def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
 
     pre_df = pd.read_csv(input_path)
     #regex_pattern = r"UniRef90_.+\|g__.+\.s__.+"
-    #regex_pattern = r"^GO:\d+\|g__[^.]+\.s__[^.]+$"
-    regex_pattern = r"^\d+\.\d+\.\d+\.\d+\|g__.+\.s__.+$"
+    regex_pattern = r"^GO:\d+\|g__[^.]+\.s__[^.]+$"
+    #regex_pattern = r"^\d+\.\d+\.\d+\.\d+\|g__.+\.s__.+$"
 
     df = pre_df[pre_df.iloc[:, 0].str.contains(regex_pattern, regex=True, na=False)].copy()
 
