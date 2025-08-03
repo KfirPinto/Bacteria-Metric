@@ -1,13 +1,16 @@
 import torch
+import numpy as np
 from data_utils import load_data_tensor, load_metadata, normalize_tensor
 from preprocess import shuffle_bacteria, split_tensor, save_eval_data
-from training.model import SplitAutoencoder
+from training.model import SplitVAE
 from training.dataset import create_dataloaders
 from training.train import train_model
-import config as config
-import random
+import sys
 import os
-
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
+import config
+import random
 def main():
 
     # ----- Load data and metadata -----
@@ -34,7 +37,7 @@ def main():
     data_tensor = torch.tensor(data_norm, dtype=torch.float32)
     unannotated_data_tensor = torch.tensor(unannotated_data_norm, dtype=torch.float32)
 
-    for i in range (11):
+    for i in range (1):
 
         out_dir = f"{config.EVAL_OUTPUT_DIR}/Run_{i}/"
         os.makedirs(out_dir, exist_ok=True)
@@ -48,7 +51,7 @@ def main():
 
         # Create DataLoaders
         train_loader = create_dataloaders(
-            split["train_tensor"], batch_size=64
+            split["train_tensor"], batch_size=config.BATCH_SIZE
         )
 
         # Initialize model
@@ -58,7 +61,7 @@ def main():
         model_seed = random.randint(0, 99999) # random seed for model weight initialization
         torch.manual_seed(model_seed)
 
-        model = SplitAutoencoder(gene_dim=gene_dim, embedding_dim=config.EMBEDDING_DIM).to(device)
+        model = SplitVAE(gene_dim=gene_dim, embedding_dim=config.EMBEDDING_DIM).to(device)
         print(f"Running on device: {device}")
 
         # Train model
@@ -68,8 +71,25 @@ def main():
         
         # Save model
         trained_model_path = os.path.join(out_dir, f"split_autoencoder.pt")
-        torch.save(trained_model, trained_model_path)
+        torch.save(trained_model.state_dict(), trained_model_path)
         print(f"Model saved to {trained_model_path}")
+
+        # Save tensor of the embddings of the test set
+        test_tensor = split["test_tensor"]
+        trained_model.eval()
+        with torch.no_grad():  # Disable gradients for inference
+            test_tensor_embeddings, _, _, _ = trained_model.forward(test_tensor.to(device))   
+            test_tensor_embeddings = test_tensor_embeddings.cpu().detach().numpy()
+
+            # Average over the sample dimension (axis=0)
+            # Shape: (samples, bacteria, embedding_dim) -> (bacteria, embedding_dim)
+            bacteria_embeddings = np.mean(test_tensor_embeddings, axis=0)
+
+            # Extract the first half embedding (bacteria representation)
+            bacteria_embeddings = bacteria_embeddings[:, :config.EMBEDDING_DIM//2]
+
+            test_tensor_embeddings_path = os.path.join(out_dir, "test_tensor_embeddings.npy")
+            np.save(test_tensor_embeddings_path, bacteria_embeddings)
 
 if __name__ == "__main__":
     main()
