@@ -283,7 +283,7 @@ def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
     sample_sums = torch.where(sample_sums == 0, torch.ones_like(sample_sums), sample_sums)
     
     # Normalize to proportional abundances
-    tensor = tensor / sample_sums
+    #tensor = tensor / sample_sums
     
     print(f"Tensor shape after normalization: {tensor.shape}")
     print(f"Sample sums after normalization (should all be 1.0): {tensor.sum(dim=(1, 2))[:5]}")  # Show first 5 samples
