@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from data_utils import load_data_tensor, load_metadata, normalize_tensor
+from data_utils import load_data_tensor, load_metadata, normalize_tensor, cal_embedding
 from preprocess import shuffle_bacteria, split_tensor, save_eval_data
 from training.model import SplitVAE
 from training.dataset import create_dataloaders
@@ -37,7 +37,7 @@ def main():
     data_tensor = torch.tensor(data_norm, dtype=torch.float32)
     unannotated_data_tensor = torch.tensor(unannotated_data_norm, dtype=torch.float32)
 
-    for i in range (1):
+    for i in range (10):
 
         out_dir = f"{config.EVAL_OUTPUT_DIR}/Run_{i}/"
         os.makedirs(out_dir, exist_ok=True)
@@ -83,8 +83,11 @@ def main():
 
             # Average over the sample dimension (axis=0)
             # Shape: (samples, bacteria, embedding_dim) -> (bacteria, embedding_dim)
-            bacteria_embeddings = np.mean(test_tensor_embeddings, axis=0)
-
+            # (optional) bacteria_embeddings = np.mean(test_tensor_embeddings, axis=0)
+            
+            rel_abundance_path = config.REL_ABUNDANCE_PATH
+            test_set_path = config.BACTERIA_LIST_EXPANDED_PATH
+            bacteria_embeddings = cal_embedding(test_tensor_embeddings, rel_abundance_path, test_set_path)
             # Extract the first half embedding (bacteria representation)
             bacteria_embeddings = bacteria_embeddings[:, :config.EMBEDDING_DIM//2]
 
