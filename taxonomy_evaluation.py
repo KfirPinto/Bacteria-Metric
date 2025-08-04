@@ -116,12 +116,13 @@ def organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df):
             print(f"[WARNING] Skipping bacterium with missing taxonomy: {bacterium_name}")
             continue
 
+        # Use consistent lowercase keys for all taxonomic levels
         encoded_dict[bacterium_name] = {
             "encoding": bacterium_embedding,
             "family": tax_info.get("Family"),
-            "Order": tax_info.get("Order"),
-            "Class": tax_info.get("Class"),
-            "Phylum": tax_info.get("Phylum") 
+            "order": tax_info.get("Order"),      # Changed from "Order" to "order"
+            "class": tax_info.get("Class"),      # Changed from "Class" to "class" 
+            "phylum": tax_info.get("Phylum")     # Changed from "Phylum" to "phylum"
         }
 
         if i < 5:  # Print first 5 for verification
@@ -347,6 +348,91 @@ def apply_dimensionality_reduction(data, method='pca', n_components=2, random_st
     
     return reduced_data
 
+# def plot_embeddings_with_cluster_boundaries(filtered_encoded_dict, cluster_labels, evaluation_results,
+#                                            taxonomic_level="family", reduction_method="PCA",
+#                                            save_path="plot_cluster_boundaries.png"):
+
+#     from scipy.spatial import ConvexHull
+#     from matplotlib.patches import Polygon, Circle
+#     from sklearn.cluster import DBSCAN
+#     import matplotlib.patches as patches
+    
+#     # Extract data
+#     reduced_data = np.array([entry['reduced_encoding'] for entry in filtered_encoded_dict.values()])
+#     tax_labels = [entry[taxonomic_level] for entry in filtered_encoded_dict.values()]
+
+#     # Set up colors for taxonomic groups
+#     unique_taxa = sorted(set(tax_labels))
+#     colors = plt.cm.tab20(np.linspace(0, 1, len(unique_taxa)))
+#     taxa_to_color = {taxa: colors[i] for i, taxa in enumerate(unique_taxa)}
+#     point_colors = [taxa_to_color[tax] for tax in tax_labels]
+    
+#     # Create the plot
+#     plt.figure(figsize=(16, 12))
+    
+#     # Plot cluster boundaries first (so they appear behind points)
+#     unique_clusters = sorted(set(cluster_labels))
+#     boundary_color = 'lightgrey'  # All boundaries will be light grey
+    
+#     for i, cluster in enumerate(unique_clusters):
+#         cluster_mask = np.array(cluster_labels) == cluster
+#         cluster_points = reduced_data[cluster_mask]
+        
+#         if len(cluster_points) < 3:
+#             # For clusters with fewer than 3 points, draw circles around each point
+#             for point in cluster_points:
+#                 circle = Circle(point, radius=0.1, fill=False, 
+#                               edgecolor=boundary_color, linewidth=1.5, alpha=0.8)
+#                 plt.gca().add_patch(circle)
+#             continue
+        
+#         # Draw circle around cluster centroid
+#         center = np.mean(cluster_points, axis=0)
+#         radius = np.max(np.linalg.norm(cluster_points - center, axis=1)) * 1.2
+#         circle = Circle(center, radius=radius, fill=False,
+#                         edgecolor=boundary_color, linewidth=1.5, alpha=0.6)
+#         plt.gca().add_patch(circle)
+            
+#     # Plot the points on top of boundaries
+#     scatter = plt.scatter(reduced_data[:, 0], reduced_data[:, 1],
+#                          c=point_colors, s=80, alpha=0.8, edgecolors='black', linewidth=0.5)
+    
+#     # Create legend for taxonomic groups (colors)
+#     taxa_handles = [plt.Line2D([0], [0], marker='o', color='w',
+#                               markerfacecolor=taxa_to_color[taxa], markersize=10,
+#                               label=taxa, markeredgecolor='black')
+#                    for taxa in unique_taxa]
+   
+#     # Add legends
+#     taxa_legend = plt.legend(handles=taxa_handles, title=f"{taxonomic_level.capitalize()}", 
+#                             bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+#     # Set title and labels
+#     k = evaluation_results['Num_Clusters']
+#     plt.title(f"2D {reduction_method.upper()} of Bacteria (k = {k})\n"
+#              f"Color = {taxonomic_level.capitalize()}, Cluster Boundaries", fontsize=16)
+    
+#     plt.xlabel(f"{reduction_method.upper()} Component 1", fontsize=14)
+#     plt.ylabel(f"{reduction_method.upper()} Component 2", fontsize=14)
+    
+#     # Add clustering evaluation scores
+#     true_k = evaluation_results['Num_True_Classes']
+#     purity = evaluation_results['Purity']
+#     silhouette = evaluation_results['Silhouette_Score']
+    
+#     score_text = f"Purity: {purity:.3f} | Silhouette: {silhouette:.3f}\n" \
+#                 f"Chosen k = {k} | True #{taxonomic_level.capitalize()}s = {true_k}"
+    
+#     plt.text(0.99, 0.01, score_text,
+#             transform=plt.gca().transAxes,
+#             fontsize=10, color='black',
+#             ha='right', va='bottom',
+#             bbox=dict(facecolor='white', alpha=0.7, edgecolor='gray'))
+    
+#     plt.tight_layout()
+#     plt.savefig(save_path, dpi=300, bbox_inches='tight')
+#     plt.close()
+
 def plot_embeddings_with_cluster_boundaries(filtered_encoded_dict, cluster_labels, evaluation_results,
                                            taxonomic_level="family", reduction_method="PCA",
                                            save_path="plot_cluster_boundaries.png"):
@@ -369,28 +455,38 @@ def plot_embeddings_with_cluster_boundaries(filtered_encoded_dict, cluster_label
     # Create the plot
     plt.figure(figsize=(16, 12))
     
-    # Plot cluster boundaries first (so they appear behind points)
+    # FIXED: Calculate centroids based on 2D reduced data instead of original data
     unique_clusters = sorted(set(cluster_labels))
-    boundary_color = 'lightgrey'  # All boundaries will be light grey
+    boundary_color = 'lightgrey'
     
     for i, cluster in enumerate(unique_clusters):
         cluster_mask = np.array(cluster_labels) == cluster
-        cluster_points = reduced_data[cluster_mask]
+        cluster_points = reduced_data[cluster_mask]  # Use 2D data
         
         if len(cluster_points) < 3:
             # For clusters with fewer than 3 points, draw circles around each point
             for point in cluster_points:
-                circle = Circle(point, radius=0.1, fill=False, 
+                circle = Circle(point, radius=0.05, fill=False,  # FIXED: smaller radius
                               edgecolor=boundary_color, linewidth=1.5, alpha=0.8)
                 plt.gca().add_patch(circle)
             continue
         
-        # Draw circle around cluster centroid
-        center = np.mean(cluster_points, axis=0)
-        radius = np.max(np.linalg.norm(cluster_points - center, axis=1)) * 1.2
-        circle = Circle(center, radius=radius, fill=False,
-                        edgecolor=boundary_color, linewidth=1.5, alpha=0.6)
-        plt.gca().add_patch(circle)
+        # FIXED: Use convex hull instead of arbitrary circles
+        try:
+            hull = ConvexHull(cluster_points)
+            hull_points = cluster_points[hull.vertices]
+            polygon = Polygon(hull_points, fill=False,
+                            edgecolor=boundary_color, linewidth=1.5, alpha=0.8)
+            plt.gca().add_patch(polygon)
+        except:
+            # Fallback to circle if convex hull fails
+            center = np.mean(cluster_points, axis=0)
+            # FIXED: Use 95th percentile instead of max * 1.2
+            distances = np.linalg.norm(cluster_points - center, axis=1)
+            radius = np.percentile(distances, 95) if len(distances) > 0 else 0.1
+            circle = Circle(center, radius=radius, fill=False,
+                            edgecolor=boundary_color, linewidth=1.5, alpha=0.6)
+            plt.gca().add_patch(circle)
             
     # Plot the points on top of boundaries
     scatter = plt.scatter(reduced_data[:, 0], reduced_data[:, 1],
@@ -431,6 +527,10 @@ def plot_embeddings_with_cluster_boundaries(filtered_encoded_dict, cluster_label
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
+
+
+
+
 
 def plot_by_taxonomy(filtered_encoded_dict, taxonomic_level, reduction_method="PCA", 
                     save_path="plot_taxonomy.png"):
@@ -499,6 +599,69 @@ def plot_tax_distribution(filtered_encoded_dict, taxonomic_level, save_path="tax
     plt.savefig(save_path)
     plt.close()
 
+# def process_taxonomic_level(taxonomic_level, embeddings_data, embeddings_labels, 
+#                             taxonomy_df, encoded_dict, k_range, output_dir, reduction_method="PCA", top_n=15):
+#     """
+#     Process the embeddings for a given taxonomic level (e.g., 'family' or 'order').
+#     This includes clustering, dimensionality reduction, and plotting.
+#     """
+#     # Create output directory for the current taxonomic level
+#     taxonomic_output_dir = os.path.join(output_dir, taxonomic_level.capitalize())
+#     os.makedirs(taxonomic_output_dir, exist_ok=True)
+
+#     # Filter by the top N most frequent taxonomic labels
+#     filtered_dict = filter_top_taxonomic_levels(encoded_dict, taxonomic_level, top_n)
+    
+#     # Extract filtered data and labels
+#     filtered_data = np.array([entry['encoding'] for entry in filtered_dict.values()])
+#     filtered_labels = [entry[taxonomic_level] for entry in filtered_dict.values()]
+    
+#     print(f"{taxonomic_level.capitalize()} filtered data shape: {filtered_data.shape}")
+    
+#     # Test multiple k values to find optimal clustering
+#     results = evaluate_multiple_k(filtered_data, filtered_labels, k_range, taxonomic_level.capitalize())
+#     # Find the best k based on purity
+#     best_k = max(results.keys(), key=lambda k: results[k]['Purity'])
+#     # Plot clustering metrics
+#     plot_clustering_metrics(results, os.path.join(taxonomic_output_dir, f"{taxonomic_level}_clustering_metrics.png"))
+#     print(f"\nBest k for {taxonomic_level.capitalize()} clustering: {best_k}")
+
+#     # Apply KMeans with the optimal k
+#     kmeans_labels = apply_kmeans(filtered_data, num_clusters=best_k)
+
+#     # Evaluate clustering performance
+#     eval_results = evaluate_clustering(filtered_data, kmeans_labels, filtered_labels, taxonomic_level.capitalize())
+#     print_evaluation_results(eval_results)
+
+#     # Test clustering significance
+#     sig_results = test_purity_significance(filtered_data, kmeans_labels, filtered_labels, n_permutations=100)
+    
+#     # Plot significance results
+#     plot_significance_test(sig_results, taxonomic_level.capitalize(),
+#                            os.path.join(taxonomic_output_dir, f"{taxonomic_level}_purity_significance.png"))
+
+#     # Apply dimensionality reduction (PCA, tSNE, UMAP, etc.)
+#     print(f"\nApplying {reduction_method.upper()} for 2D visualization...")
+#     reduced_data = apply_dimensionality_reduction(filtered_data, method=reduction_method, n_components=2)
+
+#     # Add reduced encodings to the filtered dictionary
+#     for i, bacterium_name in enumerate(filtered_dict.keys()):
+#         filtered_dict[bacterium_name]['reduced_encoding'] = reduced_data[i]
+
+#     # Plot taxonomy distribution
+#     plot_tax_distribution(filtered_dict, taxonomic_level, os.path.join(taxonomic_output_dir, f"{taxonomic_level}_distribution.png"))
+
+#     # Generate all plots with the selected dimensionality reduction method
+#     tax_plot_path = os.path.join(taxonomic_output_dir, f"plot_{taxonomic_level}_{reduction_method}.png")
+#     plot_by_taxonomy(filtered_dict, taxonomic_level, reduction_method, tax_plot_path)
+    
+#     # Cluster boundary plots (colored by taxonomy with cluster boundaries)
+#     boundary_plot_path = os.path.join(taxonomic_output_dir, f"plot_{taxonomic_level}_cluster_boundaries_{reduction_method}.png")
+#     plot_embeddings_with_cluster_boundaries(filtered_dict, kmeans_labels, eval_results, taxonomic_level, reduction_method, boundary_plot_path)
+
+#     print(f"\nAll plots saved to: {taxonomic_output_dir}")
+#     print(f"Dimensionality reduction method used: {reduction_method.upper()}")
+
 def process_taxonomic_level(taxonomic_level, embeddings_data, embeddings_labels, 
                             taxonomy_df, encoded_dict, k_range, output_dir, reduction_method="PCA", top_n=15):
     """
@@ -526,23 +689,23 @@ def process_taxonomic_level(taxonomic_level, embeddings_data, embeddings_labels,
     plot_clustering_metrics(results, os.path.join(taxonomic_output_dir, f"{taxonomic_level}_clustering_metrics.png"))
     print(f"\nBest k for {taxonomic_level.capitalize()} clustering: {best_k}")
 
-    # Apply KMeans with the optimal k
-    kmeans_labels = apply_kmeans(filtered_data, num_clusters=best_k)
-
-    # Evaluate clustering performance
-    eval_results = evaluate_clustering(filtered_data, kmeans_labels, filtered_labels, taxonomic_level.capitalize())
+    # OPTION 1: Apply dimensionality reduction first, then cluster on 2D data
+    print(f"\nApplying {reduction_method.upper()} for 2D visualization...")
+    reduced_data = apply_dimensionality_reduction(filtered_data, method=reduction_method, n_components=2)
+    
+    # FIXED: Cluster on the 2D reduced data instead of high-dimensional data
+    kmeans_labels = apply_kmeans(reduced_data, num_clusters=best_k)
+    
+    # Evaluate clustering performance (on 2D data)
+    eval_results = evaluate_clustering(reduced_data, kmeans_labels, filtered_labels, taxonomic_level.capitalize())
     print_evaluation_results(eval_results)
 
-    # Test clustering significance
-    sig_results = test_purity_significance(filtered_data, kmeans_labels, filtered_labels, n_permutations=100)
+    # Test clustering significance (on 2D data)
+    sig_results = test_purity_significance(reduced_data, kmeans_labels, filtered_labels, n_permutations=100)
     
     # Plot significance results
     plot_significance_test(sig_results, taxonomic_level.capitalize(),
                            os.path.join(taxonomic_output_dir, f"{taxonomic_level}_purity_significance.png"))
-
-    # Apply dimensionality reduction (PCA, tSNE, UMAP, etc.)
-    print(f"\nApplying {reduction_method.upper()} for 2D visualization...")
-    reduced_data = apply_dimensionality_reduction(filtered_data, method=reduction_method, n_components=2)
 
     # Add reduced encodings to the filtered dictionary
     for i, bacterium_name in enumerate(filtered_dict.keys()):
@@ -561,6 +724,7 @@ def process_taxonomic_level(taxonomic_level, embeddings_data, embeddings_labels,
 
     print(f"\nAll plots saved to: {taxonomic_output_dir}")
     print(f"Dimensionality reduction method used: {reduction_method.upper()}")
+    print(f"Clustering performed on: 2D reduced data")  # Added for clarity
 
 def main():
     # Parse command line arguments
