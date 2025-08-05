@@ -1,40 +1,32 @@
 import torch
 import numpy as np
-import sys
-import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import sys, os, collections, argparse, umap
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score, silhouette_score
-import matplotlib.pyplot as plt
-import pandas as pd
+from sklearn.metrics import silhouette_score
+from sklearn.manifold import MDS, TSNE
+from scipy.spatial.distance import pdist, squareform
 from adjustText import adjust_text
-import collections
+from collections import Counter
 from pathlib import Path
-import argparse
-import importlib.util
 sys.path.append(".")
 
 # Device setup
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def load_test_data(file_path="test_tensor.npy"):
-    test_tensor = np.load(file_path, allow_pickle=True)
-    test_tensor = torch.tensor(test_tensor, dtype=torch.float32)
-    return test_tensor
+def load_embeddings(file_path="embeddings.npy"):
+    embeddings_tensor = np.load(file_path, allow_pickle=True)
+    embeddings_tensor = torch.tensor(embeddings_tensor, dtype=torch.float32)
+    return embeddings_tensor
 
-def load_test_labels(file_path="test_bacteria.npy"):
-    test_labels = np.load(file_path, allow_pickle=True)
-    return test_labels
-
-def load_model(model_path, model_class, gene_dim, embedding_dim):
-    model = model_class(gene_dim=gene_dim, embedding_dim=embedding_dim)
-    model.load_state_dict(torch.load(model_path, map_location=device))
-    model.to(device)
-    model.eval()
-    return model
+def load_embeddings_labels(file_path="embeddings_labels.csv"):
+    df = pd.read_csv(file_path)
+    labels = df.iloc[:, 0].tolist()
+    return labels
 
 def load_taxonomy(taxonomy_file):
-
     taxonomy_df = pd.read_csv(taxonomy_file)
     # Detect missing family values
     missing_family_df = taxonomy_df[taxonomy_df['Family'].isna() | (taxonomy_df['Family'] == '')]
@@ -48,6 +40,25 @@ def load_taxonomy(taxonomy_file):
 
     return taxonomy_df
 
+def load_variance_file(variance_file, num_bacteria):
+    if variance_file is None:
+        return None
+    try:
+        if variance_file.endswith('.npy'):
+            variances = np.load(variance_file)
+        elif variance_file.endswith('.csv'):
+            variances = pd.read_csv(variance_file).iloc[:, 0].to_numpy()
+        else:
+            raise ValueError("Unsupported variance file format. Use .npy or .csv")
+
+        if len(variances) != num_bacteria:
+            raise ValueError(f"Variance file has {len(variances)} entries, but {num_bacteria} embeddings exist")
+
+        return variances
+    except Exception as e:
+        print(f"[ERROR] Failed to load variance file: {e}")
+        return None
+
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Evaluate clustering performance of bacterial embeddings",
@@ -55,122 +66,114 @@ def parse_arguments():
     )
     
     # Input files
-    parser.add_argument("--test_data", 
-                        type=str, 
-                        default="test_tensor.npy",
-                        help="Path to test data numpy file (.npy)"
-    )
-    
-    parser.add_argument("--test_labels", 
-                        type=str, 
-                        default="test_bacteria.npy",
-                        help="Path to test bacteria labels numpy file (.npy)"
-    )
-    
-    parser.add_argument("--model_path", 
-                        type=str, 
-                        default="split_autoencoder.pt",
-                        help="Path to trained model file (.pt)"
-    )
-    
-    parser.add_argument("--taxonomy_file", 
-                        type=str, 
-                        default="bacterial_lineage.csv",
-                        help="Path to bacterial taxonomy CSV file"
-    )
-    
+    parser.add_argument("--embeddings", type=str, default="embeddings.npy", help="Path to external embeddings numpy file (.npy).")
+    parser.add_argument("--embeddings_labels", type=str, default="embeddings_labels.csv", help="Path to embeddings bacteria labels numpy file (.csv)")
+    parser.add_argument("--taxonomy_file", type=str, default="bacterial_lineage.csv",help="Path to bacterial taxonomy CSV file")
+    parser.add_argument("--variance_file", type=str, default=None, 
+    help="Optional path to variance file (npy or csv) where each entry corresponds to variance of a bacterium embedding")
+
     # Output directory
-    parser.add_argument("--output_dir", 
-                        type=str, 
-                        default="./plots",
-                        help="Directory to save output plots and results"
-    )
+    parser.add_argument("--output_dir", type=str, default="./plots",help="Directory to save output plots and results")
     
     # Clustering parameters
-    parser.add_argument("--min_k", 
-                        type=int, 
-                        default=2,
-                        help="Minimum number of clusters to test"
+    parser.add_argument("--min_k", type=int, default=2,help="Minimum number of clusters to test")
+    parser.add_argument("--max_k", type=int, default=15, help="Maximum number of clusters to test")
+
+    # Dimensionality reduction method
+    parser.add_argument("--reduction_method", type=str, default="pca",choices=['pca', 'tsne', 'umap', 'pcoa'],
+                        help="Dimensionality reduction method for visualization"
     )
-    
-    parser.add_argument("--max_k", 
-                        type=int, 
-                        default=15,
-                        help="Maximum number of clusters to test"
-    )
-
-    # Sapir Additions
-    parser.add_argument("--model-file",
-                        type=str,
-                        required=True,
-                        help="Path to the model.py file that defines the model architecture.")
-
-    parser.add_argument("--model-class",
-                        type=str,
-                        default="SplitAutoencoder",
-                        help="Name of the model class to import from the model file (default: SplitAutoencoder)")
-
-    parser.add_argument("--embedding-dim",
-                        type=int,
-                        default=32,
-                        help="Dimensionality of the embedding space (default: 32)")
-
+    # Taxonomic levels to process
+    parser.add_argument("--taxonomic_levels", type=str, default="family,order,class,phylum", 
+        help="Comma-separated list of taxonomic levels to process. Options: 'family', 'order', 'class', 'phylum'")
 
     return parser.parse_args()
 
 def setup_output_directory(output_dir):
-    """Create output directory if it doesn't exist"""
+    # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
     print(f"Output directory: {output_dir}")
     return output_dir  
 
-def encode_data(model, test_data, test_labels, taxonomy_df, device, model_type):
-    # apply the model to the test data to get the encoded representation of all bacteria
-    with torch.no_grad():
-        # Apply the encoder part of the model
-        if model_type == "SplitAutoencoder":
-            x_encoded, _ = model.encoder(test_data.to(device))  # shape: (num_samples, num_bacteria, 2b)
-            x_encoded = model.activation(x_encoded)
-        elif model_type == "SplitVAE":
-            x_encoded, x_reconstruction, mu, logvar = model.forward(test_data.to(device))  # shape: (num_samples, num_bacteria, 2b)
-        
-        # Now split the embeddings as in the original forward method
-        b = x_encoded.shape[-1] // 2
-        encoded_data = x_encoded[:, :, :b] 
-        print(f"Encoded Hi (bacteria matrix) shape: {encoded_data.shape}")
-    
-    # a dictionary to store the encoding and family of each bacterium
+def organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df,  variances=None):
+    """
+    Process embeddings and organize them with taxonomy information
+    """    
+    embeddings_data = embeddings_data[1:]  # Exclude the first row
+    # Create a dictionary to store the encoding and family of each bacterium
     encoded_dict = {}
-    num_samples, num_bacteria, embedding_dim = encoded_data.shape    
-    # Create lookup from bacterium name in test data to family
-    taxonomy_map = taxonomy_df.set_index("Original Name")[["Family", "Order", "Class"]].to_dict(orient="index")
 
-    # Iterate over each bacterium in the test data
+    # Convert embeddings_data to numpy if it's a tensor
+    if hasattr(embeddings_data, 'cpu'):
+        embeddings_data = embeddings_data.cpu().numpy()
+    
+    num_bacteria, embedding_dim = embeddings_data.shape
+    print(f"Embeddings shape: ({num_bacteria}, {embedding_dim}) - one embedding per bacterium")
+    
+    # Verify that we have the same number of bacteria in both files
+    if num_bacteria != len(embeddings_labels):
+        raise ValueError(f"Mismatch: {num_bacteria} bacteria in embeddings but {len(embeddings_labels)} in labels")
+    
+    print(f"Processing {num_bacteria} bacteria...")
+    
+    # Create lookup from bacterium name to taxonomy info
+    taxonomy_map = taxonomy_df.set_index("Original Name")[["Family", "Order", "Class", "Phylum"]].to_dict(orient="index")
+
+    # Iterate over each bacterium - embeddings_data[i] corresponds to embeddings_labels[i]
     for i in range(num_bacteria):
-        # Average of encodings across samples for each bacterium
-        bacterium_encoding = encoded_data[:, i, :].mean(dim=0).cpu().numpy()  # shape: (embedding_dim,)
-        bacterium_name = test_labels[i] # test_labels are bacterium names
+        bacterium_name = embeddings_labels[i]
+        bacterium_embedding = embeddings_data[i]  # shape: (embedding_dim,)
+
+        # Convert to numpy if it's a tensor
+        if hasattr(bacterium_embedding, 'cpu'):
+            bacterium_embedding = bacterium_embedding.cpu().numpy()
         
+        # Get taxonomy information
         tax_info = taxonomy_map.get(bacterium_name)
         if tax_info is None or tax_info.get("Family") in [None, ""]:
             print(f"[WARNING] Skipping bacterium with missing taxonomy: {bacterium_name}")
             continue
 
+        # Use consistent lowercase keys for all taxonomic levels
         encoded_dict[bacterium_name] = {
-            "encoding": bacterium_encoding,
+            "encoding": bacterium_embedding,
             "family": tax_info.get("Family"),
-            "Order": tax_info.get("Order"),
-            "Class": tax_info.get("Class")
+            "order": tax_info.get("Order"),      # Changed from "Order" to "order"
+            "class": tax_info.get("Class"),      # Changed from "Class" to "class" 
+            "phylum": tax_info.get("Phylum")     # Changed from "Phylum" to "phylum"
         }
 
-        print(f"Taxonomy for {bacterium_name}: Family={tax_info.get('Family')}, "
-          f"Order={tax_info.get('Order')}, Class={tax_info.get('Class')}")
+        if variances is not None:
+            encoded_dict[bacterium_name]['variance'] = variances[i]
+        else:
+            encoded_dict[bacterium_name]['variance'] = None
+
+        if i < 5:  # Print first 5 for verification
+            print(f"Bacterium {i}: {bacterium_name} -> Family={tax_info.get('Family')}, "
+                    f"Order={tax_info.get('Order')}, Class={tax_info.get('Class')}, Phylum={tax_info.get('Phylum')}")
 
     return encoded_dict
 
-def apply_kmeans(reduced_data, num_clusters):
-    kmeans = KMeans(n_clusters=num_clusters)
-    kmeans.fit(reduced_data)
+def filter_top_taxonomic_levels(encoded_dict, taxonomic_level, top_n=15):
+    """Filter data by the top N most frequent taxonomic labels."""
+    # Extract taxonomic labels
+    tax_labels = [entry[taxonomic_level] for entry in encoded_dict.values()]
+    
+    # Count occurrences and get top N
+    label_counts = Counter(tax_labels)
+    most_frequent_labels = [label for label, _ in label_counts.most_common(top_n)]
+    
+    # Filter the encoded_dict to keep only bacteria with top N taxonomic labels
+    filtered_encoded_dict = {}
+    for bacterium_name, entry in encoded_dict.items():
+        if entry[taxonomic_level] in most_frequent_labels:
+            filtered_encoded_dict[bacterium_name] = entry
+    
+    return filtered_encoded_dict
+
+def apply_kmeans(data, num_clusters):
+    kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+    kmeans.fit(data)
     return kmeans.labels_
 
 def calculate_purity_score(cluster_labels, true_labels):
@@ -178,15 +181,10 @@ def calculate_purity_score(cluster_labels, true_labels):
     cluster_labels = np.array(cluster_labels)
     true_labels = np.array(true_labels)
     
-    # Total number of points
     n_samples = len(cluster_labels)
-    
-    # Get unique clusters
     unique_clusters = np.unique(cluster_labels)
     
-    # Calculate purity for each cluster
     total_pure_points = 0
-    
     for cluster in unique_clusters:
         # Get indices of points in this cluster
         cluster_mask = cluster_labels == cluster
@@ -194,51 +192,35 @@ def calculate_purity_score(cluster_labels, true_labels):
         
         # Count occurrences of each true label in this cluster
         unique_labels, counts = np.unique(cluster_true_labels, return_counts=True)
-        
         # The number of points that belong to the most frequent true label in this cluster
         max_count = np.max(counts)
         total_pure_points += max_count
     
     # Purity is the fraction of points that are in the "correct" cluster
     purity = total_pure_points / n_samples
-    
     return purity
 
-def test_purity_significance(encoded_data, cluster_labels, true_labels, n_permutations=100, random_seed=42):
-
-    # Set random seed for reproducibility
+def test_purity_significance(data, cluster_labels, true_labels, n_permutations=100, random_seed=42):
     np.random.seed(random_seed)
-    
-    # Calculate actual purity score
     actual_purity = calculate_purity_score(cluster_labels, true_labels)
-    
     # Generate null distribution by permuting labels
     null_purities = []
-    
-    print(f"Testing significance with {n_permutations} random permutations...")
-    
-    for i in range(n_permutations):
-        if (i + 1) % 100 == 0:
-            print(f"  Permutation {i + 1}/{n_permutations}")
         
+    for i in range(n_permutations):        
         # Randomly shuffle the true labels
         shuffled_labels = np.random.permutation(true_labels)
-        
         # Calculate purity with shuffled labels
         null_purity = calculate_purity_score(cluster_labels, shuffled_labels)
         null_purities.append(null_purity)
     
     null_purities = np.array(null_purities)
-    
     # Calculate p-value (fraction of null purities >= actual purity)
     p_value = (null_purities >= actual_purity).sum() / n_permutations
-    
+
     # Calculate statistics
     null_mean = np.mean(null_purities)
     null_std = np.std(null_purities)
     z_score = (actual_purity - null_mean) / null_std if null_std > 0 else 0
-    
-    # Calculate percentile rank
     percentile = (null_purities < actual_purity).sum() / n_permutations * 100
     
     results = {
@@ -249,16 +231,12 @@ def test_purity_significance(encoded_data, cluster_labels, true_labels, n_permut
         'p_value': p_value,
         'z_score': z_score,
         'percentile': percentile,
-        'n_permutations': n_permutations,
-        'is_significant_05': p_value < 0.05,
-        'is_significant_01': p_value < 0.01,
-        'is_significant_001': p_value < 0.001
+        'n_permutations': n_permutations
     }
     
     return results
 
 def plot_significance_test(sig_results, label_type="Family", save_path="purity_significance.png"):
-
     fig, ax = plt.subplots(1, 1, figsize=(10, 6))
     
     # Plot histogram of null distribution
@@ -285,9 +263,9 @@ def plot_significance_test(sig_results, label_type="Family", save_path="purity_s
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-def evaluate_clustering(encoded_data, cluster_labels, true_labels, label_type="Family"):
+def evaluate_clustering(data, cluster_labels, true_labels, label_type="Family"):
     purity = calculate_purity_score(cluster_labels, true_labels)
-    silhouette_avg = silhouette_score(encoded_data, cluster_labels)
+    silhouette_avg = silhouette_score(data, cluster_labels)
     
     # Create a summary
     evaluation_results = {
@@ -313,21 +291,28 @@ def print_evaluation_results(results):
     print(f"Silhouette Score: {results['Silhouette_Score']:.4f}")
     print(f"{'='*50}")
 
-def evaluate_multiple_k(encoded_data, true_labels, k_range, label_type="Family"):
-    # Evaluate clustering for multiple values of k to find optimal number of clusters
+def evaluate_multiple_k(data, true_labels, k_range, label_type="Family"):
     results = {}
-    
     print(f"Evaluating clustering for k values: {list(k_range)}")
     
     for k in k_range:
-        cluster_labels = apply_kmeans(encoded_data, k)
-        eval_results = evaluate_clustering(encoded_data, cluster_labels, true_labels, label_type)
+        cluster_labels = apply_kmeans(data, k)
+        # Evaluate clustering 
+        purity = calculate_purity_score(cluster_labels, true_labels)
+        silhouette_avg = silhouette_score(data, cluster_labels)
+        
+        eval_results = {
+            'Purity': purity,
+            'Silhouette_Score': silhouette_avg,
+            'Label_Type': label_type,
+            'Num_Clusters': len(np.unique(cluster_labels)),
+            'Num_True_Classes': len(set(true_labels))
+        }
         results[k] = eval_results
 
     return results
 
 def plot_clustering_metrics(k_results, save_path="clustering_metrics.png"):
-
     k_values = list(k_results.keys())
     purity_scores = [k_results[k]['Purity'] for k in k_values]
     silhouette_scores = [k_results[k]['Silhouette_Score'] for k in k_values]
@@ -352,163 +337,135 @@ def plot_clustering_metrics(k_results, save_path="clustering_metrics.png"):
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-def plot_cluster_labels_by_family(reduced_dict, kmeans_labels, evaluation_results, save_path="plot_clustered_family.png"):
+def apply_global_dimensionality_reduction(encoded_dict, method='pca', n_components=2, random_state=42):
+    """
+    Apply dimensionality reduction to the full dataset and store coordinates in encoded_dict.
+    ensures consistent coordinates across all taxonomic level plots.
+    """
+    print(f"Applying global {method.upper()} dimensionality reduction to full dataset...")
     
-    family_labels = [entry['family'] for entry in reduced_dict.values()]
-    reduced_data = np.array([entry['reduced_encoding'] for entry in reduced_dict.values()])
+    # Extract all embeddings
+    bacterium_names = list(encoded_dict.keys())
+    all_data = np.array([encoded_dict[name]['encoding'] for name in bacterium_names])
     
-    # Assign colors based on family
-    unique_families = sorted(set(family_labels))
-    family_to_color = {fam: idx for idx, fam in enumerate(unique_families)}
-    colors = [family_to_color[fam] for fam in family_labels]
+    if method.lower() == 'pca':
+        reducer = PCA(n_components=n_components, random_state=random_state)
+        reduced_data = reducer.fit_transform(all_data)
+        
+    elif method.lower() == 'tsne':
+        reducer = TSNE(n_components=n_components, random_state=random_state, 
+                      perplexity=min(30, len(all_data)-1))
+        reduced_data = reducer.fit_transform(all_data)
+        
+    elif method.lower() == 'umap':
+        reducer = umap.UMAP(n_components=n_components, random_state=random_state)
+        reduced_data = reducer.fit_transform(all_data)
+        
+    elif method.lower() == 'pcoa':
+        # Compute pairwise distances
+        distances = pdist(all_data, metric='euclidean')
+        distance_matrix = squareform(distances)
+        
+        # Apply classical MDS (which is equivalent to PCoA)
+        reducer = MDS(n_components=n_components, dissimilarity='precomputed', 
+                     random_state=random_state)
+        reduced_data = reducer.fit_transform(distance_matrix)
+        
+    else:
+        raise ValueError(f"Unknown dimensionality reduction method: {method}")
     
+    # Store the reduced coordinates in the encoded_dict
+    for i, bacterium_name in enumerate(bacterium_names):
+        encoded_dict[bacterium_name]['global_reduced_encoding'] = reduced_data[i]
+    
+    print(f"Global {method.upper()} reduction complete. Coordinates stored for {len(bacterium_names)} bacteria.")
+    return encoded_dict
+
+def plot_by_taxonomy(filtered_encoded_dict, taxonomic_level, evaluation_results, reduction_method="PCA", 
+                    save_path="plot_taxonomy.png"):
+
+    # Extract taxonomic labels and reduced data
+    taxonomic_labels = [entry.get(taxonomic_level, 'Unknown') for entry in filtered_encoded_dict.values()]
+    # reduced_data = np.array([entry['reduced_encoding'] for entry in filtered_encoded_dict.values()])
+    reduced_data = np.array([entry['global_reduced_encoding'] for entry in filtered_encoded_dict.values()])
+    
+    variances = [entry.get('variance', None) for entry in filtered_encoded_dict.values()]
+    
+    # Normalize variances to a reasonable radius scale, or set constant
+    if any(v is not None for v in variances):
+        variance_array = np.array([v if v is not None else 0 for v in variances])
+        # Scale variance to size range (e.g., 60–300)
+        min_radius, max_radius = 60, 300
+        norm_variance = (variance_array - variance_array.min()) / (variance_array.ptp() + 1e-6)
+        radii = min_radius + norm_variance * (max_radius - min_radius)
+    else:
+        radii = 100  # default size
+
+    # Create color mapping for the taxonomic groups
+    unique_taxa = sorted(set(taxonomic_labels))
+    taxa_to_color = {taxa: idx for idx, taxa in enumerate(unique_taxa)}
+    colors = [taxa_to_color.get(taxa, taxa_to_color.get('Unknown', 0)) for taxa in taxonomic_labels]
+
+    # Create the plot
     plt.figure(figsize=(14, 12))
     scatter = plt.scatter(
         reduced_data[:, 0], reduced_data[:, 1],
-        c=colors, cmap='tab20', edgecolors='k', s=100, alpha=0.8
+        c=colors, cmap='tab20', edgecolors='k', s=radii, alpha=0.8
     )
-    # Add cluster number as text label (adjusted for overlap)
-    texts = []
-    for i, cluster in enumerate(kmeans_labels):
-        texts.append(
-            plt.text(reduced_data[i, 0], reduced_data[i, 1], str(cluster),
-                     fontsize=10, weight='bold', alpha=0.9)
-        )
-    adjust_text(texts, arrowprops=dict(arrowstyle='-', color='gray', lw=0.5))
-    # Legend for families
-    handles = [plt.Line2D([0], [0], marker='o', color='w',
-                          label=fam,
-                          markerfacecolor=scatter.cmap(family_to_color[fam] / len(unique_families)), markersize=10)
-               for fam in unique_families]
-    plt.legend(handles=handles, title="Family", bbox_to_anchor=(1.05, 1), loc='upper left')
-    k = evaluation_results['Num_Clusters']
-    plt.title(f"2D PCA of Bacteria (k = {k})\nColor = Family, Label = Cluster ID", fontsize=16)
     
-    plt.xlabel("Principal Component 1", fontsize=14)
-    plt.ylabel("Principal Component 2", fontsize=14)
-
-    # Add clustering evaluation scores and k
+    # Create legend
+    handles = [plt.Line2D([0], [0], marker='o', color='w',
+                          label=taxa,
+                          markerfacecolor=scatter.cmap(taxa_to_color[taxa] / max(len(unique_taxa)-1, 1)), 
+                          markersize=10)
+               for taxa in unique_taxa]
+    plt.legend(handles=handles, title=f"{taxonomic_level.capitalize()}", 
+               bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    # Set title and labels
+    plt.title(f"2D {reduction_method.upper()} of Bacteria \nColored by {taxonomic_level.capitalize()}", 
+              fontsize=16)
+    
+    plt.xlabel(f"{reduction_method.upper()} Component 1", fontsize=14)
+    plt.ylabel(f"{reduction_method.upper()} Component 2", fontsize=14)
+    
     k = evaluation_results['Num_Clusters']
+    # Add clustering evaluation scores
     true_k = evaluation_results['Num_True_Classes']
     purity = evaluation_results['Purity']
     silhouette = evaluation_results['Silhouette_Score']
-
+    
     score_text = f"Purity: {purity:.3f} | Silhouette: {silhouette:.3f}\n" \
-                f"Chosen k = {k} | True #Classes = {true_k}"
-
+                f"Chosen k = {k} | True #{taxonomic_level.capitalize()}s = {true_k}"
+    
     plt.text(0.99, 0.01, score_text,
             transform=plt.gca().transAxes,
             fontsize=10, color='black',
             ha='right', va='bottom',
             bbox=dict(facecolor='white', alpha=0.7, edgecolor='gray'))
-
+      
     plt.tight_layout()
     plt.savefig(save_path, bbox_inches='tight')
     plt.close()
 
-def plot_cluster_labels_by_order(reduced_dict, kmeans_labels_order, evaluation_results, save_path="plot_clustered_order.png"):
-    # Map from bacterium name to order
-    order_labels = [entry['Order'] for entry in reduced_dict.values()]
-    reduced_data = np.array([entry['reduced_encoding'] for entry in reduced_dict.values()])
-
-    # Assign colors based on order
-    unique_orders = sorted(o for o in set(order_labels) if isinstance(o, str))
-    order_to_color = {order: idx for idx, order in enumerate(unique_orders)}
-    colors = [order_to_color.get(order, -1) for order in order_labels]
-
-    plt.figure(figsize=(14, 12))
-    scatter = plt.scatter(
-        reduced_data[:, 0], reduced_data[:, 1],
-        c=colors, cmap='tab20', edgecolors='k', s=100, alpha=0.8
-    )
-
-    texts = []
-    for i, cluster in enumerate(kmeans_labels_order):
-        texts.append(
-            plt.text(reduced_data[i, 0], reduced_data[i, 1], str(cluster),
-                     fontsize=10, weight='bold', alpha=0.9)
-        )
-    adjust_text(texts, arrowprops=dict(arrowstyle='-', color='gray', lw=0.5))
-
-    # Legend for orders
-    handles = [plt.Line2D([0], [0], marker='o', color='w',
-                          label=order,
-                          markerfacecolor=scatter.cmap(order_to_color[order] / len(unique_orders)), markersize=10)
-               for order in unique_orders]
-    plt.legend(handles=handles, title="Order", bbox_to_anchor=(1.05, 1), loc='upper left')
-
-    k = evaluation_results['Num_Clusters']
-    plt.title(f"2D PCA of Bacteria (k = {k})\nColor = Order, Label = Cluster ID", fontsize=16)
-
-    plt.xlabel("Principal Component 1", fontsize=14)
-    plt.ylabel("Principal Component 2", fontsize=14)
-
-    # Add clustering evaluation scores and k
-    k = evaluation_results['Num_Clusters']
-    true_k = evaluation_results['Num_True_Classes']
-    purity = evaluation_results['Purity']
-    silhouette = evaluation_results['Silhouette_Score']
-
-    score_text = f"Purity: {purity:.3f} | Silhouette: {silhouette:.3f}\n" \
-                f"Chosen k = {k} | True #Classes = {true_k}"
-
-    plt.text(0.99, 0.01, score_text,
-            transform=plt.gca().transAxes,
-            fontsize=10, color='black',
-            ha='right', va='bottom',
-            bbox=dict(facecolor='white', alpha=0.7, edgecolor='gray'))
-
-    plt.tight_layout()
-    plt.savefig(save_path)
-    plt.close()
-
-def plot_family_only(reduced_dict, save_path="plot_family_only.png"):
-    # Extract family labels and reduced data
-    family_labels = [entry['family'] for entry in reduced_dict.values()]
-    reduced_data = np.array([entry['reduced_encoding'] for entry in reduced_dict.values()])
-
-    # Plot plain 2D scatter
-    plt.figure(figsize=(14, 12))
-    plt.scatter(reduced_data[:, 0], reduced_data[:, 1], color='steelblue', edgecolor='k', s=80, alpha=0.8)
-
-    # Create label texts and adjust to avoid overlapping
-    texts = []
-    for i, family in enumerate(family_labels):
-        texts.append(
-            plt.text(reduced_data[i, 0], reduced_data[i, 1], family, fontsize=9, weight='bold')
-        )
-
-    # Use adjust_text to move overlapping labels
-    adjust_text(texts, arrowprops=dict(arrowstyle='-', color='gray', lw=0.5))
-
-    plt.title("2D PCA Embeddings of Bacteria\nLabel = Taxonomic Family", fontsize=16)
-    plt.xlabel("Principal Component 1", fontsize=14)
-    plt.ylabel("Principal Component 2", fontsize=14)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-
-    plt.tight_layout()
-    plt.savefig(save_path)
-    plt.close()
-
-def plot_family_distribution(reduced_dict, save_path="family_distribution.png"):
-    # Count how many bacteria are in each family
-    family_counts = collections.Counter([entry['family'] for entry in reduced_dict.values()])
+def plot_tax_distribution(filtered_encoded_dict, taxonomic_level, save_path="tax_distribution.png"):
+    # Count how many bacteria are in each family (or other taxonomic level)
+    counts = collections.Counter([entry[taxonomic_level] for entry in filtered_encoded_dict.values()])
     
-    # Sort families by count (descending)
-    sorted_families = sorted(family_counts.items(), key=lambda x: x[1], reverse=True)
-    families, counts = zip(*sorted_families)
+    # Sort taxonomic labels by count (descending)
+    sorted_tax = sorted(counts.items(), key=lambda x: x[1], reverse=True)
+    tax, counts = zip(*sorted_tax)
 
     # Plot
     plt.figure(figsize=(12, 6))
-    bars = plt.bar(families, counts, color='skyblue', edgecolor='k')
+    bars = plt.bar(tax, counts, color='skyblue', edgecolor='k')
 
     # Rotate labels for readability
     plt.xticks(rotation=45, ha='right', fontsize=10)
     plt.yticks(fontsize=12)
-    plt.xlabel("Family", fontsize=14)
+    plt.xlabel(f"{taxonomic_level}", fontsize=14)  # Use f-string to insert taxonomic_level
     plt.ylabel("Number of Bacteria", fontsize=14)
-    plt.title("Bacteria Count per Family", fontsize=16)
+    plt.title(f"Bacteria Count per {taxonomic_level.capitalize()}", fontsize=16)  # Capitalize the taxonomic level in title
 
     # Annotate counts on top of bars
     for bar, count in zip(bars, counts):
@@ -519,118 +476,83 @@ def plot_family_distribution(reduced_dict, save_path="family_distribution.png"):
     plt.savefig(save_path)
     plt.close()
 
-def load_model_class(model_file_path, class_name):
-    spec = importlib.util.spec_from_file_location("model_module", model_file_path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return getattr(module, class_name)
+def process_taxonomic_level(taxonomic_level, encoded_dict, k_range, output_dir, reduction_method="PCA", top_n=15):
+    """
+    Process the embeddings for a given taxonomic level (e.g., 'family' or 'order').
+    This includes clustering, dimensionality reduction, and plotting.
+    """
+    # Create output directory for the current taxonomic level
+    taxonomic_output_dir = os.path.join(output_dir, taxonomic_level.capitalize())
+    os.makedirs(taxonomic_output_dir, exist_ok=True)
+
+    # Filter by the top N most frequent taxonomic labels
+    filtered_dict = filter_top_taxonomic_levels(encoded_dict, taxonomic_level, top_n)
+    filtered_data = np.array([entry['encoding'] for entry in filtered_dict.values()])
+    filtered_labels = [entry[taxonomic_level] for entry in filtered_dict.values()]
+    print(f"{taxonomic_level.capitalize()} filtered data shape: {filtered_data.shape}")
+    
+    # Test multiple k values to find optimal clustering
+    results = evaluate_multiple_k(filtered_data, filtered_labels, k_range, taxonomic_level.capitalize())
+    # Find the best k based on purity
+    best_k = max(results.keys(), key=lambda k: results[k]['Purity'])
+    # Plot clustering metrics
+    plot_clustering_metrics(results, os.path.join(taxonomic_output_dir, f"{taxonomic_level}_clustering_metrics.png"))
+    print(f"\nBest k for {taxonomic_level.capitalize()} clustering: {best_k}")
+
+    # Apply KMeans with the optimal k
+    kmeans_labels = apply_kmeans(filtered_data, num_clusters=best_k)
+
+    # Evaluate clustering performance
+    eval_results = evaluate_clustering(filtered_data, kmeans_labels, filtered_labels, taxonomic_level.capitalize())
+    print_evaluation_results(eval_results)
+
+    # Test clustering significance
+    sig_results = test_purity_significance(filtered_data, kmeans_labels, filtered_labels, n_permutations=100)
+    
+    # Plot significance results
+    plot_significance_test(sig_results, taxonomic_level.capitalize(),
+                           os.path.join(taxonomic_output_dir, f"{taxonomic_level}_purity_significance.png"))
+    
+    # Plot taxonomy distribution
+    plot_tax_distribution(filtered_dict, taxonomic_level, os.path.join(taxonomic_output_dir, 
+                                                                       f"{taxonomic_level}_distribution.png"))
+
+    # now uses global coordinates stored in 'global_reduced_encoding'
+    tax_plot_path = os.path.join(taxonomic_output_dir, f"plot_{taxonomic_level}_{reduction_method}.png")
+    plot_by_taxonomy(filtered_dict, taxonomic_level, eval_results, reduction_method, tax_plot_path)
+
+    print(f"\nAll plots saved to: {taxonomic_output_dir}")
+    print(f"Dimensionality reduction method used: {reduction_method.upper()}")
 
 def main():
     # Parse command line arguments
     args = parse_arguments()
     output_dir = setup_output_directory(args.output_dir)
-    # Validate input files exist
-    required_files = [args.test_data, args.test_labels, args.model_path, args.taxonomy_file]
-    for file_path in required_files:
-        if not os.path.exists(file_path):
-            print(f"Error: File not found: {file_path}")
-            return
-    
-    print(f"Loading files:")
-    print(f"  Test data: {args.test_data}")
-    print(f"  Test labels: {args.test_labels}")
-    print(f"  Model: {args.model_path}")
-    print(f"  Taxonomy: {args.taxonomy_file}")
 
-    # Load test data, model, and taxonomy table
-    test_data = load_test_data(args.test_data)
-    test_labels = load_test_labels(args.test_labels)
-    ModelClass = load_model_class(args.model_file, args.model_class)
-    model = load_model(args.model_path, ModelClass, gene_dim=test_data.shape[-1], embedding_dim=args.embedding_dim)
+    # Load files
+    embeddings_data = load_embeddings(args.embeddings)
+    embeddings_labels = load_embeddings_labels(args.embeddings_labels)
     taxonomy_df = load_taxonomy(args.taxonomy_file)
-  
-    # Encode 
-    encoded_dict = encode_data(model, test_data, test_labels, taxonomy_df, device=device, model_type=args.model_class)
-    all_encoded = np.vstack([entry['encoding'] for entry in encoded_dict.values()])
-
-    # Extract true labels for evaluation
-    family_labels = [entry['family'] for entry in encoded_dict.values()]
-    order_labels = [entry['Order'] for entry in encoded_dict.values()]
+    variances = load_variance_file(args.variance_file, len(embeddings_labels))
     
-    # Test multiple k values to find optimal clustering
+    # Organize embeddings with taxonomy information
+    encoded_dict = organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df, variances)
+
+    # Apply global dimensionality reduction once for consistent coordinates
+    encoded_dict = apply_global_dimensionality_reduction(encoded_dict, method=args.reduction_method, 
+                                                        n_components=2, random_state=42)
+    
+    # Define the k range for clustering
     k_range = range(args.min_k, args.max_k + 1)
+
+    # Get the list of taxonomic levels to process from the command line argument
+    taxonomic_levels = args.taxonomic_levels.split(',')
+
+    # Process the taxonomic levels (family, order, class, phylum)
+    for taxonomic_level in taxonomic_levels:
+        process_taxonomic_level(taxonomic_level, encoded_dict, k_range, output_dir,
+                                     reduction_method=args.reduction_method, top_n=15)
+    print("\nAll evaluations and plots completed successfully!")
     
-    family_results = evaluate_multiple_k(all_encoded, family_labels, k_range, "Family")
-    order_results = evaluate_multiple_k(all_encoded, order_labels, k_range, "Order")
-    
-    # Find best k for each taxonomic level 
-    best_k_family = max(family_results.keys(), 
-                       key=lambda k: family_results[k]['Purity'])
-    best_k_order = max(order_results.keys(), 
-                      key=lambda k: order_results[k]['Purity'])
-    
-    print(f"\nBest k for Family clustering: {best_k_family}")
-    print(f"Best k for Order clustering: {best_k_order}")
-
-    # Apply KMeans in original (high-dimensional) space
-    kmeans_labels_family = apply_kmeans(all_encoded, num_clusters=best_k_family)
-    kmeans_labels_order = apply_kmeans(all_encoded, num_clusters=best_k_order)
-
-    # Evaluate family clustering
-    family_eval = evaluate_clustering(all_encoded, kmeans_labels_family, family_labels, "Family")
-    print_evaluation_results(family_eval)
-    
-    # Evaluate order clustering
-    order_eval = evaluate_clustering(all_encoded, kmeans_labels_order, order_labels, "Order")
-    print_evaluation_results(order_eval)
-
-    # Test statistical significance of purity scores
-    print("\n" + "="*60)
-    print("TESTING STATISTICAL SIGNIFICANCE OF CLUSTERING RESULTS")
-    print("="*60)
-    
-    # Test family clustering significance
-    family_sig_results = test_purity_significance(
-        all_encoded, kmeans_labels_family, family_labels, 100
-    )
-    
-    # Test order clustering significance
-    order_sig_results = test_purity_significance(
-        all_encoded, kmeans_labels_order, order_labels, 100
-    )
-
-    # Plot significance results
-    plot_significance_test(family_sig_results, "Family", os.path.join(output_dir, "family_purity_significance.png"))
-    plot_significance_test(order_sig_results, "Order", os.path.join(output_dir, "order_purity_significance.png"))
-    
-    # Generate plots
-    plot_clustering_metrics(family_results, "family_clustering_metrics.png")
-    plot_clustering_metrics(order_results, "order_clustering_metrics.png")
-
-    # Perform PCA for 2D visualization
-    pca = PCA(n_components=2)
-    reduced_data = pca.fit_transform(all_encoded)
-
-    # Update reduced_dict with 2D encodings
-    reduced_dict = {}
-    for i, (bacterium_name, entry) in enumerate(encoded_dict.items()):
-        reduced_dict[bacterium_name] = {
-            "reduced_encoding": reduced_data[i],
-            "family": entry["family"],
-            "Order": entry["Order"],
-            "Class": entry["Class"]
-        }
-
-    # Plot the 2D embeddings
-    family_plot_path = os.path.join(output_dir, "plot_clustered_family.png")
-    order_plot_path = os.path.join(output_dir, "plot_clustered_order.png")
-    family_only_path = os.path.join(output_dir, "plot_family_only.png")
-    family_dist_path = os.path.join(output_dir, "family_distribution.png")
-
-    plot_cluster_labels_by_family(reduced_dict, kmeans_labels_family, family_eval, family_plot_path)
-    plot_cluster_labels_by_order(reduced_dict, kmeans_labels_order, order_eval, order_plot_path)
-    plot_family_only(reduced_dict, family_only_path)
-    plot_family_distribution(reduced_dict, family_dist_path)
-
 if __name__ == "__main__":
     main()
