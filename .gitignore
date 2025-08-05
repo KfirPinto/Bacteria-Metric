@@ -7,6 +7,7 @@ wandb/
 *.pt
 *.npy
 *.png
+*.csv
 output/
 eval_data
 config.py
