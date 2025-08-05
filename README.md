@@ -49,8 +49,7 @@ python taxonomy_evaluation.py --embeddings embeddings.npy --embeddings_labels em
 | Argument | Description | Default | Required |
 |----------|-------------|---------|----------|
 | `--embeddings` | Path to embeddings numpy file (.npy) | `embeddings.npy` | No |
-| `--embeddings_labels` | Path to embeddings labels CSV file | `embeddings_labels.csv` | No |
-| `--taxonomy_file` | Path to bacterial taxonomy CSV file | `bacterial_lineage.csv` | No |
+| `--embeddings_labels` | Path to embeddings labels CSV file | `embeddings_labels.npy` | No |
 | `--variance_file` | (Optional) Path to file containing variance per embedding (.npy or .csv) | None | No
 
 #### Analysis Parameters
@@ -122,11 +121,3 @@ The tool performs permutation testing (100 iterations) to determine if clusterin
 | `p_value` | Probability that observed purity occurred by chance |
 | `z_score` | Standard deviations above null distribution mean |
 | `percentile` | Percentile rank of actual purity in null distribution |
-
-## Complete Workflow Summary
-
-1. **Prepare raw data**: Ensure you have `embeddings.npy` and `embeddings_labels.npy`
-2. **Generate required files**: Run `process_embedding_labels.py all` to create formatted input files
-3. **Install dependencies**: Install required Python packages
-4. **Run clustering analysis**: Execute `taxonomy_evaluation.py` with desired parameters
-5. **Analyze results**: Review generated plots and statistical analyses in the output directory
