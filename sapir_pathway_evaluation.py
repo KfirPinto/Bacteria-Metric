@@ -16,21 +16,14 @@ from skbio import DistanceMatrix
 from autoencoder_model.training.model import SplitAutoencoder
 from variational_autoencoder.training.model import SplitVAE
 
-def load_gene_abundance(test_data_path):
-    gene_abundance_tensor = np.load(test_data_path)
-    gene_abundance_tensor = torch.tensor(gene_abundance_tensor, dtype=torch.float32)
-    return gene_abundance_tensor
+def load_embedding(test_data_path):
+    embedding_tensor = np.load(test_data_path)
+    #embedding_tensor = torch.tensor(embedding_tensor, dtype=torch.float32)
+    return embedding_tensor
 
-def load_gene_abundance_metadata(test_labels_path): # TO DO: what is label? 
+def load_embedding_metadata(test_labels_path): 
     test_labels = np.load(test_labels_path, allow_pickle=True)
     return test_labels
-
-def load_model(model_class, model_args: dict, state_dict_path: str, device: str = "cuda"):
-    model = model_class(**model_args)
-    model.load_state_dict(torch.load(state_dict_path, map_location=device))
-    model.to(device)
-    model.eval()
-    return model
 
 def load_pathway_data(pathway_data_path, pathway_bacteria_path):
     pathway_abundance_tensor = np.load(pathway_data_path)  
@@ -65,31 +58,6 @@ def compute_binary_pathway_vectors(pathway_abundance, bacteria_names, threshold=
 
 def normalize_vectors(vectors):
     return normalize(vectors, norm='l2', axis=1)
-
-def encode_data(model, input, metadata, device="cuda"):
-    input = input.to(device)
-    bacteria_encoding = []
-    with torch.no_grad():
-        z, *rest = model.forward(input)  # shape: (num_samples, num_bacteria, 2b)
-        b = z.shape[-1] // 2
-        bacteria_encoding = z[:, :, :b]  # first half of embedding
-        #print(f"Encoded Hi (bacteria matrix) shape: {bacteria_encoding.shape}")
-
-    # Get the number of bacteria and the embedding dimension
-    num_bacteria = bacteria_encoding.shape[1]  
-    embedding_dim = bacteria_encoding.shape[2]  
-    # Prepare embeddings for all bacteria
-    embeddings = {}
-    # itertate over each bacterium in the test labels
-    for i in range(num_bacteria):
-        # Average of encodings across samples for each bacterium
-        single_bacterium_encoding = bacteria_encoding[:, i, :].mean(dim=0).cpu().numpy()  # shape: (embedding_dim,)
-        bacterium_name = metadata[i]
-        #print(f"Processing bacterium: {bacterium_name}")
-        #print(f"single bacteria encoding shape: {single_bacterium_encoding.shape}")
-        #print(f"single bacterium encoding: {single_bacterium_encoding}")
-        embeddings[bacterium_name] = single_bacterium_encoding  # Store the encoding for this bacterium
-    return embeddings
 
 # Similarity calculations between embedding vectors
 def calculate_similarities(method, embeddings):
@@ -255,10 +223,10 @@ def get_parser():
     # Input Data Arguments
     # -----------------------------
     data_group = parser.add_argument_group("Input Data")
-    data_group.add_argument('--test_data', type=str, required=True,
-                            help='Path to the test gene abundance tensor (.npy file).')
+    data_group.add_argument('--test_embedding', type=str, required=True,
+                            help='Path to the embedding tensor (.npy file).')
     data_group.add_argument('--test_metadata', type=str, required=True,
-                            help='Path to the test gene abundance metadata (bacteria names, .npy file).')
+                            help='Path to the tensor metadata (bacteria names, .npy file).')
     data_group.add_argument('--pathway_data', type=str, required=True,
                             help='Path to the pathway abundance tensor (.npy file).')
     data_group.add_argument('--pathway_bacteria', type=str, required=True,
@@ -268,11 +236,6 @@ def get_parser():
     # Model Arguments
     # -----------------------------
     model_group = parser.add_argument_group("Model")
-    model_group.add_argument('--model_class', type=str, required=True,
-                             choices=['SplitVAE', 'SplitAutoencoder'],
-                             help='Name of model class to load.')
-    model_group.add_argument('--state_dict_path', type=str, required=True,
-                             help='Path to trained model state_dict file.')
     model_group.add_argument('--embedding_dim', type=int, required=True,
                              help='Dimension of the embedding layer.')
 
@@ -316,33 +279,19 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
     # Load gene abundance (test only), metadata (test only), model
     # and pathway abundance (train and test, filtering is required)
-    gene_abundance = load_gene_abundance(args.test_data)
-    gene_abundance_metadata = load_gene_abundance_metadata(args.test_metadata)
+    embedding = load_embedding(args.test_embedding).squeeze()
+    embedding_metadata = load_embedding_metadata(args.test_metadata)
     pathway_abundance, pathway_metadata = load_pathway_data(args.pathway_data, args.pathway_bacteria)
 
-    # Load the choosen model
-    model_classes = {
-    'SplitVAE': SplitVAE,
-    'SplitAutoencoder': SplitAutoencoder
-    }
-    model_class = model_classes[args.model_class]
-
-    model_args = {
-    "input_dim": gene_abundance.shape[-1],
-    "embedding_dim": args.embedding_dim
-    }
-    model = load_model(model_class, model_args, args.state_dict_path, device=device)
 
     # Extract relevant pathways 
-    pathway_abundance_reordered, pathway_abundance_metadata_reordered = sub_matrix(gene_abundance_metadata,
+    pathway_abundance_reordered, pathway_abundance_metadata_reordered = sub_matrix(embedding_metadata,
                                                                                    pathway_abundance, pathway_metadata)
 
     # Get embeddings from model - dict: {bacterium_name: embedding}
-    embeddings = encode_data(model, gene_abundance, gene_abundance_metadata, device=device)
+    embeddings = {name: embedding[i] for i, name in enumerate(embedding_metadata)}
 
     # Get binary pathway vectors - dict: {bacterium_name: binary vector correspoing to participation at metabolic pathways}
     binary_pathway_vectors = compute_binary_pathway_vectors(pathway_abundance_reordered,
