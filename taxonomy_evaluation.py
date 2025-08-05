@@ -40,6 +40,25 @@ def load_taxonomy(taxonomy_file):
 
     return taxonomy_df
 
+def load_variance_file(variance_file, num_bacteria):
+    if variance_file is None:
+        return None
+    try:
+        if variance_file.endswith('.npy'):
+            variances = np.load(variance_file)
+        elif variance_file.endswith('.csv'):
+            variances = pd.read_csv(variance_file).iloc[:, 0].to_numpy()
+        else:
+            raise ValueError("Unsupported variance file format. Use .npy or .csv")
+
+        if len(variances) != num_bacteria:
+            raise ValueError(f"Variance file has {len(variances)} entries, but {num_bacteria} embeddings exist")
+
+        return variances
+    except Exception as e:
+        print(f"[ERROR] Failed to load variance file: {e}")
+        return None
+
 def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Evaluate clustering performance of bacterial embeddings",
@@ -50,6 +69,8 @@ def parse_arguments():
     parser.add_argument("--embeddings", type=str, default="embeddings.npy", help="Path to external embeddings numpy file (.npy).")
     parser.add_argument("--embeddings_labels", type=str, default="embeddings_labels.csv", help="Path to embeddings bacteria labels numpy file (.csv)")
     parser.add_argument("--taxonomy_file", type=str, default="bacterial_lineage.csv",help="Path to bacterial taxonomy CSV file")
+    parser.add_argument("--variance_file", type=str, default=None, 
+    help="Optional path to variance file (npy or csv) where each entry corresponds to variance of a bacterium embedding")
 
     # Output directory
     parser.add_argument("--output_dir", type=str, default="./plots",help="Directory to save output plots and results")
@@ -74,7 +95,7 @@ def setup_output_directory(output_dir):
     print(f"Output directory: {output_dir}")
     return output_dir  
 
-def organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df):
+def organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df,  variances=None):
     """
     Process embeddings and organize them with taxonomy information
     """    
@@ -121,6 +142,11 @@ def organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df):
             "class": tax_info.get("Class"),      # Changed from "Class" to "class" 
             "phylum": tax_info.get("Phylum")     # Changed from "Phylum" to "phylum"
         }
+
+        if variances is not None:
+            encoded_dict[bacterium_name]['variance'] = variances[i]
+        else:
+            encoded_dict[bacterium_name]['variance'] = None
 
         if i < 5:  # Print first 5 for verification
             print(f"Bacterium {i}: {bacterium_name} -> Family={tax_info.get('Family')}, "
@@ -362,6 +388,18 @@ def plot_by_taxonomy(filtered_encoded_dict, taxonomic_level, evaluation_results,
     taxonomic_labels = [entry.get(taxonomic_level, 'Unknown') for entry in filtered_encoded_dict.values()]
     # reduced_data = np.array([entry['reduced_encoding'] for entry in filtered_encoded_dict.values()])
     reduced_data = np.array([entry['global_reduced_encoding'] for entry in filtered_encoded_dict.values()])
+    
+    variances = [entry.get('variance', None) for entry in filtered_encoded_dict.values()]
+    
+    # Normalize variances to a reasonable radius scale, or set constant
+    if any(v is not None for v in variances):
+        variance_array = np.array([v if v is not None else 0 for v in variances])
+        # Scale variance to size range (e.g., 60–300)
+        min_radius, max_radius = 60, 300
+        norm_variance = (variance_array - variance_array.min()) / (variance_array.ptp() + 1e-6)
+        radii = min_radius + norm_variance * (max_radius - min_radius)
+    else:
+        radii = 100  # default size
 
     # Create color mapping for the taxonomic groups
     unique_taxa = sorted(set(taxonomic_labels))
@@ -372,7 +410,7 @@ def plot_by_taxonomy(filtered_encoded_dict, taxonomic_level, evaluation_results,
     plt.figure(figsize=(14, 12))
     scatter = plt.scatter(
         reduced_data[:, 0], reduced_data[:, 1],
-        c=colors, cmap='tab20', edgecolors='k', s=100, alpha=0.8
+        c=colors, cmap='tab20', edgecolors='k', s=radii, alpha=0.8
     )
     
     # Create legend
@@ -495,9 +533,10 @@ def main():
     embeddings_data = load_embeddings(args.embeddings)
     embeddings_labels = load_embeddings_labels(args.embeddings_labels)
     taxonomy_df = load_taxonomy(args.taxonomy_file)
-
+    variances = load_variance_file(args.variance_file, len(embeddings_labels))
+    
     # Organize embeddings with taxonomy information
-    encoded_dict = organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df)
+    encoded_dict = organize_embeddings(embeddings_data, embeddings_labels, taxonomy_df, variances)
 
     # Apply global dimensionality reduction once for consistent coordinates
     encoded_dict = apply_global_dimensionality_reduction(encoded_dict, method=args.reduction_method, 
