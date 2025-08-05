@@ -19,22 +19,17 @@ The tool requires three input files:
    - Shape: `(n_bacteria, embedding_dim)`
    - First row is typically excluded during processing
 
-2. **Labels file** (`embeddings_labels.csv`):
+2. **Labels file** (`embeddings_labels.npy`):
    - CSV file with bacterial names corresponding to embeddings
    - First column should contain bacterial names
    - Must match the order of embeddings
-
-3. **Taxonomy file** (`taxonomy.csv`):
-   - CSV file with taxonomic information
-   - Required columns: `Original Name`, `Family`, `Order`, `Class`, `Phylum`
-   - Bacteria with missing `Family` information will be automatically dropped
 
 ## Usage
 
 ### Custom Parameters
 
 ```bash
-python taxonomic_evaluation.py --embeddings my_embeddings.npy --embeddings_labels my_labels.csv --taxonomy_file my_taxonomy.csv --taxonomic_level Class --distance cosine --output_dir ./results
+python taxonomic_evaluation.py --embeddings my_embeddings.npy --embeddings_labels my_labels.npy --taxonomic_level Class --distance cosine --output_dir ./results
 ```
 
 ### Command Line Arguments
@@ -42,8 +37,7 @@ python taxonomic_evaluation.py --embeddings my_embeddings.npy --embeddings_label
 | Argument | Default | Description |
 |----------|---------|-------------|
 | `--embeddings` | `embeddings.npy` | Path to embeddings numpy file |
-| `--embeddings_labels` | `embeddings_labels.csv` | Path to bacterial labels CSV file |
-| `--taxonomy_file` | `taxonomy.csv` | Path to taxonomy data CSV file |
+| `--embeddings_labels` | `embeddings_labels.npy` | Path to bacterial labels CSV file |
 | `--taxonomic_level` | `Class` | Taxonomic level for evaluation (`Order`, `Family`, `Class`, `Phylum`) |
 | `--distance` | `cosine` | Distance metric (`cosine`, `euclidean`) |
 | `--output_dir` | `./plots` | Directory for output files |
