@@ -20,7 +20,7 @@ pip install torch numpy matplotlib seaborn pandas scikit-learn scipy scikit-bio
 
 ### Example for run command
 ```bash
-python pathway_evaluation.py --embeddings embeddings.npy --embeddings_labels embeddings_labels.npy --pathway_data pathway_data.npy --pathway_bacteria pathway_bacteria.npy --method_embeddings cosine --method_pathways mahalanobis --normalized_embeddings  --output_dir ./results
+python pathway_evaluation.py --embeddings embeddings.npy --embeddings_labels embeddings_labels.npy --pathway_data pathway_data.npy --pathway_labels pathway_bacteria.npy --method_embeddings cosine --method_pathways mahalanobis --normalized_embeddings  --output_dir ./results
 ```
 
 ## Command-Line Arguments
@@ -31,7 +31,7 @@ python pathway_evaluation.py --embeddings embeddings.npy --embeddings_labels emb
 | `--embeddings` | Path to embeddings tensor (.npy file) |
 | `--embeddings_labels` | Path to embeddings metadata - bacteria names (.npy file) |
 | `--pathway_data` | Path to pathway abundance tensor (.npy file) |
-| `--pathway_bacteria` | Path to pathway abundance metadata - bacteria names (.npy file) |
+| `--pathway_labels` | Path to pathway abundance metadata - bacteria names (.npy file) |
 
 ### Similarity Calculation (Optional)
 | Argument | Description | Default | Options |
