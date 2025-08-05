@@ -21,24 +21,27 @@ def load_embeddings(file_path="embeddings.npy"):
     embeddings_tensor = torch.tensor(embeddings_tensor, dtype=torch.float32)
     return embeddings_tensor
 
-def load_embeddings_labels(file_path="embeddings_labels.csv"):
-    df = pd.read_csv(file_path)
-    labels = df.iloc[:, 0].tolist()
-    return labels
+def load_embeddings_labels(file_path="embeddings_labels.npy"):
+    """
+    Load .npy file containing full taxonomy lineage strings and extract taxonomy levels.
+    """
+    full_lineages = np.load(file_path, allow_pickle=True)[1:]
 
-def load_taxonomy(taxonomy_file):
-    taxonomy_df = pd.read_csv(taxonomy_file)
-    # Detect missing family values
-    missing_family_df = taxonomy_df[taxonomy_df['Family'].isna() | (taxonomy_df['Family'] == '')]
+    parsed = []
+    for lineage in full_lineages:
+        parts = lineage.split('|')
+        taxonomy = {p[0]: p[3:] for p in parts if '__' in p}  
+        parsed.append({
+            "Original Name": lineage,
+            "Phylum": taxonomy.get('p', ''),
+            "Class": taxonomy.get('c', ''),
+            "Order": taxonomy.get('o', ''),
+            "Family": taxonomy.get('f', ''),
+        })
 
-    if not missing_family_df.empty:
-        print("The following bacteria have missing 'Family' information and will be dropped:")
-        print(missing_family_df["Original Name"].tolist())
-
-    # Drop rows with missing or empty Family column
-    taxonomy_df = taxonomy_df[~taxonomy_df['Family'].isna() & (taxonomy_df['Family'] != '')]
-
-    return taxonomy_df
+    taxonomy_df = pd.DataFrame(parsed)
+    labels = taxonomy_df["Original Name"].tolist()
+    return labels, taxonomy_df
 
 def load_variance_file(variance_file, num_bacteria):
     if variance_file is None:
@@ -68,7 +71,6 @@ def parse_arguments():
     # Input files
     parser.add_argument("--embeddings", type=str, default="embeddings.npy", help="Path to external embeddings numpy file (.npy).")
     parser.add_argument("--embeddings_labels", type=str, default="embeddings_labels.csv", help="Path to embeddings bacteria labels numpy file (.csv)")
-    parser.add_argument("--taxonomy_file", type=str, default="bacterial_lineage.csv",help="Path to bacterial taxonomy CSV file")
     parser.add_argument("--variance_file", type=str, default=None, 
     help="Optional path to variance file (npy or csv) where each entry corresponds to variance of a bacterium embedding")
 
@@ -531,8 +533,7 @@ def main():
 
     # Load files
     embeddings_data = load_embeddings(args.embeddings)
-    embeddings_labels = load_embeddings_labels(args.embeddings_labels)
-    taxonomy_df = load_taxonomy(args.taxonomy_file)
+    embeddings_labels, taxonomy_df = load_embeddings_labels(args.embeddings_labels)
     variances = load_variance_file(args.variance_file, len(embeddings_labels))
     
     # Organize embeddings with taxonomy information
