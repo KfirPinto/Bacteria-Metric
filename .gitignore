@@ -8,5 +8,6 @@ wandb/
 *.npy
 *.png
 *.csv
+*.txt
 eval_data
 config.py
