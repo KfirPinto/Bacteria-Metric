@@ -216,7 +216,9 @@ def filter_based_uniprotkb(input_path, output_dir, uniprotkb_path):
 
             # Append to output file with header only on the first write
             chunk_filtered.to_csv(output_file, mode='a', index=False, header=not os.path.exists(output_file), columns=header)
-        
+
+
+# filtering and normelized the data, preduce 4 files: tensor.npy, sample_list.npy, bacteria_list.npy, gene_families_list.npy       
 def load_gene_families(input_path, output_dir, threshold=False, top_k=1000):
 
     pre_df = pd.read_csv(input_path)

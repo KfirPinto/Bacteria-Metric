@@ -10,3 +10,5 @@ config.py
 results/
 kfir/
 datasets/
+processed_data/
+humann_databases/
