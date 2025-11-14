@@ -5,10 +5,11 @@ __pycache__/
 wandb/
 *.pt
 *.npy
-eval_data
+eval_results
 config.py
 results/
 kfir/
 datasets/
 processed_data/
 humann_databases/
+eval_results/

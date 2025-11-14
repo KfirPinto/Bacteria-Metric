@@ -93,4 +93,4 @@ def main():
         np.save(test_tensor_embeddings_path, bacteria_embeddings)
 
 if __name__ == "__main__":
-main()
+    main()
