@@ -11,3 +11,5 @@ wandb/
 output/
 eval_data
 config.py
+humann_databases/
+processed_data/
