@@ -24,9 +24,9 @@ def vectorize_sample_constituency_loss(H):
     other_H_k = other_H[:, k_idx, :]  # same as H_k but from different sample
 
     # Step 5: Normalize embeddings for cosine similarity
-    H_j = F.normalize(H_j, dim=-1)
-    H_k = F.normalize(H_k, dim=-1)
-    other_H_k = F.normalize(other_H_k, dim=-1)
+    H_j = F.normalize(H_j, dim=-1, eps=1e-8)
+    H_k = F.normalize(H_k, dim=-1, eps=1e-8)
+    other_H_k = F.normalize(other_H_k, dim=-1, eps=1e-8)
 
     # Step 6: Cosine similarity (dot product of unit vectors)
     sim_same = torch.sum(H_j * H_k, dim=-1)           # shape: (n, num_pairs)
@@ -56,9 +56,9 @@ def vectorize_bacteria_constituency_loss(H):
     H_k_other = H[k_idx, rand_indices.unsqueeze(1)]    # (d, num_pairs, b)
 
     # Step 5: Normalize vectors along the embedding dimension
-    H_j = F.normalize(H_j, dim=-1)
-    H_k = F.normalize(H_k, dim=-1)
-    H_k_other = F.normalize(H_k_other, dim=-1)
+    H_j = F.normalize(H_j, dim=-1, eps=1e-8)
+    H_k = F.normalize(H_k, dim=-1, eps=1e-8)
+    H_k_other = F.normalize(H_k_other, dim=-1, eps=1e-8)
 
     # Step 6: Cosine similarity
     sim_same = torch.sum(H_j * H_k, dim=-1)            # (d, num_pairs)
