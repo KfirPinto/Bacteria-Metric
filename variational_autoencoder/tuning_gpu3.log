@@ -1,0 +1,1818 @@
+nohup: ignoring input
+[I 2025-11-19 20:21:57,836] A new study created in memory with name: no-name-e7a4f411-764e-4c81-9598-c34825c34a1f
+wandb: Currently logged in as: kfirpinto (kfirpinto-bar-ilan-university) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run h3btalz6
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_202235-h3btalz6
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run restful-thunder-1
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/h3btalz6
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading summary, console lines 0-0
+wandb: 🚀 View run restful-thunder-1 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/h3btalz6
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_202235-h3btalz6/logs
+[I 2025-11-19 20:22:41,121] Trial 0 finished with value: inf and parameters: {'embedding_dim': 128, 'learning_rate': 0.0022099263367676186, 'batch_size': 64, 'weight_decay': 0.0008540604781989108}. Best is trial 0 with value: inf.
+wandb: setting up run 2o5kq7n1
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_202318-2o5kq7n1
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run sunny-hill-2
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/2o5kq7n1
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 97-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▃▃▃▃▄▄▄▄▄▄▄▄▄▅▅▅▅▆▆▆▆▆▆▆▇▇▇▇▇▇▇██
+wandb:  train_bact_loss █▇▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▆▅▄▄▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss ██▇▇▅▄▄▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▄▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▂▃▃▃▄▄▅▅▅▆▆▆▆▇▇████████████████████████
+wandb:   val_recon_loss █▇▅▄▃▂▁▁▁▁▁▂▂▂▁▂▁▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▇▅▄▂▁▁▁▁▁▂▂▂▂▂▃▃▃▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.04447
+wandb: train_recon_loss 4.17136
+wandb: train_total_loss 9.08161
+wandb:    val_bact_loss 0.05677
+wandb:      val_kl_loss 2.37533
+wandb:   val_recon_loss 17.96235
+wandb:   val_total_loss 22.82594
+wandb: 
+wandb: 🚀 View run sunny-hill-2 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/2o5kq7n1
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_202318-2o5kq7n1/logs
+[I 2025-11-19 20:30:45,959] Trial 1 finished with value: 21.91008186340332 and parameters: {'embedding_dim': 16, 'learning_rate': 0.00023341422891428248, 'batch_size': 32, 'weight_decay': 0.0002975584222956833}. Best is trial 1 with value: 21.91008186340332.
+wandb: setting up run 4gw67smg
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_203121-4gw67smg
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run fallen-planet-3
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/4gw67smg
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: 🚀 View run fallen-planet-3 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/4gw67smg
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_203121-4gw67smg/logs
+[I 2025-11-19 20:31:25,926] Trial 2 finished with value: inf and parameters: {'embedding_dim': 16, 'learning_rate': 0.005378118807051187, 'batch_size': 128, 'weight_decay': 0.0005869784293685}. Best is trial 1 with value: 21.91008186340332.
+wandb: setting up run l0fffexa
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_203201-l0fffexa
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run golden-field-4
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/l0fffexa
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 97-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▂▂▂▂▂▃▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▅▆▆▆▆▇▇▇▇▇████
+wandb:  train_bact_loss ████▇▇▇▆▆▅▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▄▃▃▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▅▅▅▄▄▄▄▄▄▃▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss ███▇▇▅▅▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▄▄▄▃▄▄▄▄▄▄▅▅▅▅▅▅▅▅▆▆▅▆▆▆▆▆▆▆▇▇▇▇▇▇▇▇███
+wandb:   val_recon_loss █▅▄▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▇▆▅▄▄▄▄▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.18079
+wandb: train_recon_loss 10.47749
+wandb: train_total_loss 15.55332
+wandb:    val_bact_loss 0.19468
+wandb:      val_kl_loss 1.45645
+wandb:   val_recon_loss 18.2998
+wandb:   val_total_loss 23.35682
+wandb: 
+wandb: 🚀 View run golden-field-4 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/l0fffexa
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_203201-l0fffexa/logs
+[I 2025-11-19 20:41:48,186] Trial 3 finished with value: 22.54302406311035 and parameters: {'embedding_dim': 64, 'learning_rate': 0.0003568448149848766, 'batch_size': 128, 'weight_decay': 0.0006975104344057313}. Best is trial 1 with value: 21.91008186340332.
+wandb: setting up run uqs5ozcm
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_204223-uqs5ozcm
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run lucky-bird-5
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/uqs5ozcm
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▂▂▂▃▃▃▃▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇▇███
+wandb:  train_bact_loss █▆▃▃▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▄▄▄▃▃▃▃▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▄▄▄▄▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▂▂▁▁▂▃▃▄▄▄▅▅▅▅▆▇▇▇▇▇███▇████████▇████▇█▇
+wandb:   val_recon_loss █▃▂▂▂▁▁▂▂▂▁▂▂▂▂▂▁▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▅▅▄▃▂▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▂▁▁▁▁▁▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.07108
+wandb: train_recon_loss 4.50322
+wandb: train_total_loss 10.16528
+wandb:    val_bact_loss 0.08013
+wandb:      val_kl_loss 2.34031
+wandb:   val_recon_loss 17.97386
+wandb:   val_total_loss 23.6186
+wandb: 
+wandb: 🚀 View run lucky-bird-5 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/uqs5ozcm
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_204223-uqs5ozcm/logs
+[I 2025-11-19 20:49:45,746] Trial 4 finished with value: 23.32875418663025 and parameters: {'embedding_dim': 16, 'learning_rate': 0.0006950114718785454, 'batch_size': 32, 'weight_decay': 0.0007053520621798142}. Best is trial 1 with value: 21.91008186340332.
+wandb: setting up run j5te5ss7
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_205020-j5te5ss7
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run volcanic-star-6
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/j5te5ss7
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading output.log
+wandb: uploading summary, console lines 0-0
+wandb: 🚀 View run volcanic-star-6 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/j5te5ss7
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_205020-j5te5ss7/logs
+[I 2025-11-19 20:50:24,898] Trial 5 finished with value: inf and parameters: {'embedding_dim': 64, 'learning_rate': 0.0017033122789437973, 'batch_size': 32, 'weight_decay': 9.165930652930032e-06}. Best is trial 1 with value: 21.91008186340332.
+wandb: setting up run w2q59lpo
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_205101-w2q59lpo
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run helpful-galaxy-7
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/w2q59lpo
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.94069
+wandb: train_recon_loss 42870982690.56089
+wandb: train_total_loss 2.889189996281498e+25
+wandb:    val_bact_loss 5.03787
+wandb:      val_kl_loss 3.673234636629114e+17
+wandb:   val_recon_loss 492387790.05328
+wandb:   val_total_loss 3.6732346384643834e+17
+wandb: 
+wandb: 🚀 View run helpful-galaxy-7 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/w2q59lpo
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_205101-w2q59lpo/logs
+[I 2025-11-19 20:51:11,319] Trial 6 pruned. 
+wandb: setting up run 6cikcmmn
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_205146-6cikcmmn
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run feasible-jazz-8
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/6cikcmmn
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 2.10836
+wandb: train_recon_loss 157.62118
+wandb: train_total_loss 171.85533
+wandb:    val_bact_loss 1.29456
+wandb:      val_kl_loss 0.85709
+wandb:   val_recon_loss 59.25253
+wandb:   val_total_loss 65.78864
+wandb: 
+wandb: 🚀 View run feasible-jazz-8 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/6cikcmmn
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_205146-6cikcmmn/logs
+[I 2025-11-19 20:51:53,271] Trial 7 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_205228-lu8fbt0w
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run ancient-breeze-9
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/lu8fbt0w
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading summary, console lines 0-0
+wandb: 🚀 View run ancient-breeze-9 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/lu8fbt0w
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_205228-lu8fbt0w/logs
+[I 2025-11-19 20:52:32,623] Trial 8 finished with value: inf and parameters: {'embedding_dim': 64, 'learning_rate': 0.004236584936334843, 'batch_size': 64, 'weight_decay': 0.0009431157384073778}. Best is trial 1 with value: 21.91008186340332.
+wandb: setting up run 5bmhkhy4
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_205308-5bmhkhy4
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run generous-snowflake-10
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/5bmhkhy4
+wandb: updating run metadata; uploading wandb-metadata.json; uploading data
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading summary, console lines 0-0
+wandb: 🚀 View run generous-snowflake-10 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/5bmhkhy4
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_205308-5bmhkhy4/logs
+[I 2025-11-19 20:53:11,018] Trial 9 pruned. 
+wandb: setting up run 56tlk41j
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_205346-56tlk41j
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run flowing-wood-11
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/56tlk41j
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇▇▇██
+wandb:  train_bact_loss █▇▆▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▇▆▅▅▅▅▄▄▄▃▃▃▃▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▇▆▆▅▅▄▄▄▄▄▄▃▃▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▅▄▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▂▃▃▃▅▅▅▅▅▆▆▆▆▇▇▇▇▇█████████████████████
+wandb:   val_recon_loss ██▇▆▄▂▂▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb:   val_total_loss █▅▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.06735
+wandb: train_recon_loss 4.53313
+wandb: train_total_loss 9.37688
+wandb:    val_bact_loss 0.07309
+wandb:      val_kl_loss 2.37652
+wandb:   val_recon_loss 18.19401
+wandb:   val_total_loss 23.04291
+wandb: 
+wandb: 🚀 View run flowing-wood-11 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/56tlk41j
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_205346-56tlk41j/logs
+[I 2025-11-19 21:01:42,001] Trial 10 finished with value: 21.501097838083904 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00010564289810152798, 'batch_size': 32, 'weight_decay': 0.000290120116537205}. Best is trial 10 with value: 21.501097838083904.
+wandb: setting up run sseylsvo
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_210217-sseylsvo
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run whole-pond-12
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/sseylsvo
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▃▃▃▄▄▄▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇▇▇██
+wandb:  train_bact_loss ██▇▄▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss ██▇▇▆▆▅▅▄▄▄▃▃▃▃▃▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▇▇▆▆▆▆▅▅▅▅▄▄▄▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▇▃▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▃▃▃▃▄▄▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇▇▇▇███████████████
+wandb:   val_recon_loss █▅▃▃▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁
+wandb:   val_total_loss █▅▅▄▂▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.06615
+wandb: train_recon_loss 4.53758
+wandb: train_total_loss 9.40712
+wandb:    val_bact_loss 0.06953
+wandb:      val_kl_loss 2.40284
+wandb:   val_recon_loss 18.16054
+wandb:   val_total_loss 23.03706
+wandb: 
+wandb: 🚀 View run whole-pond-12 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/sseylsvo
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_210217-sseylsvo/logs
+[I 2025-11-19 21:10:11,220] Trial 11 finished with value: 21.52547001838684 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00010125084028144953, 'batch_size': 32, 'weight_decay': 0.0002908203746354373}. Best is trial 10 with value: 21.501097838083904.
+wandb: setting up run grm4mrhn
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_211046-grm4mrhn
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run flowing-resonance-13
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/grm4mrhn
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.10213
+wandb: train_recon_loss 36.83247
+wandb: train_total_loss 41.20325
+wandb:    val_bact_loss 1.09529
+wandb:      val_kl_loss 0.34355
+wandb:   val_recon_loss 27.93899
+wandb:   val_total_loss 32.14443
+wandb: 
+wandb: 🚀 View run flowing-resonance-13 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/grm4mrhn
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_211046-grm4mrhn/logs
+[I 2025-11-19 21:10:53,094] Trial 12 pruned. 
+wandb: setting up run s9wu5gvl
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_211128-s9wu5gvl
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run fluent-dew-14
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/s9wu5gvl
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.10197
+wandb: train_recon_loss 36.86796
+wandb: train_total_loss 41.0825
+wandb:    val_bact_loss 1.09453
+wandb:      val_kl_loss 0.3424
+wandb:   val_recon_loss 27.93594
+wandb:   val_total_loss 31.98342
+wandb: 
+wandb: 🚀 View run fluent-dew-14 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/s9wu5gvl
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_211128-s9wu5gvl/logs
+[I 2025-11-19 21:11:35,498] Trial 13 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_211211-etzewpzt
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run swept-valley-15
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/etzewpzt
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-1, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁█
+wandb:  train_bact_loss █▁
+wandb: train_recon_loss █▁
+wandb: train_total_loss █▁
+wandb:    val_bact_loss █▁
+wandb:      val_kl_loss ▁█
+wandb:   val_recon_loss █▁
+wandb:   val_total_loss █▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 1
+wandb:  train_bact_loss 1.01004
+wandb: train_recon_loss 22.85002
+wandb: train_total_loss 27.95783
+wandb:    val_bact_loss 1.07741
+wandb:      val_kl_loss 0.8359
+wandb:   val_recon_loss 22.79234
+wandb:   val_total_loss 27.85341
+wandb: 
+wandb: 🚀 View run swept-valley-15 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/etzewpzt
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_211211-etzewpzt/logs
+[I 2025-11-19 21:12:22,940] Trial 14 pruned. 
+wandb: setting up run dilnbf9h
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_211258-dilnbf9h
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run eager-pond-16
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/dilnbf9h
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇██
+wandb:  train_bact_loss █▇▄▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss ██▇▆▆▆▅▅▄▄▄▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss ██▆▆▆▅▄▄▄▄▃▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▇▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▂▁▃▃▄▄▅▅▅▆▆▆▇▇███▇████████▇█████▇████▇▇
+wandb:   val_recon_loss █▆▅▅▄▃▂▂▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁
+wandb:   val_total_loss █▇▅▃▂▁▁▁▁▂▃▃▃▃▃▃▄▄▃▄▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▂▃▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.08163
+wandb: train_recon_loss 4.04042
+wandb: train_total_loss 8.01439
+wandb:    val_bact_loss 0.091
+wandb:      val_kl_loss 1.89208
+wandb:   val_recon_loss 18.42046
+wandb:   val_total_loss 22.35775
+wandb: 
+wandb: 🚀 View run eager-pond-16 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/dilnbf9h
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_211258-dilnbf9h/logs
+[I 2025-11-19 21:20:50,701] Trial 15 finished with value: 21.265721082687378 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00043782752491190003, 'batch_size': 32, 'weight_decay': 0.00015781786436973774}. Best is trial 15 with value: 21.265721082687378.
+wandb: setting up run teh7rlyk
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_212125-teh7rlyk
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run iconic-dream-17
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/teh7rlyk
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.10772
+wandb: train_recon_loss 62.14756
+wandb: train_total_loss 66.93143
+wandb:    val_bact_loss 1.10508
+wandb:      val_kl_loss 0.4181
+wandb:   val_recon_loss 30.34985
+wandb:   val_total_loss 33.77731
+wandb: 
+wandb: 🚀 View run iconic-dream-17 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/teh7rlyk
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_212125-teh7rlyk/logs
+[I 2025-11-19 21:21:32,940] Trial 16 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_212207-fsqecqk5
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run dutiful-snow-18
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/fsqecqk5
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▂▂▂▂▂▂▂▂▂▃▃▃▃▃▄▄▅▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇███
+wandb:  train_bact_loss █▇▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▅▅▄▃▃▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▅▄▄▄▄▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▇▆▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▂▃▃▃▄▄▄▅▆▆▆▇▇▇▇▇▇▇▇▇███████████████████
+wandb:   val_recon_loss █▇▅▅▄▁▁▁▁▁▁▁▂▂▁▂▂▂▂▂▁▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▅▃▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.06225
+wandb: train_recon_loss 4.12206
+wandb: train_total_loss 8.30595
+wandb:    val_bact_loss 0.07265
+wandb:      val_kl_loss 2.16458
+wandb:   val_recon_loss 17.80759
+wandb:   val_total_loss 21.96529
+wandb: 
+wandb: 🚀 View run dutiful-snow-18 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/fsqecqk5
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_212207-fsqecqk5/logs
+[I 2025-11-19 21:29:56,895] Trial 17 finished with value: 21.098496198654175 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00020017657021869262, 'batch_size': 32, 'weight_decay': 0.0001636666106902938}. Best is trial 17 with value: 21.098496198654175.
+wandb: setting up run tmk7spxf
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_213032-tmk7spxf
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run royal-wildflower-19
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/tmk7spxf
+wandb: updating run metadata; uploading wandb-metadata.json; uploading requirements.txt; uploading console lines 0-0
+wandb: uploading wandb-metadata.json; uploading output.log; uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: 🚀 View run royal-wildflower-19 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/tmk7spxf
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_213032-tmk7spxf/logs
+[I 2025-11-19 21:30:35,312] Trial 18 finished with value: inf and parameters: {'embedding_dim': 32, 'learning_rate': 0.009742167726645809, 'batch_size': 32, 'weight_decay': 0.00016774169106021207}. Best is trial 17 with value: 21.098496198654175.
+wandb: setting up run 18uf1qvn
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_213110-18uf1qvn
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run winter-oath-20
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/18uf1qvn
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.10401
+wandb: train_recon_loss 43.96515
+wandb: train_total_loss 47.72337
+wandb:    val_bact_loss 1.08738
+wandb:      val_kl_loss 0.11658
+wandb:   val_recon_loss 30.1786
+wandb:   val_total_loss 33.34043
+wandb: 
+wandb: 🚀 View run winter-oath-20 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/18uf1qvn
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_213110-18uf1qvn/logs
+[I 2025-11-19 21:31:17,071] Trial 19 pruned. 
+wandb: setting up run 3wrzvn34
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_213153-3wrzvn34
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run snowy-oath-21
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/3wrzvn34
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-1, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁█
+wandb:  train_bact_loss █▁
+wandb: train_recon_loss █▁
+wandb: train_total_loss █▁
+wandb:    val_bact_loss █▁
+wandb:      val_kl_loss ▁█
+wandb:   val_recon_loss █▁
+wandb:   val_total_loss █▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 1
+wandb:  train_bact_loss 1.02247
+wandb: train_recon_loss 22.94639
+wandb: train_total_loss 28.07359
+wandb:    val_bact_loss 1.06264
+wandb:      val_kl_loss 0.74592
+wandb:   val_recon_loss 22.73067
+wandb:   val_total_loss 27.82219
+wandb: 
+wandb: 🚀 View run snowy-oath-21 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/3wrzvn34
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_213153-3wrzvn34/logs
+[I 2025-11-19 21:32:04,849] Trial 20 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_213240-800fcb57
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run rose-shape-22
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/800fcb57
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▂▃▃▃▃▃▃▃▄▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▇▇▇▇▇██
+wandb:  train_bact_loss █▆▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▄▄▄▄▄▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss ██▇▇▆▅▅▅▅▄▃▃▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▆▅▅▄▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▂▁▂▃▃▃▄▄▄▅▆▆▆▆▇▇▇▇▇█████████████████████
+wandb:   val_recon_loss ██▇▅▂▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▁▁▁▁▁▁▁
+wandb:   val_total_loss █▇▅▄▃▁▁▁▁▁▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.06901
+wandb: train_recon_loss 4.19143
+wandb: train_total_loss 8.5198
+wandb:    val_bact_loss 0.07507
+wandb:      val_kl_loss 2.18959
+wandb:   val_recon_loss 17.87383
+wandb:   val_total_loss 22.204
+wandb: 
+wandb: 🚀 View run rose-shape-22 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/800fcb57
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_213240-800fcb57/logs
+[I 2025-11-19 21:40:32,287] Trial 21 finished with value: 21.223781029383343 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00016799125519546316, 'batch_size': 32, 'weight_decay': 0.00020672307523760547}. Best is trial 17 with value: 21.098496198654175.
+wandb: setting up run jcueu20k
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_214107-jcueu20k
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run polar-star-23
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/jcueu20k
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▄▄▄▅▅▅▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇█
+wandb:  train_bact_loss █▇▇▆▄▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▅▄▄▄▄▄▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss ██▇▇▆▆▆▅▅▅▄▄▄▄▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▅▄▄▃▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▂▁▁▁▃▃▃▃▄▄▆▆▆▇▆▇▇▇▇▇▇███████████████████
+wandb:   val_recon_loss █▆▄▂▂▂▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▂▁▁▁▁▁
+wandb:   val_total_loss █▆▅▃▂▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.06333
+wandb: train_recon_loss 4.12163
+wandb: train_total_loss 8.01644
+wandb:    val_bact_loss 0.07199
+wandb:      val_kl_loss 2.17634
+wandb:   val_recon_loss 17.8814
+wandb:   val_total_loss 21.78447
+wandb: 
+wandb: 🚀 View run polar-star-23 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/jcueu20k
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_214107-jcueu20k/logs
+[I 2025-11-19 21:48:59,605] Trial 22 finished with value: 20.79428021113078 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00016655408570094194, 'batch_size': 32, 'weight_decay': 0.0001060698822584523}. Best is trial 22 with value: 20.79428021113078.
+wandb: setting up run txau9ay1
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_214934-txau9ay1
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run hopeful-night-24
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/txau9ay1
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▄▄▄▄▄▅▅▅▅▅▅▅▆▆▆▆▆▆▆▇▇▇▇▇██
+wandb:  train_bact_loss █▅▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▅▅▄▃▃▃▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▇▇▆▆▅▅▄▄▄▄▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▇▅▄▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▁▁▂▃▃▃▄▄▄▄▄▅▆▆▇▇▇██████████████████████
+wandb:   val_recon_loss █▆▄▃▂▁▁▁▁▁▁▁▁▁▁▁▁▂▂▁▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▇▄▃▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▃▂▃▃▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.05294
+wandb: train_recon_loss 4.05825
+wandb: train_total_loss 7.43068
+wandb:    val_bact_loss 0.06278
+wandb:      val_kl_loss 2.1658
+wandb:   val_recon_loss 17.92815
+wandb:   val_total_loss 21.26982
+wandb: 
+wandb: 🚀 View run hopeful-night-24 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/txau9ay1
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_214934-txau9ay1/logs
+[I 2025-11-19 21:57:30,276] Trial 23 finished with value: 20.417481978734333 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00015977304924719792, 'batch_size': 32, 'weight_decay': 1.1722203044449507e-05}. Best is trial 23 with value: 20.417481978734333.
+wandb: setting up run apyzeyyb
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_215805-apyzeyyb
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run wandering-grass-25
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/apyzeyyb
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 97-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▅▆▆▆▆▇▇▇▇▇▇██
+wandb:  train_bact_loss █▅▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss ██▇▆▆▅▅▅▅▄▄▄▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▅▅▅▄▄▄▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▆▄▄▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▁▂▂▃▃▄▄▄▅▆▇▆▇▇▇▇▇██████████████████████
+wandb:   val_recon_loss █▅▅▄▃▂▂▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▇▆▅▄▁▁▁▁▁▁▂▂▂▂▂▂▃▂▃▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.05388
+wandb: train_recon_loss 4.0568
+wandb: train_total_loss 7.5057
+wandb:    val_bact_loss 0.06372
+wandb:      val_kl_loss 2.17151
+wandb:   val_recon_loss 17.8517
+wandb:   val_total_loss 21.28787
+wandb: 
+wandb: 🚀 View run wandering-grass-25 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/apyzeyyb
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_215805-apyzeyyb/logs
+[I 2025-11-19 22:06:01,754] Trial 24 finished with value: 20.41681631406148 and parameters: {'embedding_dim': 32, 'learning_rate': 0.0001620472340668165, 'batch_size': 32, 'weight_decay': 2.4437732716063506e-05}. Best is trial 24 with value: 20.41681631406148.
+wandb: setting up run o2nmey0h
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_220637-o2nmey0h
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run giddy-donkey-26
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/o2nmey0h
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▃▃▄▄▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇█████
+wandb:  train_bact_loss █▄▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▅▄▄▄▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▅▅▄▄▃▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▅▄▄▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▁▂▂▃▃▄▄▄▆▇▇▇▇█▇████████████████████▇▇▇▇
+wandb:   val_recon_loss █▆▄▃▃▂▂▂▁▁▁▁▂▂▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▅▄▃▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.06217
+wandb: train_recon_loss 3.73826
+wandb: train_total_loss 6.88978
+wandb:    val_bact_loss 0.07389
+wandb:      val_kl_loss 1.93081
+wandb:   val_recon_loss 17.71403
+wandb:   val_total_loss 20.84972
+wandb: 
+wandb: 🚀 View run giddy-donkey-26 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/o2nmey0h
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_220637-o2nmey0h/logs
+[I 2025-11-19 22:14:30,772] Trial 25 finished with value: 20.461906909942627 and parameters: {'embedding_dim': 32, 'learning_rate': 0.00032947132033702363, 'batch_size': 32, 'weight_decay': 1.181220731442222e-05}. Best is trial 24 with value: 20.41681631406148.
+wandb: setting up run 1lnr8wnp
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_221505-1lnr8wnp
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run breezy-lake-27
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/1lnr8wnp
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▂▂▂▃▃▃▃▃▃▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▆▆▇▇▇▇▇██
+wandb:  train_bact_loss █▆▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▅▅▄▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss ██▇▆▆▅▅▅▄▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▅▄▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▂▁▂▃▃▃▃▄▄▇▇▇▇▇▇█████████████████▇▇▇▇▇▇▇
+wandb:   val_recon_loss █▆▅▄▄▂▂▁▁▁▁▁▂▂▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▅▄▂▂▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.0669
+wandb: train_recon_loss 3.7137
+wandb: train_total_loss 6.81184
+wandb:    val_bact_loss 0.07708
+wandb:      val_kl_loss 1.93352
+wandb:   val_recon_loss 17.76405
+wandb:   val_total_loss 20.86212
+wandb: 
+wandb: 🚀 View run breezy-lake-27 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/1lnr8wnp
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_221505-1lnr8wnp/logs
+[I 2025-11-19 22:23:02,036] Trial 26 finished with value: 20.34646964073181 and parameters: {'embedding_dim': 32, 'learning_rate': 0.0003291764436002076, 'batch_size': 32, 'weight_decay': 6.9802925013868955e-06}. Best is trial 26 with value: 20.34646964073181.
+wandb: setting up run e0ax1gjo
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_222337-e0ax1gjo
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run cosmic-firefly-28
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/e0ax1gjo
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇███
+wandb:  train_bact_loss ██▄▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▇▆▆▅▅▄▄▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▇▇▆▆▅▄▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▆▅▄▄▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▂▂▂▃▄▄▆▆▆▆▆▇▇▇▇████████████████▇▇▇█▇▇▇▇
+wandb:   val_recon_loss █▆▃▂▁▁▁▂▂▁▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▃▃▂▁▁▁▁▁▂▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▁▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.10127
+wandb: train_recon_loss 3.72751
+wandb: train_total_loss 6.89479
+wandb:    val_bact_loss 0.11915
+wandb:      val_kl_loss 1.53676
+wandb:   val_recon_loss 17.69671
+wandb:   val_total_loss 20.8542
+wandb: 
+wandb: 🚀 View run cosmic-firefly-28 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/e0ax1gjo
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_222337-e0ax1gjo/logs
+[I 2025-11-19 22:35:05,208] Trial 27 finished with value: 20.358617544174194 and parameters: {'embedding_dim': 128, 'learning_rate': 0.00028737015524753716, 'batch_size': 32, 'weight_decay': 8.283325889370342e-05}. Best is trial 26 with value: 20.34646964073181.
+wandb: setting up run 486mn9dd
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_223540-486mn9dd
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run twilight-brook-29
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/486mn9dd
+wandb: updating run metadata; uploading wandb-metadata.json; uploading requirements.txt; uploading console lines 0-0
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading summary, console lines 0-0
+wandb: 🚀 View run twilight-brook-29 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/486mn9dd
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_223540-486mn9dd/logs
+[I 2025-11-19 22:35:43,443] Trial 28 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_223618-n0x8w1kx
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run silver-breeze-30
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/n0x8w1kx
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.02114
+wandb: train_recon_loss 44.42628
+wandb: train_total_loss 48.2765
+wandb:    val_bact_loss 1.01841
+wandb:      val_kl_loss 0.22551
+wandb:   val_recon_loss 29.7527
+wandb:   val_total_loss 33.24513
+wandb: 
+wandb: 🚀 View run silver-breeze-30 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/n0x8w1kx
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_223618-n0x8w1kx/logs
+[I 2025-11-19 22:36:27,951] Trial 29 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_223703-3297k808
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trim-tree-31
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/3297k808
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.04161
+wandb: train_recon_loss 57.71891
+wandb: train_total_loss 63.37468
+wandb:    val_bact_loss 1.04142
+wandb:      val_kl_loss 2.04363
+wandb:   val_recon_loss 29.4971
+wandb:   val_total_loss 34.07669
+wandb: 
+wandb: 🚀 View run trim-tree-31 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/3297k808
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_223703-3297k808/logs
+[I 2025-11-19 22:37:12,445] Trial 30 pruned. 
+wandb: setting up run cuour237
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_223747-cuour237
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run stoic-plant-32
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/cuour237
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.01863
+wandb: train_recon_loss 36.55521
+wandb: train_total_loss 38.88986
+wandb:    val_bact_loss 1.0162
+wandb:      val_kl_loss 0.11521
+wandb:   val_recon_loss 27.85366
+wandb:   val_total_loss 30.01689
+wandb: 
+wandb: 🚀 View run stoic-plant-32 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/cuour237
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_223747-cuour237/logs
+[I 2025-11-19 22:37:56,972] Trial 31 pruned. 
+wandb: setting up run o0vnrrup
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_223832-o0vnrrup
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run effortless-leaf-33
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/o0vnrrup
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇████
+wandb:  train_bact_loss █▅▅▄▄▃▃▃▂▂▂▂▂▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▇▆▅▅▄▄▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▆▅▅▅▄▄▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▅▄▄▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▁▁▂▃▄▄▆▆▆▇▇▇▇████████████████▇█▇█▇▇▇▇▇▇
+wandb:   val_recon_loss █▆▃▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▂▂▂▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▃▂▂▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.09398
+wandb: train_recon_loss 3.74272
+wandb: train_total_loss 6.7788
+wandb:    val_bact_loss 0.11094
+wandb:      val_kl_loss 1.54898
+wandb:   val_recon_loss 17.84961
+wandb:   val_total_loss 20.88416
+wandb: 
+wandb: 🚀 View run effortless-leaf-33 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/o0vnrrup
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_223832-o0vnrrup/logs
+[I 2025-11-19 22:49:55,526] Trial 32 finished with value: 20.169988473256428 and parameters: {'embedding_dim': 128, 'learning_rate': 0.00029217097248070064, 'batch_size': 32, 'weight_decay': 5.548347207930785e-05}. Best is trial 32 with value: 20.169988473256428.
+wandb: setting up run cqfafbm1
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_225030-cqfafbm1
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run eternal-haze-34
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/cqfafbm1
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇████
+wandb:  train_bact_loss █▅▄▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss ██▇▆▆▅▅▅▄▄▄▃▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▇▇▆▆▄▄▄▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▇▅▄▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▃▃▃▄▅▅▆▆▇▇▇▇██████████████████████▇██▇▇
+wandb:   val_recon_loss █▆▆▅▄▃▂▂▁▁▁▂▁▁▁▂▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▅▄▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▂▂▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.10522
+wandb: train_recon_loss 3.78938
+wandb: train_total_loss 6.95905
+wandb:    val_bact_loss 0.12379
+wandb:      val_kl_loss 1.50504
+wandb:   val_recon_loss 17.67908
+wandb:   val_total_loss 20.84699
+wandb: 
+wandb: 🚀 View run eternal-haze-34 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/cqfafbm1
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_225030-cqfafbm1/logs
+[I 2025-11-19 23:01:54,326] Trial 33 finished with value: 20.45140592257182 and parameters: {'embedding_dim': 128, 'learning_rate': 0.0003223512974931277, 'batch_size': 32, 'weight_decay': 9.036215679962033e-05}. Best is trial 32 with value: 20.169988473256428.
+wandb: setting up run rle6daoh
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_230229-rle6daoh
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run deft-butterfly-35
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/rle6daoh
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▂▂▂▂▂▃▃▃▃▄▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▆▆▆▇▇▇▇▇███
+wandb:  train_bact_loss █▅▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▆▄▄▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▆▅▄▄▄▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▇▅▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▁▂▂▂▃▃▄▄▅▆▆▇▇▇█▇██████████████▇█▇▇▇▇▇▇▇
+wandb:   val_recon_loss ██▆▅▄▁▁▂▁▁▁▂▂▂▂▂▂▂▂▂▁▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▆▂▁▁▁▁▂▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.09375
+wandb: train_recon_loss 3.78318
+wandb: train_total_loss 6.86193
+wandb:    val_bact_loss 0.11214
+wandb:      val_kl_loss 1.55967
+wandb:   val_recon_loss 17.83947
+wandb:   val_total_loss 20.90681
+wandb: 
+wandb: 🚀 View run deft-butterfly-35 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/rle6daoh
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_230229-rle6daoh/logs
+[I 2025-11-19 23:13:54,400] Trial 34 finished with value: 20.399273713429768 and parameters: {'embedding_dim': 128, 'learning_rate': 0.0002704598922391873, 'batch_size': 32, 'weight_decay': 6.08820693578932e-05}. Best is trial 32 with value: 20.169988473256428.
+wandb: setting up run g90zhkyo
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_231429-g90zhkyo
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run royal-wildflower-36
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/g90zhkyo
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.0097
+wandb: train_recon_loss 32.68877
+wandb: train_total_loss 38.81953
+wandb:    val_bact_loss 1.00964
+wandb:      val_kl_loss 0.2342
+wandb:   val_recon_loss 25.27061
+wandb:   val_total_loss 31.31452
+wandb: 
+wandb: 🚀 View run royal-wildflower-36 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/g90zhkyo
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_231429-g90zhkyo/logs
+[I 2025-11-19 23:14:38,041] Trial 35 pruned. 
+wandb: setting up run i644tcs7
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_231513-i644tcs7
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run wandering-firefly-37
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/i644tcs7
+wandb: updating run metadata; uploading wandb-metadata.json; uploading requirements.txt; uploading console lines 0-0
+wandb: uploading wandb-metadata.json; uploading output.log; uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: 🚀 View run wandering-firefly-37 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/i644tcs7
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_231513-i644tcs7/logs
+[I 2025-11-19 23:15:16,426] Trial 36 pruned. 
+wandb: setting up run ya1hijsf
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_231551-ya1hijsf
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run rich-silence-38
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/ya1hijsf
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/pruners/_percentile.py:21: RuntimeWarning: All-NaN slice encountered
+  return np.nanmin(values)
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading output.log
+wandb: uploading history steps 0-0, summary, console lines 0-1
+wandb: 
+wandb: Run history:
+wandb:           epoch ▁
+wandb: train_bact_loss ▁
+wandb:              +6 ...
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.09882
+wandb: train_recon_loss inf
+wandb: train_total_loss inf
+wandb:    val_bact_loss nan
+wandb:      val_kl_loss nan
+wandb:   val_recon_loss nan
+wandb:   val_total_loss nan
+wandb: 
+wandb: 🚀 View run rich-silence-38 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/ya1hijsf
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_231551-ya1hijsf/logs
+[I 2025-11-19 23:16:00,839] Trial 37 pruned. 
+wandb: setting up run s2perteo
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_231635-s2perteo
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run dauntless-bird-39
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/s2perteo
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.26607
+wandb: train_recon_loss 44.7175
+wandb: train_total_loss 50.73905
+wandb:    val_bact_loss 1.32788
+wandb:      val_kl_loss 0.7609
+wandb:   val_recon_loss 24.99967
+wandb:   val_total_loss 30.47288
+wandb: 
+wandb: 🚀 View run dauntless-bird-39 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/s2perteo
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_231635-s2perteo/logs
+[I 2025-11-19 23:16:41,919] Trial 38 pruned. 
+wandb: setting up run ptabfshm
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_231716-ptabfshm
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run vital-sound-40
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/ptabfshm
+wandb: updating run metadata; uploading wandb-summary.json
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▁▁▂▂▂▂▂▂▂▃▃▃▃▃▃▄▄▅▅▅▅▆▆▆▆▆▆▆▆▆▇▇▇███
+wandb:  train_bact_loss █▆▆▅▅▄▄▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss █▅▅▄▄▃▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▇▆▅▅▄▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▄▄▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▂▁▁▂▂▃▃▄▄▄▅▆▆▆▇▇▇▇▇██▇█▇▇█████▇▇▇▇▇▇▇▇▇▇
+wandb:   val_recon_loss █▆▄▃▂▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▆▆▅▄▃▂▂▂▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.08725
+wandb: train_recon_loss 3.84798
+wandb: train_total_loss 7.15093
+wandb:    val_bact_loss 0.09885
+wandb:      val_kl_loss 1.71858
+wandb:   val_recon_loss 17.8009
+wandb:   val_total_loss 21.09626
+wandb: 
+wandb: 🚀 View run vital-sound-40 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/ptabfshm
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_231716-ptabfshm/logs
+[I 2025-11-19 23:26:19,210] Trial 39 finished with value: 20.375739097595215 and parameters: {'embedding_dim': 64, 'learning_rate': 0.0002757011906214747, 'batch_size': 32, 'weight_decay': 6.895267631745729e-05}. Best is trial 32 with value: 20.169988473256428.
+wandb: setting up run 44v6cbwb
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_232655-44v6cbwb
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run vibrant-sponge-41
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/44v6cbwb
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.44527
+wandb: train_recon_loss 292.94415
+wandb: train_total_loss 315.44786
+wandb:    val_bact_loss 1.10602
+wandb:      val_kl_loss 2.56873
+wandb:   val_recon_loss 69.85842
+wandb:   val_total_loss 77.74416
+wandb: 
+wandb: 🚀 View run vibrant-sponge-41 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/44v6cbwb
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_232655-44v6cbwb/logs
+[I 2025-11-19 23:27:02,983] Trial 40 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_232737-24awaz0k
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run revived-durian-42
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/24awaz0k
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▃▄▄▄▄▅▅▅▅▅▅▅▆▆▆▇▇▇▇▇▇▇███
+wandb:  train_bact_loss █▄▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_recon_loss ██▇▇▆▆▅▅▅▅▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: train_total_loss █▆▅▅▅▄▄▄▄▄▃▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    val_bact_loss █▅▄▃▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_kl_loss ▁▁▂▃▃▄▄▅▅▅▆▇▇███████████████████▇█▇█▇▇█▇
+wandb:   val_recon_loss █▄▂▁▁▁▁▁▂▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   val_total_loss █▅▄▂▁▁▂▂▂▂▂▂▂▂▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:            epoch 99
+wandb:  train_bact_loss 0.08669
+wandb: train_recon_loss 3.87696
+wandb: train_total_loss 7.14174
+wandb:    val_bact_loss 0.09874
+wandb:      val_kl_loss 1.73477
+wandb:   val_recon_loss 17.81002
+wandb:   val_total_loss 21.07597
+wandb: 
+wandb: 🚀 View run revived-durian-42 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/24awaz0k
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_232737-24awaz0k/logs
+[I 2025-11-19 23:36:41,523] Trial 41 finished with value: 20.501684824625652 and parameters: {'embedding_dim': 64, 'learning_rate': 0.00025835168498269896, 'batch_size': 32, 'weight_decay': 6.167717432048856e-05}. Best is trial 32 with value: 20.169988473256428.
+wandb: setting up run w81bx9a3
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_233716-w81bx9a3
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run lucky-pond-43
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/w81bx9a3
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.04215
+wandb: train_recon_loss 42.44027
+wandb: train_total_loss 45.32273
+wandb:    val_bact_loss 1.03868
+wandb:      val_kl_loss 0.23336
+wandb:   val_recon_loss 26.48571
+wandb:   val_total_loss 29.09657
+wandb: 
+wandb: 🚀 View run lucky-pond-43 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/w81bx9a3
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_233716-w81bx9a3/logs
+[I 2025-11-19 23:37:23,924] Trial 42 pruned. 
+wandb: setting up run u5kv2m4y
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_233758-u5kv2m4y
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run serene-firebrand-44
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/u5kv2m4y
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.03375
+wandb: train_recon_loss 40.48946
+wandb: train_total_loss 44.54357
+wandb:    val_bact_loss 1.02295
+wandb:      val_kl_loss 0.48906
+wandb:   val_recon_loss 25.57773
+wandb:   val_total_loss 28.81047
+wandb: 
+wandb: 🚀 View run serene-firebrand-44 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/u5kv2m4y
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_233758-u5kv2m4y/logs
+[I 2025-11-19 23:38:06,412] Trial 43 pruned. 
+wandb: setting up run 6k76mtdz
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_233841-6k76mtdz
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run twilight-fog-45
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/6k76mtdz
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.01738
+wandb: train_recon_loss 34.74372
+wandb: train_total_loss 38.11967
+wandb:    val_bact_loss 1.01539
+wandb:      val_kl_loss 0.15042
+wandb:   val_recon_loss 27.3521
+wandb:   val_total_loss 30.63091
+wandb: 
+wandb: 🚀 View run twilight-fog-45 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/6k76mtdz
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_233841-6k76mtdz/logs
+[I 2025-11-19 23:38:49,961] Trial 44 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_233924-qmoepbca
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run volcanic-bush-46
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/qmoepbca
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 0-1, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁█
+wandb:  train_bact_loss █▁
+wandb: train_recon_loss █▁
+wandb: train_total_loss █▁
+wandb:    val_bact_loss █▁
+wandb:      val_kl_loss █▁
+wandb:   val_recon_loss █▁
+wandb:   val_total_loss █▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 1
+wandb:  train_bact_loss 1.1119
+wandb: train_recon_loss 21.98138
+wandb: train_total_loss 25.66106
+wandb:    val_bact_loss 1.12847
+wandb:      val_kl_loss 0.88008
+wandb:   val_recon_loss 22.66829
+wandb:   val_total_loss 26.15968
+wandb: 
+wandb: 🚀 View run volcanic-bush-46 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/qmoepbca
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_233924-qmoepbca/logs
+[I 2025-11-19 23:39:35,360] Trial 45 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_234011-tlg6y4gi
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run deep-vortex-47
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/tlg6y4gi
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: 🚀 View run deep-vortex-47 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/tlg6y4gi
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_234011-tlg6y4gi/logs
+[I 2025-11-19 23:40:17,705] Trial 46 finished with value: inf and parameters: {'embedding_dim': 128, 'learning_rate': 0.002285593577959991, 'batch_size': 32, 'weight_decay': 0.00012119619175278533}. Best is trial 32 with value: 20.169988473256428.
+wandb: setting up run xjae1tcv
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_234052-xjae1tcv
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run glowing-sponge-48
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/xjae1tcv
+wandb: updating run metadata
+wandb: uploading wandb-summary.json
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.03335
+wandb: train_recon_loss 34.87549
+wandb: train_total_loss 38.59569
+wandb:    val_bact_loss 1.03487
+wandb:      val_kl_loss 0.25691
+wandb:   val_recon_loss 26.10826
+wandb:   val_total_loss 29.75783
+wandb: 
+wandb: 🚀 View run glowing-sponge-48 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/xjae1tcv
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_234052-xjae1tcv/logs
+[I 2025-11-19 23:41:00,398] Trial 47 pruned. 
+wandb: setting up run s3mlzwvk
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_234135-s3mlzwvk
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run earnest-oath-49
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/s3mlzwvk
+Starting optimization on GPU 3 (50 Trials, 100 Epochs each)...
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+⚠️ NaN detected at epoch 0. Stopping trial early.
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+⚠️ NaN detected at epoch 0. Stopping trial early.
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+⚠️ NaN detected at epoch 0. Stopping trial early.
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+⚠️ NaN detected at epoch 0. Stopping trial early.
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: CUDA out of memory. Tried to allocate 2.92 GiB. GPU 3 has a total capacity of 44.39 GiB of which 2.63 GiB is free. Including non-PyTorch memory, this process has 41.75 GiB memory in use. Of the allocated memory 34.04 GiB is allocated by PyTorch, and 7.22 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+⚠️ NaN detected at epoch 0. Stopping trial early.
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: CUDA out of memory. Tried to allocate 2.92 GiB. GPU 3 has a total capacity of 44.39 GiB of which 2.63 GiB is free. Including non-PyTorch memory, this process has 41.75 GiB memory in use. Of the allocated memory 34.04 GiB is allocated by PyTorch, and 7.22 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: CUDA out of memory. Tried to allocate 2.92 GiB. GPU 3 has a total capacity of 44.39 GiB of which 2.65 GiB is free. Including non-PyTorch memory, this process has 41.74 GiB memory in use. Of the allocated memory 34.04 GiB is allocated by PyTorch, and 7.20 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+⚠️ NaN detected at epoch 0. Stopping trial early.
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+wandb: updating run metadata; uploading wandb-metadata.json; uploading requirements.txt; uploading console lines 0-0
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading summary
+wandb: 🚀 View run earnest-oath-49 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/s3mlzwvk
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_234135-s3mlzwvk/logs
+[I 2025-11-19 23:41:38,827] Trial 48 pruned. 
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251119_234214-x7bt4t0b
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run feasible-haze-50
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/x7bt4t0b
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 0-0, summary
+wandb: 
+wandb: Run history:
+wandb:            epoch ▁
+wandb:  train_bact_loss ▁
+wandb: train_recon_loss ▁
+wandb: train_total_loss ▁
+wandb:    val_bact_loss ▁
+wandb:      val_kl_loss ▁
+wandb:   val_recon_loss ▁
+wandb:   val_total_loss ▁
+wandb: 
+wandb: Run summary:
+wandb:            epoch 0
+wandb:  train_bact_loss 1.02239
+wandb: train_recon_loss 41.63315
+wandb: train_total_loss 44.34344
+wandb:    val_bact_loss 1.01923
+wandb:      val_kl_loss 0.21499
+wandb:   val_recon_loss 30.79774
+wandb:   val_total_loss 33.31922
+wandb: 
+wandb: 🚀 View run feasible-haze-50 at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2/runs/x7bt4t0b
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/SplitAutoencoder_Optimization2
+wandb: Synced 4 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251119_234214-x7bt4t0b/logs
+[I 2025-11-19 23:42:23,155] Trial 49 pruned. 
+Trial pruned or failed: CUDA out of memory. Tried to allocate 2.92 GiB. GPU 3 has a total capacity of 44.39 GiB of which 2.66 GiB is free. Including non-PyTorch memory, this process has 41.72 GiB memory in use. Of the allocated memory 34.04 GiB is allocated by PyTorch, and 7.19 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Data Split Stats:
+  Train: 438 bacteria (including unannotated)
+  Val:   81 bacteria
+  Test:  81 bacteria
+Trial pruned or failed: 
+
+--- Optimization Finished ---
+Best trial:
+  Value (Best Val Loss): 20.169988473256428
+  Best Params: 
+    embedding_dim: 128
+    learning_rate: 0.00029217097248070064
+    batch_size: 32
+    weight_decay: 5.548347207930785e-05

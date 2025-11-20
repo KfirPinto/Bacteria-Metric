@@ -1,0 +1,3 @@
+Best Val Loss: 19.718365907669067
+Best Parameters:
+{'embedding_dim': 16, 'learning_rate': 0.0002708847430290848, 'batch_size': 32, 'weight_decay': 3.93172580245981e-05, 'w_bact': 0.11791572346865359, 'w_sample': 0.14072569111219524}

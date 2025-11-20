@@ -4,8 +4,7 @@ import os
 import random
 
 def shuffle_bacteria(data, bacteria):
-    # Fix seed for reproducibility
-    torch.manual_seed(42) 
+    torch.manual_seed(42) # fix the random seed for const partitioning to train and test sets
     perm = torch.randperm(data.size(1))
     return data[:, perm, :], bacteria[perm]
 
@@ -30,7 +29,7 @@ def split_tensor(data, bacteria, unannotated_data, unannotated_bacteria, train_r
     val_bacteria = bacteria[idx_train:idx_val]
 
     # --- 3. Test Set ---
-    # The final chunk, held out for final evaluation (0.52 target)
+    # The final chunk, held out for final evaluation
     test_tensor = data[:, idx_val:, :]
     test_bacteria = bacteria[idx_val:]
 

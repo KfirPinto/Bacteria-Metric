@@ -1,0 +1,2 @@
+Best Val Loss: 20.169988473256428
+{'embedding_dim': 128, 'learning_rate': 0.00029217097248070064, 'batch_size': 32, 'weight_decay': 5.548347207930785e-05}
