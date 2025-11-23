@@ -74,7 +74,7 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
 
     if wandb.run is None:
         wandb.init(
-            project="SplitAutoencoder_Optimization",
+            project="SplitAutoencoder_Optimization2",
             config={
             "name": name,
             "epochs": num_epochs,
@@ -88,6 +88,8 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
         # --- Training Phase ---
         model.train()
         running_total = 0.0
+        # הוספת משתנים למעקב אחרי רכיבי ה-Loss
+        running_recon, running_bact, running_sample, running_kl = 0.0, 0.0, 0.0, 0.0
 
         for batch in train_loader:
             batch_tensor = batch[0].to(device)
@@ -97,6 +99,12 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
             encoded, decoded, mu, logvar = model(batch_tensor)
             recon_loss, bact_loss, sample_loss, wd, kl_loss = custom_loss(batch_tensor, decoded, encoded, mu, logvar, model=model, weight_decay=weight_decay)
             
+            # שמירת הערכים המקוריים לפני השקלול (לצורך Logging נקי)
+            running_recon += recon_loss.item()
+            running_bact += bact_loss.item()
+            running_sample += sample_loss.item()
+            running_kl += kl_loss.item()
+
             if lambda_weight is not None:
                 recon_loss *= lambda_weight[0]
                 bact_loss *= lambda_weight[1]
@@ -115,10 +123,14 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
             running_total += total_loss.item()
 
         avg_train_total = running_total / len(train_loader)
+        avg_train_recon = running_recon / len(train_loader) # חישוב ממוצעים
+        avg_train_bact = running_bact / len(train_loader)
 
         # --- Validation Phase ---
         model.eval()
         val_running_total = 0.0
+        # הוספת משתנים למעקב אחרי רכיבי ה-Loss ב-Validation
+        val_running_recon, val_running_bact, val_running_sample, val_running_kl = 0.0, 0.0, 0.0, 0.0
         
         with torch.no_grad():
             for batch in val_loader:
@@ -127,6 +139,12 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
                 encoded, decoded, mu, logvar = model(batch_tensor)
                 recon_loss, bact_loss, sample_loss, wd, kl_loss = custom_loss(batch_tensor, decoded, encoded, mu, logvar, model=model, weight_decay=weight_decay)
                 
+                # צבירת הערכים הנקיים
+                val_running_recon += recon_loss.item()
+                val_running_bact += bact_loss.item()
+                val_running_sample += sample_loss.item()
+                val_running_kl += kl_loss.item()
+
                 if lambda_weight is not None:
                     recon_loss *= lambda_weight[0]
                     bact_loss *= lambda_weight[1]
@@ -136,14 +154,23 @@ def train_model(model, train_loader, val_loader, device, num_epochs, learning_ra
                 val_running_total += total_val_loss.item()
 
         avg_val_total = val_running_total / len(val_loader)
+        avg_val_recon = val_running_recon / len(val_loader) # ממוצע שחזור
+        avg_val_bact = val_running_bact / len(val_loader)   # ממוצע קונסיסטנסי (הכי חשוב!)
 
         if avg_val_total < best_val_loss:
             best_val_loss = avg_val_total
 
+        # --- התיקון הקריטי: שליחת כל הרכיבים ל-WandB ---
         wandb.log({
             "epoch": epoch,
             "train_total_loss": avg_train_total,
-            "val_total_loss": avg_val_total
+            "train_bact_loss": avg_train_bact, # הוספנו
+            "train_recon_loss": avg_train_recon, # הוספנו
+            
+            "val_total_loss": avg_val_total,
+            "val_bact_loss": avg_val_bact,    # זה המדד הקריטי ל-Pearson
+            "val_recon_loss": avg_val_recon,  # וזה ל-MSE
+            "val_kl_loss": val_running_kl / len(val_loader)
         })
 
         # --- Optuna Pruning ---

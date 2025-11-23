@@ -4,7 +4,7 @@ from data_utils import load_data_tensor, load_metadata, normalize_tensor, cal_em
 from preprocess import shuffle_bacteria, split_tensor, save_eval_data
 from training.model import SplitVAE
 from training.dataset import create_dataloaders
-from training.train import train_model
+from variational_autoencoder.training.train_first import train_model
 import sys
 import os
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))

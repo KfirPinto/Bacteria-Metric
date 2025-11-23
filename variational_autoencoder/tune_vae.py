@@ -14,7 +14,7 @@ from variational_autoencoder.data_utils import load_data_tensor, load_metadata, 
 from variational_autoencoder.preprocess import shuffle_bacteria, split_tensor
 from variational_autoencoder.training.model import SplitVAE
 from variational_autoencoder.training.dataset import create_dataloaders
-from variational_autoencoder.training.train import train_model
+from variational_autoencoder.training.train_first import train_model
 
 def objective(trial):
     # --- 1. Hyperparameters Search Space ---

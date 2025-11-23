@@ -16,7 +16,7 @@ from variational_autoencoder.preprocess import shuffle_bacteria, split_tensor
 from variational_autoencoder.training.model import SplitVAE
 from variational_autoencoder.training.dataset import create_dataloaders
 # הייבוא הזה ימשוך את הפונקציה המעודכנת מ-train.py (עם הלוגים החדשים)
-from variational_autoencoder.training.train2 import train_model
+from variational_autoencoder.training.train import train_model
 
 def objective(trial):
     # --- 1. Hyperparameters Search Space ---
