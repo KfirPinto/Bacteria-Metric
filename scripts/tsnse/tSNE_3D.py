@@ -78,7 +78,7 @@ def main(embedding_path, metadata_path, color_level, save_dir="tsne_plots"):
 
 # === Edit these paths and parameters before running ===
 if __name__ == "__main__":
-    embedding_file = "/home/bcrlab/barsapi1/metric/Bacteria-Metric/eval_data/HMP_2012_Stool/Run_0/test_tensor_embeddings.npy"     # path to your embeddings file
-    metadata_file = "/home/bcrlab/barsapi1/metric/Bacteria-Metric/eval_data/HMP_2012_Stool/Run_0/bacteria_names_full_taxonomy.npy"  # path to your metadata file (bacteria names with full taxonomy)
+    embedding_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_0/test_tensor_embeddings.npy"     # path to your embeddings file
+    metadata_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/bacteria_names_full_taxonomy.npy"  # path to your metadata file (bacteria names with full taxonomy)
     taxonomy_level = "phylum"                   # level to color by (e.g., 'phylum', 'genus', 'species')
     main(embedding_file, metadata_file, taxonomy_level)

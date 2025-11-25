@@ -22,5 +22,5 @@ def plot_gene_abundance_per_sample(input_file):
     plt.savefig('gene_abundance_per_sample.png')
 
 if __name__ == "__main__":
-    input_file = "../data/HMP_2012/raw/gene_abundance.tsv"
+    input_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/gene_abundance_bacteria_regroup.tsv"
     plot_gene_abundance_per_sample(input_file)

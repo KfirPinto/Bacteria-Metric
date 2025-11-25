@@ -5,6 +5,15 @@ import seaborn as sns
 import torch
 from matplotlib.colors import LinearSegmentedColormap
 import sys
+import os
+
+# --- הגדרת יצירת תיקיות אוטומטית ---
+# זה מוודא שהתיקייה קיימת. אם יצרת אותה ידנית - זה לא יפריע.
+try:
+    os.makedirs('data_visualization_plots/Union', exist_ok=True)
+except OSError:
+    pass
+# -----------------------------------
 
 def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     # Load data
@@ -36,7 +45,7 @@ def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     plt.xlabel("Bacterium Index")
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig('genes_per_bacterium')
+    plt.savefig('data_visualization_plots/genes_per_bacterium')
 
     # === Plot Pathways (same bacterium order) ===
     plt.figure(figsize=(20, 10))
@@ -46,7 +55,7 @@ def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     plt.xlabel("Bacterium Index")
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig('pathways_per_bacterium')
+    plt.savefig('data_visualization_plots/pathways_per_bacterium')
 
     threshold = 150
     for i, count in enumerate(sorted_pathway_counts):
@@ -64,8 +73,8 @@ def bacteria_count_across_samples():
     This function returns the numbers of bacteria appears at each sample
     """
 
-    tensor = np.load("../data/HMP_2012/genefamilies/after_intersection/tensor.npy")  
-    sample_list = np.load("../data/HMP_2012/genefamilies/after_intersection/sample_list.npy", allow_pickle=True)
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/gene_abundance_bacteria_regroup_normalized.csv/after_intersection/tensor.npy")  
+    sample_list = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/gene_abundance_bacteria_regroup_normalized.csv/after_intersection/sample_list.npy", allow_pickle=True)
     tensor = torch.tensor(tensor)
 
     flattened_tensor = torch.sum(tensor, dim=2) # tensor shape: (samples, bacteria)
@@ -80,7 +89,7 @@ def bacteria_count_across_samples():
     plt.title('Count of microbes per sample', fontsize=100)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('bacteria_count')
+    plt.savefig('data_visualization_plots/bacteria_count')
     plt.close()
 
      # Pie chart for samples with at least one microbe
@@ -93,12 +102,12 @@ def bacteria_count_across_samples():
     plt.figure(figsize=(7, 7))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
     plt.title('Proportion of samples with at least one microbe', fontsize=20)
-    plt.savefig('pie_chart_bacteria')
+    plt.savefig('data_visualization_plots/pie_chart_bacteria')
     plt.close()
 
 def create_heatmap():
-       
-    tensor = np.load("../data/HMP_2012/pathabundance/after_intersection/tensor.npy") 
+        
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/tensor.npy") 
     tensor = torch.tensor(tensor)
 
     flattened_pathways = torch.sum(tensor, dim=2).detach().numpy()
@@ -110,7 +119,7 @@ def create_heatmap():
     ax.set_ylabel("samples", fontsize=30) 
     ax.set_title("Pathways Flattened", fontsize=30)
     plt.tight_layout()
-    plt.savefig('heatmap_pathways_flattened.png')
+    plt.savefig('data_visualization_plots/heatmap_pathways_flattened.png')
     plt.close()
 
 
@@ -122,7 +131,7 @@ def create_heatmap():
     ax.set_ylabel("samples", fontsize=30) 
     ax.set_title("Bacterium Flattened", fontsize=30)
     plt.tight_layout()
-    plt.savefig('heatmap_bacterium_flattened.png')
+    plt.savefig('data_visualization_plots/heatmap_bacterium_flattened.png')
     plt.close()
 
 """
@@ -165,13 +174,13 @@ def visualize_set_intersection(file1, file2):
         wedgeprops={'edgecolor': 'black'}
     )
     plt.title('samples intersection')
-    plt.savefig('output/plots/samples_intersection')
+    plt.savefig('data_visualization_plots/samples_intersection')
     plt.close()
 
 def common_pathways():
 
-    tensor = np.load("data/data_files/pathways/Union/tensor.npy") 
-    pathway_list = np.load("data/data_files/pathways/Union/pathway_list.npy", allow_pickle=True)  
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/tensor.npy") 
+    pathway_list = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/pathway_list.npy", allow_pickle=True)  
 
     tensor = torch.tensor(tensor)
 
@@ -192,13 +201,13 @@ def common_pathways():
     plt.title('Top 20 Most Common Pathways', fontsize=16)
     plt.gca().invert_yaxis()
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('output/plots/Union/common_pathways')
+    plt.savefig('data_visualization_plots/Union/common_pathways')
     plt.close()
 
 def pathway_association():
 
-    tensor = np.load("data/data_files/pathways/Union/tensor.npy")  
-    bacteria_list = np.load("data/data_files/pathways/Union/bacteria_list.npy", allow_pickle=True)
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/tensor.npy")  
+    bacteria_list = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/bacteria_list.npy", allow_pickle=True)
     tensor = torch.tensor(tensor)
 
     flattened_tensor = torch.sum(tensor, dim=0) # tensor shape: (bacteria, pathway)
@@ -213,14 +222,14 @@ def pathway_association():
     plt.title('Association Between Microbes And Biological Pathways', fontsize=50)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('output/plots/Union/pathway_association')
+    plt.savefig('data_visualization_plots/Union/pathway_association')
     plt.close()
 
 def bacteria_count():
 
-    tensor = np.load("data/data_files/pathways/Union/tensor.npy")  
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/tensor.npy")  
 
-    bacteria_list = np.load("data/data_files/pathways/Union/bacteria_list.npy", allow_pickle=True)
+    bacteria_list = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/bacteria_list.npy", allow_pickle=True)
 
     tensor = torch.tensor(tensor)
 
@@ -243,14 +252,14 @@ def bacteria_count():
     plt.title('Full Distribution of Microbe Counts', fontsize=50)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('output/plots/Union/bacteria_count')
+    plt.savefig('data_visualization_plots/Union/bacteria_count')
     plt.close()
 
 def non_zero_microbes():
     
     # For each microbe - how many samples are not 0
 
-    tensor = np.load("data/tensor.npy")  
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/tensor.npy")  
 
     # Step 1: Check if bacterium participates in at least one biological pathway for a given person. 
     # Perform a boolean operaion and sum over the pathway axis (axis=2)
@@ -276,16 +285,16 @@ def non_zero_microbes():
     plt.tight_layout()
 
     # Step 6: save the plot
-    plt.savefig('non_zero_microbes')
+    plt.savefig('data_visualization_plots/non_zero_microbes')
     plt.close()
 
 def non_zero_samples():
 
     # For each sample - how many bacteria are not 0
 
-    tensor = np.load("data/tensor.npy")  
-    bacteria_list = np.load("data/bacteria_list.npy", allow_pickle=True)
-    people_list = np.load("data/people_list.npy", allow_pickle=True)
+    tensor = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/tensor.npy")  
+    bacteria_list = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/bacteria_list.npy", allow_pickle=True)
+    people_list = np.load("/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/sample_list.npy", allow_pickle=True)
 
     # Step 1: Check if bacterium participates in at least one biological pathway for a given person. 
     # Perform a boolean operaion and sum over the pathway axis (axis=2)
@@ -296,7 +305,7 @@ def non_zero_samples():
     df = pd.DataFrame(participation.T, columns=people_list)  # Transpose participation -> (bacteria, samples)
     df.insert(0, "Bacteria", bacteria_list)  # Add bacteria names as the first column
 
-    df.to_csv("data/non_zero_bacteria_participation.csv", index=False)
+    df.to_csv("data_visualization_plots/non_zero_bacteria_participation.csv", index=False)
 
     # Step 2: Sum over the bacteria axis to determine how many bacteria each samples contains
     samples_counts = np.sum(participation, axis=1) # tensor shape: (samples)
@@ -305,7 +314,7 @@ def non_zero_samples():
             "Sample": people_list,
             "Non_Zero_Bacteria_Count": samples_counts
         })    
-    df_1.to_csv("data/samples_count.csv", index = False)
+    df_1.to_csv("data_visualization_plots/samples_count.csv", index = False)
 
     # Step 4: Create the histogram
     plt.figure(figsize=(10, 6))
@@ -320,8 +329,55 @@ def non_zero_samples():
     plt.tight_layout()
 
     # Step 6: save the plot
-    plt.savefig('non_zero_samples')
+    plt.savefig('data_visualization_plots/non_zero_samples')
     plt.close()
 
 if __name__ == "__main__":
+    # יצירת התיקיות הדרושות לשמירה
+    try:
+        os.makedirs('data_visualization_plots/Union', exist_ok=True)
+    except OSError:
+        pass
+
+    print("Starting visualization process...")
+
+    # --- פונקציות ללא ארגומנטים (הנתיבים מוגדרים בפנים) ---
+    print("Running: create_heatmap...")
     create_heatmap()
+    
+    print("Running: bacteria_count_across_samples...")
+    bacteria_count_across_samples()
+
+    print("Running: common_pathways...")
+    common_pathways()
+
+    print("Running: pathway_association...")
+    pathway_association()
+
+    print("Running: bacteria_count (Union)...")
+    bacteria_count()
+
+    print("Running: non_zero_microbes...")
+    non_zero_microbes()
+
+    print("Running: non_zero_samples...")
+    non_zero_samples()
+
+    # --- פונקציות עם ארגומנטים (נתיבים לקבצי after_intersection) ---
+    
+    print("Running: data_distribution...")
+    # חובה להשתמש בנתונים אחרי חיתוך כדי שיהיה אותו מספר חיידקים ואותו סדר
+    data_distribution(
+        gene_tensor="/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/gene_abundance_bacteria_regroup_normalized.csv/after_intersection/tensor.npy",
+        pathway_tensor="/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/tensor.npy",
+        bacteria_list="/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/bacteria_list.npy"
+    )
+
+    print("Running: visualize_set_intersection...")
+    # השוואה בין רשימות הדגימות (Samples)
+    visualize_set_intersection(
+        file1="/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/gene_abundance_bacteria_regroup_normalized.csv/after_intersection/sample_list.npy",
+        file2="/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/sample_list.npy"
+    )
+
+    print("All plots generated successfully in 'data_visualization_plots' folder!")

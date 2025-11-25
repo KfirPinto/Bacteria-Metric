@@ -2,7 +2,7 @@ import argparse
 import sys
 import torch
 import os
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 import numpy as np
@@ -16,7 +16,7 @@ from scipy.spatial import distance
 from skbio.stats.distance import mantel
 from skbio import DistanceMatrix
 
-from autoencoder_model.training.model import SplitAutoencoder
+#from autoencoder_model.training.model import SplitAutoencoder
 from variational_autoencoder.training.model import SplitVAE
 
 def load_embedding(test_data_path):
