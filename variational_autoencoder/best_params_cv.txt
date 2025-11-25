@@ -1,0 +1,2 @@
+Best Avg Bact Loss: 0.08329757920776804
+{'embedding_dim': 64, 'learning_rate': 0.00014481935598430448, 'batch_size': 32, 'weight_decay': 1.1402415832514844e-05}
