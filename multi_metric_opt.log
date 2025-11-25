@@ -401,3 +401,31 @@ wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaM
   warnings.warn(
 /home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 59 is already reported.
   warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 60 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 61 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 62 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 63 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 64 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 65 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 66 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 67 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 68 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 69 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 70 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 71 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 72 is already reported.
+  warnings.warn(
+/home/dsi/pintokf/.local/lib/python3.9/site-packages/optuna/trial/_trial.py:503: UserWarning: The reported value is ignored because this `step` 73 is already reported.
+  warnings.warn(
