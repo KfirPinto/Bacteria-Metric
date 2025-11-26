@@ -1,2 +1,0 @@
-Best Pearson: 0.2061229689660614
-{'embedding_dim': 64, 'learning_rate': 0.00038060550906690533, 'batch_size': 64, 'weight_decay': 0.00022712560795158895}
