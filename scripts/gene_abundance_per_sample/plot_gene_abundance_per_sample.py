@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+# מציאת מיקום הסקריפט - במקרה הזה זה גם מיקום השמירה
+OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def plot_gene_abundance_per_sample(input_file):
     df = pd.read_csv(input_file, index_col=0, sep='\t')
@@ -19,7 +22,7 @@ def plot_gene_abundance_per_sample(input_file):
     plt.xlabel('Sample')
     plt.ylabel('Total Gene Abundance')
     plt.tight_layout()
-    plt.savefig('gene_abundance_per_sample.png')
+    plt.savefig(os.path.join(OUTPUT_DIR, 'gene_abundance_per_sample.png'))
 
 if __name__ == "__main__":
     input_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/gene_abundance_bacteria_regroup.tsv"

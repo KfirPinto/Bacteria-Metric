@@ -7,13 +7,35 @@ from matplotlib.colors import LinearSegmentedColormap
 import sys
 import os
 
-# --- הגדרת יצירת תיקיות אוטומטית ---
-# זה מוודא שהתיקייה קיימת. אם יצרת אותה ידנית - זה לא יפריע.
-try:
-    os.makedirs('data_visualization_plots/Union', exist_ok=True)
-except OSError:
-    pass
-# -----------------------------------
+# --- הגדרת נתיבים חכמה וסידור תיקיות ---
+# 1. מוצא איפה הסקריפט הזה נמצא כרגע (בתוך scripts/data_visualization)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 2. מגדיר את תיקיית היעד הראשית
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, "data_visualization_plots")
+
+# 3. מגדיר תתי-תיקיות לסידור נכון
+UNION_DIR = os.path.join(OUTPUT_DIR, "Union")           # נתונים גולמיים / איחוד
+INTERSECTION_DIR = os.path.join(OUTPUT_DIR, "Intersection") # נתונים אחרי חיתוך
+
+# 4. יוצר את כל התיקיות
+os.makedirs(UNION_DIR, exist_ok=True)
+os.makedirs(INTERSECTION_DIR, exist_ok=True)
+
+def get_save_path(filename, subfolder="Intersection"):
+    """
+    פונקציית עזר לשמירה במיקום הנכון.
+    ברירת המחדל היא Intersection כי רוב הגרפים הם השוואתיים.
+    """
+    if subfolder == "Union":
+        return os.path.join(UNION_DIR, filename)
+    elif subfolder == "Intersection":
+        return os.path.join(INTERSECTION_DIR, filename)
+    else:
+        # אם רוצים לשמור בתיקייה הראשית (למשל גרפים כלליים)
+        return os.path.join(OUTPUT_DIR, filename)
+
+# ----------------------------------------
 
 def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     # Load data
@@ -45,7 +67,9 @@ def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     plt.xlabel("Bacterium Index")
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig('data_visualization_plots/genes_per_bacterium')
+    # שמירה בתיקיית Intersection (כי זה השוואה)
+    plt.savefig(get_save_path('genes_per_bacterium', subfolder="Intersection"))
+    plt.close()
 
     # === Plot Pathways (same bacterium order) ===
     plt.figure(figsize=(20, 10))
@@ -55,7 +79,9 @@ def data_distribution(gene_tensor, pathway_tensor, bacteria_list):
     plt.xlabel("Bacterium Index")
     plt.xticks(rotation=90)
     plt.tight_layout()
-    plt.savefig('data_visualization_plots/pathways_per_bacterium')
+    # שמירה בתיקיית Intersection
+    plt.savefig(get_save_path('pathways_per_bacterium', subfolder="Intersection"))
+    plt.close()
 
     threshold = 150
     for i, count in enumerate(sorted_pathway_counts):
@@ -89,7 +115,9 @@ def bacteria_count_across_samples():
     plt.title('Count of microbes per sample', fontsize=100)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('data_visualization_plots/bacteria_count')
+    
+    # שמירה בתיקיית Intersection (כי זה מבוסס על נתוני החיתוך)
+    plt.savefig(get_save_path('bacteria_count', subfolder="Intersection"))
     plt.close()
 
      # Pie chart for samples with at least one microbe
@@ -102,7 +130,9 @@ def bacteria_count_across_samples():
     plt.figure(figsize=(7, 7))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=['lightgreen', 'lightcoral'])
     plt.title('Proportion of samples with at least one microbe', fontsize=20)
-    plt.savefig('data_visualization_plots/pie_chart_bacteria')
+    
+    # שמירה בתיקיית Intersection
+    plt.savefig(get_save_path('pie_chart_bacteria', subfolder="Intersection"))
     plt.close()
 
 def create_heatmap():
@@ -119,7 +149,9 @@ def create_heatmap():
     ax.set_ylabel("samples", fontsize=30) 
     ax.set_title("Pathways Flattened", fontsize=30)
     plt.tight_layout()
-    plt.savefig('data_visualization_plots/heatmap_pathways_flattened.png')
+    
+    # שמירה בתיקיית Intersection
+    plt.savefig(get_save_path('heatmap_pathways_flattened.png', subfolder="Intersection"))
     plt.close()
 
 
@@ -131,22 +163,11 @@ def create_heatmap():
     ax.set_ylabel("samples", fontsize=30) 
     ax.set_title("Bacterium Flattened", fontsize=30)
     plt.tight_layout()
-    plt.savefig('data_visualization_plots/heatmap_bacterium_flattened.png')
+    
+    # שמירה בתיקיית Intersection
+    plt.savefig(get_save_path('heatmap_bacterium_flattened.png', subfolder="Intersection"))
     plt.close()
 
-"""
-    flattened_pathway = torch.sum(tensor, dim=2).detach().numpy()
-    flattened_pathway_log = np.log1p(flattened_pathway) 
-    print(f"Max: {np.max(flattened_pathway_log)}")
-    plt.figure(figsize=(8, 6))
-    ax = sns.heatmap(flattened_pathway_log, cmap="viridis", annot=False, cbar=True, vmin=np.min(flattened_pathway_log), vmax=0.00175)
-    ax.set_xlabel("bacteria")  
-    ax.set_ylabel("samples") 
-    ax.set_title("Pathway Flattened")
-    plt.tight_layout()
-    plt.savefig('pathway_flattened.png')
-    plt.close()
-"""
 def visualize_set_intersection(file1, file2):
 
      # Load sets from .npy files
@@ -174,7 +195,9 @@ def visualize_set_intersection(file1, file2):
         wedgeprops={'edgecolor': 'black'}
     )
     plt.title('samples intersection')
-    plt.savefig('data_visualization_plots/samples_intersection')
+    
+    # שמירה בתיקיית Intersection (זה ממש ההגדרה של הפונקציה)
+    plt.savefig(get_save_path('samples_intersection', subfolder="Intersection"))
     plt.close()
 
 def common_pathways():
@@ -201,7 +224,9 @@ def common_pathways():
     plt.title('Top 20 Most Common Pathways', fontsize=16)
     plt.gca().invert_yaxis()
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('data_visualization_plots/Union/common_pathways')
+    
+    # שמירה בתיקיית Union (נתונים גולמיים)
+    plt.savefig(get_save_path('common_pathways', subfolder='Union'))
     plt.close()
 
 def pathway_association():
@@ -222,7 +247,9 @@ def pathway_association():
     plt.title('Association Between Microbes And Biological Pathways', fontsize=50)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('data_visualization_plots/Union/pathway_association')
+    
+    # שמירה בתיקיית Union
+    plt.savefig(get_save_path('pathway_association', subfolder='Union'))
     plt.close()
 
 def bacteria_count():
@@ -252,7 +279,9 @@ def bacteria_count():
     plt.title('Full Distribution of Microbe Counts', fontsize=50)
     plt.xticks(fontsize=50)
     plt.tight_layout()  # avoid overlapping
-    plt.savefig('data_visualization_plots/Union/bacteria_count')
+    
+    # שמירה בתיקיית Union
+    plt.savefig(get_save_path('bacteria_count', subfolder='Union'))
     plt.close()
 
 def non_zero_microbes():
@@ -284,8 +313,8 @@ def non_zero_microbes():
     plt.xticks(range(1, max(bacteria_counts) + 1))  
     plt.tight_layout()
 
-    # Step 6: save the plot
-    plt.savefig('data_visualization_plots/non_zero_microbes')
+    # שמירה בתיקיית Union (כי אלו נתונים גולמיים)
+    plt.savefig(get_save_path('non_zero_microbes', subfolder="Union"))
     plt.close()
 
 def non_zero_samples():
@@ -305,7 +334,7 @@ def non_zero_samples():
     df = pd.DataFrame(participation.T, columns=people_list)  # Transpose participation -> (bacteria, samples)
     df.insert(0, "Bacteria", bacteria_list)  # Add bacteria names as the first column
 
-    df.to_csv("data_visualization_plots/non_zero_bacteria_participation.csv", index=False)
+    df.to_csv(get_save_path("non_zero_bacteria_participation.csv", subfolder="Union"), index=False)
 
     # Step 2: Sum over the bacteria axis to determine how many bacteria each samples contains
     samples_counts = np.sum(participation, axis=1) # tensor shape: (samples)
@@ -314,7 +343,7 @@ def non_zero_samples():
             "Sample": people_list,
             "Non_Zero_Bacteria_Count": samples_counts
         })    
-    df_1.to_csv("data_visualization_plots/samples_count.csv", index = False)
+    df_1.to_csv(get_save_path("samples_count.csv", subfolder="Union"), index = False)
 
     # Step 4: Create the histogram
     plt.figure(figsize=(10, 6))
@@ -328,20 +357,15 @@ def non_zero_samples():
     plt.xticks(range(min(samples_counts), max(samples_counts) + 1, 5))  # ערכים בציר X כל 5 מספרים
     plt.tight_layout()
 
-    # Step 6: save the plot
-    plt.savefig('data_visualization_plots/non_zero_samples')
+    # שמירה בתיקיית Union
+    plt.savefig(get_save_path('non_zero_samples', subfolder="Union"))
     plt.close()
 
 if __name__ == "__main__":
-    # יצירת התיקיות הדרושות לשמירה
-    try:
-        os.makedirs('data_visualization_plots/Union', exist_ok=True)
-    except OSError:
-        pass
+    print(f"Starting visualization process...")
+    print(f"Saving plots to: {OUTPUT_DIR}")
 
-    print("Starting visualization process...")
-
-    # --- פונקציות ללא ארגומנטים (הנתיבים מוגדרים בפנים) ---
+    # --- פונקציות ללא ארגומנטים ---
     print("Running: create_heatmap...")
     create_heatmap()
     
@@ -380,4 +404,4 @@ if __name__ == "__main__":
         file2="/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/sample_list.npy"
     )
 
-    print("All plots generated successfully in 'data_visualization_plots' folder!")
+    print("All plots generated successfully!")

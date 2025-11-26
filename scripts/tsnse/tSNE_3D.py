@@ -54,7 +54,7 @@ def plot_tsne_by_level(df, level, save_dir=None):
         plt.savefig(f"{save_dir}/tsne_3d_by_{level}.png", dpi=300)
     plt.show()
 
-def main(embedding_path, metadata_path, color_level, save_dir="tsne_plots"):
+def main(embedding_path, metadata_path, color_level, save_dir):
     print("🔹 Loading embeddings and metadata...")
     embeddings = np.load(embedding_path)
     metadata = np.load(metadata_path, allow_pickle=True)
@@ -74,11 +74,15 @@ def main(embedding_path, metadata_path, color_level, save_dir="tsne_plots"):
     print(f"🔹 Plotting by taxonomy level: {color_level}")
     plot_tsne_by_level(taxonomy_df, level=color_level, save_dir=save_dir)
 
-    print(f"✅ Done! Plot saved to: {save_dir}/tsne_by_{color_level}.png")
 
 # === Edit these paths and parameters before running ===
 if __name__ == "__main__":
+    # 1. מזהה את התיקייה שבה הסקריפט הזה נמצא כרגע
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
     embedding_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_0/test_tensor_embeddings.npy"     # path to your embeddings file
-    metadata_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/bacteria_names_full_taxonomy.npy"  # path to your metadata file (bacteria names with full taxonomy)
+    metadata_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/bacteria_names_full_taxonomy.npy"  # path to your metadata file
     taxonomy_level = "phylum"                   # level to color by (e.g., 'phylum', 'genus', 'species')
-    main(embedding_file, metadata_file, taxonomy_level)
+    
+    # 2. מעביר את התיקייה הנוכחית כתיקיית השמירה
+    main(embedding_file, metadata_file, taxonomy_level, save_dir=SCRIPT_DIR)
