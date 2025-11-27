@@ -1,0 +1,915 @@
+nohup: ignoring input
+[I 2025-11-26 18:53:17,663] A new study created in RDB with name: bacteria_optimization
+wandb: Currently logged in as: kfirpinto (kfirpinto-bar-ilan-university) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: WARNING Using a boolean value for 'reinit' is deprecated. Use 'return_previous' or 'finish_previous' instead.
+wandb: setting up run hzwmugme
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_185318-hzwmugme
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_0
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/hzwmugme
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading config.yaml
+wandb: uploading history steps 497-499, summary
+wandb: 
+wandb: Run history:
+wandb:                    epoch ▂▃▄▄▅▆▆▇▁▂▃▄▄▄▅▅▅▆▇█▄▅▅▆█▁▂▂▃▄▅▅▆▇▁▂▃▅▅█
+wandb:  trial_0_fold_0_val_bact ██▇▅▅▄▅▄▃▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_0_fold_0_val_recon █▅▄▃▃▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_0_fold_0_val_total ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁▁▁▁▁
+wandb:  trial_0_fold_1_val_bact █▇▇▆▆▄▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_0_fold_1_val_recon ██▆▅▅▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_0_fold_1_val_total █▅▄▄▄▂▂▁▁▁▁▁▁▁▁▁▂▁▁▂▁▁▁▁▂▁▁▂▂▁▁▁▁▁▁▁▁▁▁▁
+wandb:  trial_0_fold_2_val_bact █▇▆▇▄▃▃▃▂▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_0_fold_2_val_recon █▇▆▅▄▃▂▂▂▂▂▁▂▁▁▁▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_0_fold_2_val_total ▇█▅▅▄▄▂▂▁▁▁▁▁▂▂▂▁▁▁▁▁▁▁▁▂▂▂▂▁▁▁▂▁▁▁▂▂▁▂▁
+wandb:                       +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                    epoch 99
+wandb:  trial_0_fold_0_val_bact 0.10561
+wandb: trial_0_fold_0_val_recon 18.47451
+wandb: trial_0_fold_0_val_total 21.25455
+wandb:  trial_0_fold_1_val_bact 0.10008
+wandb: trial_0_fold_1_val_recon 18.21037
+wandb: trial_0_fold_1_val_total 21.05828
+wandb:  trial_0_fold_2_val_bact 0.1147
+wandb: trial_0_fold_2_val_recon 18.87017
+wandb: trial_0_fold_2_val_total 21.65833
+wandb:                       +6 ...
+wandb: 
+wandb: 🚀 View run trial_0 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/hzwmugme
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_185318-hzwmugme/logs
+[I 2025-11-26 19:31:00,666] Trial 0 finished with value: 20.61565450032552 and parameters: {'embedding_dim': 32, 'learning_rate': 0.001, 'batch_size': 64, 'weight_decay': 0.0}. Best is trial 0 with value: 20.61565450032552.
+wandb: setting up run i0cm0fpz
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_193100-i0cm0fpz
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_2
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/i0cm0fpz
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading output.log; uploading config.yaml
+wandb: uploading history steps 499-499, summary
+wandb: 
+wandb: Run history:
+wandb:                    epoch ▁▂▂▃▃▅▅▆▆▆▇▅▅▅▅▇██▁▂▄▄▅▅▇▄▅▆█▁▃▃▃▃▄▅▅▅▇█
+wandb:  trial_2_fold_0_val_bact ██▇▆▅▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_2_fold_0_val_recon █▅▃▂▂▂▂▂▂▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_2_fold_0_val_total █▅▂▂▂▁▁▁▁▁▁▁▁▁▁▂▁▁▂▂▁▂▂▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁
+wandb:  trial_2_fold_1_val_bact █▇▆▅▄▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_2_fold_1_val_recon █▄▄▃▃▂▁▁▁▁▁▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_2_fold_1_val_total █▄▄▃▃▂▁▁▁▁▂▁▁▁▂▁▁▁▁▁▂▁▂▂▁▁▂▁▂▁▁▂▁▂▂▁▁▁▁▁
+wandb:  trial_2_fold_2_val_bact ██▆▆▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_2_fold_2_val_recon █▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_2_fold_2_val_total ██▆▅▄▁▁▁▃▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▂▂▂▁▂▁▂▂
+wandb:                       +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                    epoch 99
+wandb:  trial_2_fold_0_val_bact 0.13235
+wandb: trial_2_fold_0_val_recon 18.0725
+wandb: trial_2_fold_0_val_total 20.87345
+wandb:  trial_2_fold_1_val_bact 0.13505
+wandb: trial_2_fold_1_val_recon 18.52276
+wandb: trial_2_fold_1_val_total 21.51035
+wandb:  trial_2_fold_2_val_bact 0.11745
+wandb: trial_2_fold_2_val_recon 18.95783
+wandb: trial_2_fold_2_val_total 21.84071
+wandb:                       +6 ...
+wandb: 
+wandb: 🚀 View run trial_2 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/i0cm0fpz
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_193100-i0cm0fpz/logs
+[I 2025-11-26 20:11:36,493] Trial 2 finished with value: 20.840564982096357 and parameters: {'embedding_dim': 24, 'learning_rate': 0.0015081628239637884, 'batch_size': 32, 'weight_decay': 1.9008403595742718e-05}. Best is trial 0 with value: 20.61565450032552.
+wandb: setting up run 8kpo3ovm
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_201136-8kpo3ovm
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_4
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/8kpo3ovm
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading history steps 498-499, summary
+wandb: 
+wandb: Run history:
+wandb: epoch ▂▃▄▅▆█▂▂▄▅▅▅▆▇█▃▄▆▆▇██▁▃▃▆▆▇█▁▂▂▃▃▄▅▅▆▆█
+wandb:   +15 ...
+wandb: 
+wandb: Run summary:
+wandb:                    epoch 99
+wandb:  trial_4_fold_0_val_bact nan
+wandb: trial_4_fold_0_val_recon nan
+wandb: trial_4_fold_0_val_total nan
+wandb:  trial_4_fold_1_val_bact nan
+wandb: trial_4_fold_1_val_recon nan
+wandb: trial_4_fold_1_val_total nan
+wandb:  trial_4_fold_2_val_bact nan
+wandb: trial_4_fold_2_val_recon nan
+wandb: trial_4_fold_2_val_total nan
+wandb:                       +6 ...
+wandb: 
+wandb: 🚀 View run trial_4 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/8kpo3ovm
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_201136-8kpo3ovm/logs
+[I 2025-11-26 20:55:00,912] Trial 4 finished with value: inf and parameters: {'embedding_dim': 64, 'learning_rate': 0.0025215565280482448, 'batch_size': 64, 'weight_decay': 9.371802765438306e-05}. Best is trial 3 with value: 20.559984493255616.
+wandb: setting up run vp8kqkj7
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_205500-vp8kqkj7
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_6
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/vp8kqkj7
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:                    epoch ▁▁▁▁▁▂▂▂▂▂▃▃▃▃▃▃▄▄▄▄▄▅▅▅▅▆▆▆▆▆▆▆▆▆▇▇▇▇██
+wandb:  trial_6_fold_0_val_bact █▇▇▆▆▆▅▅▅▄▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_6_fold_0_val_recon ██▆▄▄▄▃▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_6_fold_0_val_total ██▄▄▄▃▃▃▂▂▁▁▂▂▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                    epoch 99
+wandb:  trial_6_fold_0_val_bact 0.19348
+wandb: trial_6_fold_0_val_recon 19.00804
+wandb: trial_6_fold_0_val_total 21.88235
+wandb: 
+wandb: 🚀 View run trial_6 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/vp8kqkj7
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_205500-vp8kqkj7/logs
+[I 2025-11-26 21:04:12,834] Trial 6 pruned. 
+wandb: setting up run 32knxks9
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_210412-32knxks9
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_8
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/32knxks9
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:                    epoch ▁▁▂▂▂▃▃▄▄▄▅▅▆▇▇▇▇▇██▁▁▂▃▃▃▄▄▄▄▅▅▆▆▆▆▇▇▇█
+wandb:  trial_8_fold_0_val_bact █▇▆▄▄▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_8_fold_0_val_recon █▅▅▄▃▂▂▁▁▁▂▂▂▂▂▂▂▂▂▂▁▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_8_fold_0_val_total █▅▅▄▃▁▂▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁
+wandb:  trial_8_fold_1_val_bact █▅▅▄▃▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_8_fold_1_val_recon █▄▄▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_8_fold_1_val_total █▃▂▂▂▂▁▁▁▁▁▁▁▁▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:                    epoch 99
+wandb:  trial_8_fold_0_val_bact 0.12021
+wandb: trial_8_fold_0_val_recon 18.08999
+wandb: trial_8_fold_0_val_total 20.77773
+wandb:  trial_8_fold_1_val_bact 0.11164
+wandb: trial_8_fold_1_val_recon 18.24091
+wandb: trial_8_fold_1_val_total 21.04079
+wandb: 
+wandb: 🚀 View run trial_8 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/32knxks9
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_210412-32knxks9/logs
+[I 2025-11-26 21:21:21,067] Trial 8 pruned. 
+wandb: setting up run fvg949rv
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_212121-fvg949rv
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_9
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/fvg949rv
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading output.log; uploading config.yaml
+wandb: uploading history steps 497-499, summary
+wandb: 
+wandb: Run history:
+wandb:                    epoch ▁▂▂▂▃▅▅▅▆▇▂▂▃▃▄▅▇▁▁▂▄▅▆▇▂▄▅▆▆▇▁▂▃▃▃▄▄▅▇█
+wandb:  trial_9_fold_0_val_bact ████▇▆▅▄▄▄▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▁▁▂▂▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_9_fold_0_val_recon █▄▄▄▄▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁
+wandb: trial_9_fold_0_val_total █▄▄▄▄▃▃▃▃▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▂▂▁▁▂▁
+wandb:  trial_9_fold_1_val_bact ██▇▇▇▆▅▅▄▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▁▁▁▁▁▁▁▁
+wandb: trial_9_fold_1_val_recon █▇▅▄▅▃▃▃▃▃▂▂▂▂▂▁▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂
+wandb: trial_9_fold_1_val_total █▇▇▇▆▆▅▅▄▄▄▃▃▃▂▂▂▂▂▂▂▂▁▁▂▁▁▁▁▂▂▁▂▂▂▁▂▂▂▂
+wandb:  trial_9_fold_2_val_bact ████▆▅▅▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_9_fold_2_val_recon █▄▄▃▃▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▂▁
+wandb: trial_9_fold_2_val_total █▅▄▄▃▃▂▂▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▁▂▂▂
+wandb:                       +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                    epoch 99
+wandb:  trial_9_fold_0_val_bact 0.19905
+wandb: trial_9_fold_0_val_recon 18.90938
+wandb: trial_9_fold_0_val_total 21.78434
+wandb:  trial_9_fold_1_val_bact 0.22636
+wandb: trial_9_fold_1_val_recon 18.9159
+wandb: trial_9_fold_1_val_total 21.85489
+wandb:  trial_9_fold_2_val_bact 0.18745
+wandb: trial_9_fold_2_val_recon 19.02846
+wandb: trial_9_fold_2_val_total 21.82195
+wandb:                       +6 ...
+wandb: 
+wandb: 🚀 View run trial_9 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/fvg949rv
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_212121-fvg949rv/logs
+[I 2025-11-26 22:07:50,988] Trial 9 finished with value: 20.548853143056235 and parameters: {'embedding_dim': 64, 'learning_rate': 0.0004637516123945464, 'batch_size': 64, 'weight_decay': 6.962185429668757e-05}. Best is trial 7 with value: 20.491211891174313.
+wandb: setting up run 8elyw9jb
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_220751-8elyw9jb
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_12
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/8elyw9jb
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading history steps 499-499, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▃▃▃▃▅▆▇▁▁▂▃▄▅▅▂▂▂▄▄▆▁▂▃▄▄▅▆▆█▂▂▂▂▃▄▄▆▆█
+wandb:  trial_12_fold_0_val_bact █▇▆▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_12_fold_0_val_recon █▇▇▆▆▄▄▃▃▂▂▁▁▁▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▂
+wandb: trial_12_fold_0_val_total █▄▄▃▃▃▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb:  trial_12_fold_1_val_bact █▃▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_12_fold_1_val_recon ██▇▇▃▂▂▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▂▂▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂
+wandb: trial_12_fold_1_val_total █▇▆▃▃▂▂▂▂▂▁▁▁▁▂▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃
+wandb:  trial_12_fold_2_val_bact █▇▇▇▆▅▅▄▄▄▃▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_12_fold_2_val_recon █▄▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_12_fold_2_val_total ██▆▄▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃
+wandb:                        +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_12_fold_0_val_bact 0.17242
+wandb: trial_12_fold_0_val_recon 18.35393
+wandb: trial_12_fold_0_val_total 21.74895
+wandb:  trial_12_fold_1_val_bact 0.17892
+wandb: trial_12_fold_1_val_recon 18.50111
+wandb: trial_12_fold_1_val_total 21.71153
+wandb:  trial_12_fold_2_val_bact 0.16025
+wandb: trial_12_fold_2_val_recon 18.75893
+wandb: trial_12_fold_2_val_total 22.14046
+wandb:                        +6 ...
+wandb: 
+wandb: 🚀 View run trial_12 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/8elyw9jb
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_220751-8elyw9jb/logs
+[I 2025-11-26 22:49:10,025] Trial 12 finished with value: 20.436769644419353 and parameters: {'embedding_dim': 48, 'learning_rate': 0.00010272879920506093, 'batch_size': 32, 'weight_decay': 5.601339177913041e-05}. Best is trial 12 with value: 20.436769644419353.
+wandb: setting up run 2vsg1s4d
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_224910-2vsg1s4d
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_14
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/2vsg1s4d
+wandb: updating run metadata
+wandb: updating run metadata; uploading output.log; uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: uploading history steps 498-499, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▂▂▂▄▄▆███▂▃▄▄▄▆▂▂▃▃▃▃▄▅▇▇▂▂▂▄▄▇▇▇▇▁▂▃▄▄▅
+wandb:  trial_14_fold_0_val_bact ███▆▅▃▃▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_14_fold_0_val_recon █▄▄▄▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▂
+wandb: trial_14_fold_0_val_total ██▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▂▂▃
+wandb:  trial_14_fold_1_val_bact █▇▇▆▄▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_14_fold_1_val_recon █▇▇▆▅▄▄▃▃▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▁▁▂▂▂▂▂▂
+wandb: trial_14_fold_1_val_total █▇▄▄▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃
+wandb:  trial_14_fold_2_val_bact ██▅▄▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_14_fold_2_val_recon █▅▅▅▄▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_14_fold_2_val_total █▅▅▅▄▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▂▁▂▂▂▂▂▂▂▂▂▂▂
+wandb:                        +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_14_fold_0_val_bact 0.18935
+wandb: trial_14_fold_0_val_recon 18.95615
+wandb: trial_14_fold_0_val_total 22.19252
+wandb:  trial_14_fold_1_val_bact 0.18611
+wandb: trial_14_fold_1_val_recon 18.40763
+wandb: trial_14_fold_1_val_total 21.81409
+wandb:  trial_14_fold_2_val_bact 0.18001
+wandb: trial_14_fold_2_val_recon 18.81734
+wandb: trial_14_fold_2_val_total 22.12645
+wandb:                        +6 ...
+wandb: 
+wandb: 🚀 View run trial_14 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/2vsg1s4d
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_224910-2vsg1s4d/logs
+[I 2025-11-26 23:30:18,329] Trial 14 finished with value: 20.494742170969644 and parameters: {'embedding_dim': 48, 'learning_rate': 0.00011798898438034279, 'batch_size': 32, 'weight_decay': 6.821473065714771e-05}. Best is trial 12 with value: 20.436769644419353.
+wandb: setting up run l48qc8c9
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_233018-l48qc8c9
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_17
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/l48qc8c9
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading history steps 97-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▂▂▂▂▃▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇▇▇██
+wandb:  trial_17_fold_0_val_bact ██▇▅▄▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_17_fold_0_val_recon █▇▆▅▄▂▂▂▂▂▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▃▃▂▂▂▂▂▂▂▃▂▃▂▃
+wandb: trial_17_fold_0_val_total █▅▅▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_17_fold_0_val_bact 0.1893
+wandb: trial_17_fold_0_val_recon 18.60182
+wandb: trial_17_fold_0_val_total 21.88193
+wandb: 
+wandb: 🚀 View run trial_17 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/l48qc8c9
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_233018-l48qc8c9/logs
+[I 2025-11-26 23:38:33,887] Trial 17 pruned. 
+wandb: setting up run f5vofska
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_233833-f5vofska
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_19
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/f5vofska
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading output.log; uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb: epoch ▁▁▁▁▁▂▂▂▃▃▃▃▃▃▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▆▆▇▇▇▇▇███
+wandb:    +3 ...
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_19_fold_0_val_bact nan
+wandb: trial_19_fold_0_val_recon nan
+wandb: trial_19_fold_0_val_total nan
+wandb: 
+wandb: 🚀 View run trial_19 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/f5vofska
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_233833-f5vofska/logs
+[I 2025-11-26 23:46:39,012] Trial 19 pruned. 
+wandb: setting up run h081h7aa
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_234639-h081h7aa
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_21
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/h081h7aa
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading output.log; uploading config.yaml
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▂▂▂▂▂▂▂▂▃▃▃▄▄▄▄▅▅▅▅▅▅▅▅▆▆▆▇▇▇▇▇▇▇█████
+wandb:  trial_21_fold_0_val_bact █▆▅▄▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_21_fold_0_val_recon █▆▅▄▄▂▂▂▂▂▁▁▁▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_21_fold_0_val_total █▇▆▃▃▂▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_21_fold_0_val_bact 0.14203
+wandb: trial_21_fold_0_val_recon 18.63712
+wandb: trial_21_fold_0_val_total 22.03977
+wandb: 
+wandb: 🚀 View run trial_21 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/h081h7aa
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_234639-h081h7aa/logs
+[I 2025-11-26 23:54:20,190] Trial 21 pruned. 
+wandb: setting up run 695lt54y
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251126_235420-695lt54y
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_23
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/695lt54y
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 498-499, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▂▂▃▅▅▆▇▇▂▂▄▅▅▅▆▇█▁▁▂▄▅▅▅▁▅▅▆▇▇▂▄▄▅▅▆▆▇▇█
+wandb:  trial_23_fold_0_val_bact ██▇▄▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_23_fold_0_val_recon █▅▅▄▄▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▂▁▁
+wandb: trial_23_fold_0_val_total ██▆▅▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▃▃▃▃▂▃▃▃▃▃
+wandb:  trial_23_fold_1_val_bact ███▇▅▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_23_fold_1_val_recon █▄▄▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_23_fold_1_val_total █▅▄▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂
+wandb:  trial_23_fold_2_val_bact ██▆▄▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_23_fold_2_val_recon █▄▄▄▄▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_23_fold_2_val_total █▅▄▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb:                        +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_23_fold_0_val_bact 0.18064
+wandb: trial_23_fold_0_val_recon 18.64096
+wandb: trial_23_fold_0_val_total 21.98547
+wandb:  trial_23_fold_1_val_bact 0.18038
+wandb: trial_23_fold_1_val_recon 18.38568
+wandb: trial_23_fold_1_val_total 21.59725
+wandb:  trial_23_fold_2_val_bact 0.16769
+wandb: trial_23_fold_2_val_recon 18.78528
+wandb: trial_23_fold_2_val_total 22.11949
+wandb:                        +6 ...
+wandb: 
+wandb: 🚀 View run trial_23 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/695lt54y
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251126_235420-695lt54y/logs
+[I 2025-11-27 00:35:27,903] Trial 23 finished with value: 20.43760035832723 and parameters: {'embedding_dim': 48, 'learning_rate': 0.00010416249931121885, 'batch_size': 32, 'weight_decay': 6.141744069655498e-05}. Best is trial 12 with value: 20.436769644419353.
+wandb: setting up run u2drz4ro
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_003527-u2drz4ro
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_25
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/u2drz4ro
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 197-199, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▂▂▃▃▃▃▃▄▄▄▅▆▆▇▇██▁▁▂▂▂▂▃▃▃▃▄▅▅▆▆▇▇▇▇█
+wandb:  trial_25_fold_0_val_bact ██▇▅▄▃▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_25_fold_0_val_recon ██▇▆▅▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_25_fold_0_val_total ██▆▆▅▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃
+wandb:  trial_25_fold_1_val_bact ███▇▃▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_25_fold_1_val_recon █▆▅▅▄▄▃▂▂▂▂▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▃▃▃▃▂▃▂▃▃▃▃▃▂▃
+wandb: trial_25_fold_1_val_total ██▇▆▃▂▂▂▁▁▁▁▁▁▁▁▂▁▂▂▂▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_25_fold_0_val_bact 0.18491
+wandb: trial_25_fold_0_val_recon 18.75976
+wandb: trial_25_fold_0_val_total 22.03543
+wandb:  trial_25_fold_1_val_bact 0.19378
+wandb: trial_25_fold_1_val_recon 18.42314
+wandb: trial_25_fold_1_val_total 21.71847
+wandb: 
+wandb: 🚀 View run trial_25 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/u2drz4ro
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_003527-u2drz4ro/logs
+[I 2025-11-27 00:51:59,107] Trial 25 pruned. 
+wandb: setting up run khion8uo
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_005159-khion8uo
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_27
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/khion8uo
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading history steps 97-99, summary
+wandb: uploading data
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▃▃▄▄▄▅▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇███
+wandb:  trial_27_fold_0_val_bact █▇▇▆▅▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_27_fold_0_val_recon █▄▃▃▃▃▂▂▃▂▁▁▁▁▁▁▂▁▁▁▁▁▂▂▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_27_fold_0_val_total ██▇▆▅▃▂▃▂▁▁▁▁▁▁▁▁▂▁▁▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_27_fold_0_val_bact 0.2021
+wandb: trial_27_fold_0_val_recon 19.14662
+wandb: trial_27_fold_0_val_total 22.32874
+wandb: 
+wandb: 🚀 View run trial_27 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/khion8uo
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_005159-khion8uo/logs
+[I 2025-11-27 01:00:16,411] Trial 27 pruned. 
+wandb: setting up run zdi4fdvu
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_010016-zdi4fdvu
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_29
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/zdi4fdvu
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▅▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇▇███
+wandb:  trial_29_fold_0_val_bact ███▇▅▄▄▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_29_fold_0_val_recon █▅▄▄▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▂▂▂▁▁▁▁▁
+wandb: trial_29_fold_0_val_total █▆▅▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▃▂▂▂▂▂▂▃▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_29_fold_0_val_bact 0.15319
+wandb: trial_29_fold_0_val_recon 18.46188
+wandb: trial_29_fold_0_val_total 21.96602
+wandb: 
+wandb: 🚀 View run trial_29 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/zdi4fdvu
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_010016-zdi4fdvu/logs
+[I 2025-11-27 01:08:01,771] Trial 29 pruned. 
+wandb: setting up run 97cb8098
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_010801-97cb8098
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_31
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/97cb8098
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading output.log; uploading config.yaml
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▁▂▂▂▂▂▂▃▃▃▃▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇███
+wandb:  trial_31_fold_0_val_bact █▇▅▅▄▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_31_fold_0_val_recon █▆▄▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_31_fold_0_val_total █▇▅▅▃▂▂▁▁▁▁▁▂▁▁▂▂▂▂▂▂▂▂▂▂▃▃▃▂▃▃▃▃▃▃▃▃▃▃▃
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_31_fold_0_val_bact 0.18831
+wandb: trial_31_fold_0_val_recon 18.71601
+wandb: trial_31_fold_0_val_total 22.19188
+wandb: 
+wandb: 🚀 View run trial_31 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/97cb8098
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_010801-97cb8098/logs
+[I 2025-11-27 01:15:57,852] Trial 31 pruned. 
+wandb: setting up run xg91lj6b
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_011557-xg91lj6b
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_33
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/xg91lj6b
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading history steps 499-499, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▃▆▆▇▇█▁▃▅▆▆▇█▁▁▂▃▃▅▇▇▇▁▄▅▅▆▇██▁▂▂▃▃▅▅▆
+wandb:  trial_33_fold_0_val_bact █▆▄▄▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_33_fold_0_val_recon █▄▄▃▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▂▁
+wandb: trial_33_fold_0_val_total █▅▄▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb:  trial_33_fold_1_val_bact ██▇▄▃▂▂▂▂▂▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_33_fold_1_val_recon ████▅▄▄▄▃▃▂▁▁▁▁▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_33_fold_1_val_total █▇▇▄▄▃▂▂▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb:  trial_33_fold_2_val_bact ██▇▅▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_33_fold_2_val_recon ██▆▅▅▃▃▃▃▂▂▂▁▁▁▁▁▁▁▁▁▂▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_33_fold_2_val_total █▄▄▃▂▂▁▁▁▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb:                        +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_33_fold_0_val_bact 0.17023
+wandb: trial_33_fold_0_val_recon 18.44645
+wandb: trial_33_fold_0_val_total 21.82979
+wandb:  trial_33_fold_1_val_bact 0.19493
+wandb: trial_33_fold_1_val_recon 18.52546
+wandb: trial_33_fold_1_val_total 21.87563
+wandb:  trial_33_fold_2_val_bact 0.17324
+wandb: trial_33_fold_2_val_recon 18.86949
+wandb: trial_33_fold_2_val_total 22.1391
+wandb:                        +6 ...
+wandb: 
+wandb: 🚀 View run trial_33 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/xg91lj6b
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_011557-xg91lj6b/logs
+[I 2025-11-27 01:57:17,246] Trial 33 finished with value: 20.470655536651613 and parameters: {'embedding_dim': 48, 'learning_rate': 0.00013332450812850212, 'batch_size': 32, 'weight_decay': 5.6452135752538694e-05}. Best is trial 12 with value: 20.436769644419353.
+wandb: setting up run io2lehzr
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_015717-io2lehzr
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_37
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/io2lehzr
+wandb: updating run metadata
+wandb: uploading wandb-summary.json; uploading output.log
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▁▂▂▂▂▂▂▂▃▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▇▇▇█████
+wandb:  trial_37_fold_0_val_bact ███▇▇▆▆▅▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_37_fold_0_val_recon █▆▆▆▆▅▄▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁
+wandb: trial_37_fold_0_val_total █▄▄▄▄▃▃▃▂▂▂▂▁▁▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_37_fold_0_val_bact 0.19619
+wandb: trial_37_fold_0_val_recon 18.83506
+wandb: trial_37_fold_0_val_total 21.80431
+wandb: 
+wandb: 🚀 View run trial_37 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/io2lehzr
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_015717-io2lehzr/logs
+[I 2025-11-27 02:05:38,535] Trial 37 pruned. 
+wandb: setting up run tjdrkykn
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_020538-tjdrkykn
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_39
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/tjdrkykn
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▁▂▂▂▂▂▂▂▃▃▃▃▄▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▇▇▇▇▇▇██
+wandb:  trial_39_fold_0_val_bact ██▆▄▃▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_39_fold_0_val_recon ██▇▆▅▄▃▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_39_fold_0_val_total █▅▄▃▂▂▁▂▁▁▁▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▂▂▃▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_39_fold_0_val_bact 0.1536
+wandb: trial_39_fold_0_val_recon 18.5109
+wandb: trial_39_fold_0_val_total 21.71284
+wandb: 
+wandb: 🚀 View run trial_39 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/tjdrkykn
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_020538-tjdrkykn/logs
+[I 2025-11-27 02:14:32,928] Trial 39 pruned. 
+wandb: setting up run 4l8cvy68
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_021432-4l8cvy68
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_40
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/4l8cvy68
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading config.yaml
+wandb: uploading history steps 97-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇▇████
+wandb:  trial_40_fold_0_val_bact █▇▇▇▅▃▃▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_40_fold_0_val_recon ███▅▄▃▃▂▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▂▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_40_fold_0_val_total █▆▅▅▄▃▃▂▂▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_40_fold_0_val_bact 0.21126
+wandb: trial_40_fold_0_val_recon 18.74612
+wandb: trial_40_fold_0_val_total 22.35863
+wandb: 
+wandb: 🚀 View run trial_40 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/4l8cvy68
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_021432-4l8cvy68/logs
+[I 2025-11-27 02:22:01,935] Trial 40 pruned. 
+wandb: setting up run 2ujwrnd8
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_022201-2ujwrnd8
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_41
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/2ujwrnd8
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json
+wandb: uploading output.log; uploading config.yaml
+wandb: uploading history steps 98-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▁▂▂▂▂▂▂▃▃▃▃▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇████
+wandb:  trial_41_fold_0_val_bact ████▇▆▅▅▄▃▃▃▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_41_fold_0_val_recon █▅▄▄▄▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁▂▁▁▁▁▁▁▁▁▂▁▁▁▁▂▁▁▂▁▂
+wandb: trial_41_fold_0_val_total █▇▅▄▄▄▃▃▃▃▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▂▁▁▂▁▁▂▁▁▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_41_fold_0_val_bact 0.20913
+wandb: trial_41_fold_0_val_recon 19.30972
+wandb: trial_41_fold_0_val_total 22.04619
+wandb: 
+wandb: 🚀 View run trial_41 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/2ujwrnd8
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_022201-2ujwrnd8/logs
+[I 2025-11-27 02:30:55,922] Trial 41 pruned. 
+wandb: setting up run ybbly5wu
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_023055-ybbly5wu
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_42
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/ybbly5wu
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading output.log; uploading config.yaml
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▆▆▆▆▆▇▇▇▇█
+wandb:  trial_42_fold_0_val_bact ██▄▄▄▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_42_fold_0_val_recon ██▇▆▆▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▁▂▂▂▂▂▂▂▂▂
+wandb: trial_42_fold_0_val_total █▄▄▃▂▂▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_42_fold_0_val_bact 0.18254
+wandb: trial_42_fold_0_val_recon 18.41772
+wandb: trial_42_fold_0_val_total 21.86736
+wandb: 
+wandb: 🚀 View run trial_42 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/ybbly5wu
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_023055-ybbly5wu/logs
+[I 2025-11-27 02:39:16,793] Trial 42 pruned. 
+wandb: setting up run iw6u13ib
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_023916-iw6u13ib
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_43
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/iw6u13ib
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading history steps 97-99, summary
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading data
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▁▁▂▂▂▂▂▃▃▃▃▃▃▄▄▄▄▄▄▅▅▅▆▆▆▆▆▇▇▇▇▇▇▇███
+wandb:  trial_43_fold_0_val_bact ██▆▅▄▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_43_fold_0_val_recon ██▇▅▅▃▃▂▂▂▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▂▁▂▂▂▂▂▂▂▂▂▂▂
+wandb: trial_43_fold_0_val_total █▅▆▅▅▄▃▃▃▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▂▂▂▂▂▂▂▂▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_43_fold_0_val_bact 0.19635
+wandb: trial_43_fold_0_val_recon 18.46172
+wandb: trial_43_fold_0_val_total 21.80246
+wandb: 
+wandb: 🚀 View run trial_43 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/iw6u13ib
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_023916-iw6u13ib/logs
+[I 2025-11-27 02:47:34,385] Trial 43 pruned. 
+wandb: setting up run 6mmkrpjd
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_024734-6mmkrpjd
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_45
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/6mmkrpjd
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 499-499, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▂▃▃▄▅▅▅▆▇██▂▃▃▄▅▅▅▆▅█▁▃▃▄▅▅█▂▂▃▄▄▅▅▅▆▇█
+wandb:  trial_45_fold_0_val_bact ███▇▇▅▅▄▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_45_fold_0_val_recon █▇▇▇▇▅▄▃▃▃▂▂▂▃▂▂▂▂▁▁▂▂▂▁▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_45_fold_0_val_total █▇▅▄▅▄▃▃▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:  trial_45_fold_1_val_bact ██▇▇▆▄▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_45_fold_1_val_recon █▄▄▄▄▃▃▃▃▃▂▂▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_45_fold_1_val_total █▅▅▅▅▅▄▃▃▂▂▂▂▂▂▁▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:  trial_45_fold_2_val_bact ███▇▇▅▄▄▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_45_fold_2_val_recon █▆▄▄▄▄▄▃▃▃▂▂▂▂▂▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_45_fold_2_val_total █▆▅▅▄▄▄▃▃▃▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                        +6 ...
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_45_fold_0_val_bact 0.20348
+wandb: trial_45_fold_0_val_recon 18.0479
+wandb: trial_45_fold_0_val_total 20.8014
+wandb:  trial_45_fold_1_val_bact 0.22212
+wandb: trial_45_fold_1_val_recon 17.90693
+wandb: trial_45_fold_1_val_total 20.69283
+wandb:  trial_45_fold_2_val_bact 0.19881
+wandb: trial_45_fold_2_val_recon 18.50078
+wandb: trial_45_fold_2_val_total 21.31911
+wandb:                        +6 ...
+wandb: 
+wandb: 🚀 View run trial_45 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/6mmkrpjd
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_024734-6mmkrpjd/logs
+[I 2025-11-27 03:31:38,738] Trial 45 finished with value: 20.436212062835697 and parameters: {'embedding_dim': 64, 'learning_rate': 0.000139556445437811, 'batch_size': 64, 'weight_decay': 5.572844211603357e-05}. Best is trial 45 with value: 20.436212062835697.
+wandb: setting up run goh8927t
+wandb: Tracking run with wandb version 0.23.0
+wandb: Run data is saved locally in /home/eng/pintokf/Projects/Microbium/Bacteria-Metric/wandb/run-20251127_033138-goh8927t
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run trial_47
+wandb: ⭐️ View project at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: 🚀 View run at https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/goh8927t
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading config.yaml
+wandb: uploading history steps 99-99, summary
+wandb: 
+wandb: Run history:
+wandb:                     epoch ▁▁▁▂▂▂▂▃▃▃▃▃▃▄▄▄▄▄▄▄▅▅▅▅▅▅▅▆▆▆▆▆▆▇▇▇▇▇██
+wandb:  trial_47_fold_0_val_bact ██▇▇▆▅▄▄▃▃▃▃▂▂▂▂▂▂▂▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: trial_47_fold_0_val_recon █▃▃▃▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▁▁
+wandb: trial_47_fold_0_val_total █▅▃▃▃▂▂▁▁▁▁▁▁▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▂
+wandb: 
+wandb: Run summary:
+wandb:                     epoch 99
+wandb:  trial_47_fold_0_val_bact 0.17126
+wandb: trial_47_fold_0_val_recon 19.346
+wandb: trial_47_fold_0_val_total 22.13671
+wandb: 
+wandb: 🚀 View run trial_47 at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt/runs/goh8927t
+wandb: ⭐️ View project at: https://wandb.ai/kfirpinto-bar-ilan-university/BacteriaMetric_HyperOpt
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20251127_033138-goh8927t/logs
+[I 2025-11-27 03:40:30,696] Trial 47 pruned. 
+Loading Data...
+Data Loaded. Dev set size: 459
+Injecting Baseline Parameters...
+Starting Optimization...
+Trial 0 | Fold 1/5
+Trial 0 | Fold 2/5
+Trial 0 | Fold 3/5
+Trial 0 | Fold 4/5
+Trial 0 | Fold 5/5
+Trial 2 | Fold 1/5
+Trial 2 | Fold 2/5
+Trial 2 | Fold 3/5
+Trial 2 | Fold 4/5
+Trial 2 | Fold 5/5
+Trial 4 | Fold 1/5
+Trial 4 | Fold 2/5
+Trial 4 | Fold 3/5
+Trial 4 | Fold 4/5
+Trial 4 | Fold 5/5
+Trial 6 | Fold 1/5
+Trial 8 | Fold 1/5
+Trial 8 | Fold 2/5
+Trial 9 | Fold 1/5
+Trial 9 | Fold 2/5
+Trial 9 | Fold 3/5
+Trial 9 | Fold 4/5
+Trial 9 | Fold 5/5
+Trial 12 | Fold 1/5
+Trial 12 | Fold 2/5
+Trial 12 | Fold 3/5
+Trial 12 | Fold 4/5
+Trial 12 | Fold 5/5
+Trial 14 | Fold 1/5
+Trial 14 | Fold 2/5
+Trial 14 | Fold 3/5
+Trial 14 | Fold 4/5
+Trial 14 | Fold 5/5
+Trial 17 | Fold 1/5
+Trial 19 | Fold 1/5
+Trial 21 | Fold 1/5
+Trial 23 | Fold 1/5
+Trial 23 | Fold 2/5
+Trial 23 | Fold 3/5
+Trial 23 | Fold 4/5
+Trial 23 | Fold 5/5
+Trial 25 | Fold 1/5
+Trial 25 | Fold 2/5
+Trial 27 | Fold 1/5
+Trial 29 | Fold 1/5
+Trial 31 | Fold 1/5
+Trial 33 | Fold 1/5
+Trial 33 | Fold 2/5
+Trial 33 | Fold 3/5
+Trial 33 | Fold 4/5
+Trial 33 | Fold 5/5
+Trial 37 | Fold 1/5
+Trial 39 | Fold 1/5
+Trial 40 | Fold 1/5
+Trial 41 | Fold 1/5
+Trial 42 | Fold 1/5
+Trial 43 | Fold 1/5
+Trial 45 | Fold 1/5
+Trial 45 | Fold 2/5
+Trial 45 | Fold 3/5
+Trial 45 | Fold 4/5
+Trial 45 | Fold 5/5
+Trial 47 | Fold 1/5
+
+--- Optimization Finished ---
+Best Total Val Loss: 20.436212062835697
+Best Params: {'embedding_dim': 64, 'learning_rate': 0.000139556445437811, 'batch_size': 64, 'weight_decay': 5.572844211603357e-05}

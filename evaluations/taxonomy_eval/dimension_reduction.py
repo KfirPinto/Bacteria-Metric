@@ -108,11 +108,11 @@ def main(embedding_path, metadata_path, color_level, method="PCA", save_dir="plo
 
 # === Edit these paths and parameters before running ===
 if __name__ == "__main__":
-    embedding_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_0/test_tensor_embeddings.npy"
-    metadata_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/bacteria_names_full_taxonomy.npy"
+    embedding_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/test_tensor_embeddings.npy"
+    metadata_file = "/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/bacteria_names_full_taxonomy.npy"
 
     # Run all three methods
     for method in ["PCA", "PCoA", "tSNE"]:
         for level in ["phylum", "class", "order", "family", "genus"]:
             main(embedding_file, metadata_file, level, method=method, 
-                 save_dir=f"/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_0/plots_check/{method.lower()}/{level}")
+                 save_dir=f"/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/plots/{method.lower()}/{level}")

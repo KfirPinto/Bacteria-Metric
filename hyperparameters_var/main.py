@@ -55,6 +55,8 @@ def train_one_fold(model, train_loader, val_loader, learning_rate, lambda_weight
             # חישוב ה-Loss המשוקלל
             loss = (recon * w_recon) + (bact * w_bact) + (sample * w_sample) + kl + wd
             loss.backward()
+
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
 
         # --- Validation Loop ---

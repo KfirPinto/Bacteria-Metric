@@ -2,9 +2,6 @@ import argparse
 import sys
 import torch
 import os
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-if parent_dir not in sys.path:
-    sys.path.append(parent_dir)
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -16,12 +13,17 @@ from scipy.spatial import distance
 from skbio.stats.distance import mantel
 from skbio import DistanceMatrix
 
-#from autoencoder_model.training.model import SplitAutoencoder
-from variational_autoencoder.training.model import SplitVAE
+# נסיון לייבוא המודל (לא קריטי לסקריפט הזה אך נשמר לתאימות)
+try:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(os.path.dirname(current_dir))
+    sys.path.append(parent_dir)
+    from variational_autoencoder.training.model import SplitVAE
+except ImportError:
+    pass
 
 def load_embedding(test_data_path):
     embedding_tensor = np.load(test_data_path)
-    #embedding_tensor = torch.tensor(embedding_tensor, dtype=torch.float32)
     return embedding_tensor
 
 def load_embedding_metadata(test_labels_path): 
@@ -33,28 +35,14 @@ def load_pathway_data(pathway_data_path, pathway_bacteria_path):
     all_bacteria = np.load(pathway_bacteria_path, allow_pickle=True)  
     return pathway_abundance_tensor, all_bacteria
 
-# Convert pathway scores to binary vectors (participation or not)
 def compute_binary_pathway_vectors(pathway_abundance, bacteria_names, threshold=0):
-    """
-    Converts pathway scores to binary vectors (1 if mean score > threshold, else 0)
-    for each bacterium.
-
-    Args:
-        pathway_abundance (np.ndarray): shape (samples, bacteria, pathways)
-        bacteria_names (array-like): list of bacteria names (length matches axis=1)
-        threshold (float): threshold for binary conversion
-
-    Returns:
-        dict: {bacterium_name: binary_vector}
-    """
     if isinstance(bacteria_names, np.ndarray):
             bacteria_names = bacteria_names.tolist()
 
-    binary_pathway_vectors = {} # Dictionary to hold binary vectors for each bacterium
-    # Iterate over each bacterium in the test labels and convert pathway scores to binary
+    binary_pathway_vectors = {}
     for i, bacterium in enumerate(bacteria_names):
-        sub_matrix = pathway_abundance[:, i, :]  # (num_samples, num_pathways)
-        binary_vector = (sub_matrix.mean(axis=0) > threshold).astype(int)  # 1 if pathway score > threshold, else 0
+        sub_matrix = pathway_abundance[:, i, :] 
+        binary_vector = (sub_matrix.mean(axis=0) > threshold).astype(int)
         binary_pathway_vectors[bacterium] = binary_vector
 
     return binary_pathway_vectors
@@ -62,20 +50,17 @@ def compute_binary_pathway_vectors(pathway_abundance, bacteria_names, threshold=
 def normalize_vectors(vectors):
     return normalize(vectors, norm='l2', axis=1)
 
-# Similarity calculations between embedding vectors
-def calculate_similarities(method, embeddings):
+# --- הפונקציה המעודכנת: מקבלת background_embeddings ---
+def calculate_similarities(method, embeddings, background_embeddings=None):
     """
     Calculate similarity matrix for given embeddings by the selected method.
-
-    Args:
-        method (str): 'cosine', 'l1', or 'l2' or 'mahalanobis'
-        embeddings (dict): {bacterium_name: embedding_vector}
-
-    Returns:
-        np.ndarray: similarity or distance matrix (num_bacteria x num_bacteria)
+    If method is 'mahalanobis' and background_embeddings is provided, 
+    it uses the background to calculate the covariance matrix.
     """
-    names = embeddings.keys()
-    embedding_vectors = np.array([embeddings[name] for name in names])
+    names = list(embeddings.keys())
+    embedding_vectors = np.array([embeddings[name] for name in names], dtype=np.float64)
+
+    print(f"DEBUG: Calculating similarities using method: {method}")
 
     if method == 'cosine':
         return cosine_similarity(embedding_vectors)
@@ -84,61 +69,72 @@ def calculate_similarities(method, embeddings):
     elif method == 'l2':
         return 1 / (1 + euclidean_distances(embedding_vectors))
     elif method == 'mahalanobis':
-        # Compute inverse covariance matrix
-        VI = np.linalg.pinv(np.cov(embedding_vectors.T))
-        # Compute pairwise Mahalanobis distances
+        print("DEBUG: Computing Robust Mahalanobis...")
+        
+        # שימוש בדאטה מלא לחישוב שונות משותפת אם קיים
+        if background_embeddings is not None:
+            print(f"DEBUG: Using Background Data for Covariance (N={background_embeddings.shape[0]})")
+            cov_data = background_embeddings
+        else:
+            print("WARNING: Using Test Data for Covariance (Might be unstable!)")
+            cov_data = embedding_vectors
+            
+        cov_matrix = np.cov(cov_data.T)
+        
+        # Regularization (Epsilon)
+        epsilon = 1e-5
+        cov_matrix = cov_matrix + np.eye(cov_matrix.shape[0]) * epsilon
+        
+        try:
+            VI = np.linalg.inv(cov_matrix)
+        except np.linalg.LinAlgError:
+            print("Error: Covariance matrix is singular. Adding larger epsilon.")
+            cov_matrix = cov_matrix + np.eye(cov_matrix.shape[0]) * 1e-3
+            VI = np.linalg.inv(cov_matrix)
+        
+        # חישוב מרחקים על ה-Vectors המקוריים (Test Set)
         dist_matrix = distance.cdist(embedding_vectors, embedding_vectors, metric='mahalanobis', VI=VI)
-        # Convert distances to similarity-like scale
+        
         similarity_matrix = 1 / (1 + dist_matrix)
         return similarity_matrix
+    else:
+        raise ValueError(f"Unknown method: {method}")
 
-# Normalize the similarities to the same scale
 def normalize_similarities(similarity_matrix):
     min_val = similarity_matrix.min()
     max_val = similarity_matrix.max()
     return (similarity_matrix - min_val) / (max_val - min_val)
 
 def calculate_correlations(embedding_sim, pathway_sim):
-    """
-    Calculate Pearson, Spearman, and Mantel correlations between two similarity matrices.
-
-    Args:
-        embedding_sim (np.ndarray): embedding similarity matrix (square)
-        pathway_sim (np.ndarray): pathway similarity matrix (square)
-
-    Returns:
-        tuple: (pearson_corr, spearman_corr, mantel_corr, mantel_p_value)
-    """
-    # Sanity check
     if embedding_sim.shape != pathway_sim.shape:
         raise ValueError("Embedding and pathway similarity matrices must have the same shape.")
 
     n = embedding_sim.shape[0]
-
-    # Flatten upper triangular part (excluding diagonal)
     embed_flat = embedding_sim[np.triu_indices(n, k=1)]
     pathway_flat = pathway_sim[np.triu_indices(n, k=1)]
 
-    # Pearson correlation
     pearson_corr = np.corrcoef(embed_flat, pathway_flat)[0, 1]
-
-    # Spearman correlation
     spearman_corr, _ = spearmanr(embed_flat, pathway_flat)
 
-    # Mantel test
-    # Convert similarity to distance (assuming similarity in [0,1])
-    
-    embed_dist = (1 / embedding_sim) - 1 # convert similarity to distance
-    embed_dist = (embed_dist + embed_dist.T) / 2 # make it symmetric
-    np.fill_diagonal(embed_dist, 0) # fill diagonal with 0
-    embed_dist = embed_dist.astype(np.float32) # skbio expect to float32
+    # Mantel test prep
+    with np.errstate(divide='ignore', invalid='ignore'):
+        embed_dist = (1 / embedding_sim) - 1
+        embed_dist[np.isinf(embed_dist)] = 0 
+        embed_dist = np.nan_to_num(embed_dist)
+        
+    embed_dist = (embed_dist + embed_dist.T) / 2
+    np.fill_diagonal(embed_dist, 0)
+    embed_dist = embed_dist.astype(np.float32)
 
-    pathway_dist = (1 / pathway_sim) - 1
+    with np.errstate(divide='ignore', invalid='ignore'):
+        pathway_dist = (1 / pathway_sim) - 1
+        pathway_dist[np.isinf(pathway_dist)] = 0
+        pathway_dist = np.nan_to_num(pathway_dist)
+
     pathway_dist = (pathway_dist + pathway_dist.T) / 2
     np.fill_diagonal(pathway_dist, 0)
     pathway_dist = pathway_dist.astype(np.float32)
 
-    # Convert to scikit-bio DistanceMatrix
     embed_dm = DistanceMatrix(embed_dist)
     pathway_dm = DistanceMatrix(pathway_dist)
 
@@ -153,7 +149,6 @@ def get_save_path(output_dir, method_embeddings: str, method_pathways:str, norma
     else:
         embeddings_norm = "_unnormalized_embeddings"
 
-    # Create a directory for saving plots   
     path = os.path.join(output_dir, method, embeddings_norm)
     os.makedirs(path, exist_ok=True)
     return path
@@ -161,7 +156,6 @@ def get_save_path(output_dir, method_embeddings: str, method_pathways:str, norma
 def plot_similarities(embedding_similarities, pathway_similarities, pearson_corr, spearman_corr, mantel_corr, mantel_p_value, save_dir):
     sns.set_theme()      
     n = embedding_similarities.shape[0]
-    # Scatter plot with identity line and correlation annotation
     x = embedding_similarities[np.triu_indices(n, k=1)]
     y = pathway_similarities[np.triu_indices(n, k=1)]
     plt.figure(figsize=(8, 6))
@@ -184,26 +178,11 @@ def plot_similarities(embedding_similarities, pathway_similarities, pearson_corr
     plt.close()
 
 def sub_matrix(gene_abundance_metadata, pathway_abundance, pathway_abundance_metadata):
-    """
-    Filters and reorders pathway_abundance matrix to include only bacteria appearing in gene_abundance_metadata,
-    and reorders them to match the gene_abundance_metadata order.
-
-    Args:
-        gene_abundance_metadata (array-like): ordered list of bacteria names in gene_abundance 
-        pathway_abundance (np.ndarray): matrix of shape (samples, bacteria, pathways)
-        pathway_metadata (array-like): bacteria names order in matrix pathway_abundance
-
-    Returns:
-        np.ndarray: filtered and reordered pathway_abundance
-    """
-
-    # Convert pathway_metadata to list for .index() lookup
     if isinstance(gene_abundance_metadata, np.ndarray):
         gene_abundance_metadata_list = gene_abundance_metadata.tolist()
     if isinstance(pathway_abundance_metadata, np.ndarray):
         pathway_abundance_metadata_list = pathway_abundance_metadata.tolist()
     
-    # Find indices of bacteria in pathway_metadata that match gene_abundance_metadata
     indices = []
     for bacteria in gene_abundance_metadata_list:
         if bacteria in pathway_abundance_metadata_list:
@@ -212,7 +191,6 @@ def sub_matrix(gene_abundance_metadata, pathway_abundance, pathway_abundance_met
         else:
             raise ValueError(f"{bacteria} not found in pathway_metadata")
 
-    # Reorder and subset pathway_abundance accordingly
     reordered_tensor = pathway_abundance[:, indices, :]
     reordered_metadata = pathway_abundance_metadata[indices]
     return reordered_tensor, reordered_metadata
@@ -222,29 +200,15 @@ def get_parser():
         description="Compute similarities between bacterial embeddings and pathway participation vectors."
     )
     
-    # -----------------------------
-    # Input Data Arguments
-    # -----------------------------
     data_group = parser.add_argument_group("Input Data")
-    data_group.add_argument('--test_embedding', type=str, required=True,
-                            help='Path to the embedding tensor (.npy file).')
-    data_group.add_argument('--test_metadata', type=str, required=True,
-                            help='Path to the tensor metadata (bacteria names, .npy file).')
-    data_group.add_argument('--pathway_data', type=str, required=True,
-                            help='Path to the pathway abundance tensor (.npy file).')
-    data_group.add_argument('--pathway_bacteria', type=str, required=True,
-                            help='Path to the pathway abundance metadata (bacteria names, .npy file).')
+    data_group.add_argument('--test_embedding', type=str, required=True, help='Path to the embedding tensor (.npy file).')
+    data_group.add_argument('--test_metadata', type=str, required=True, help='Path to the tensor metadata (bacteria names, .npy file).')
+    data_group.add_argument('--pathway_data', type=str, required=True, help='Path to the pathway abundance tensor (.npy file).')
+    data_group.add_argument('--pathway_bacteria', type=str, required=True, help='Path to the pathway abundance metadata (bacteria names, .npy file).')
     
-    # -----------------------------
-    # Model Arguments
-    # -----------------------------
     model_group = parser.add_argument_group("Model")
-    model_group.add_argument('--embedding_dim', type=int, required=True,
-                             help='Dimension of the embedding layer.')
+    model_group.add_argument('--embedding_dim', type=int, required=True, help='Dimension of the embedding layer.')
 
-    # -----------------------------
-    # Similarity Calculation Arguments
-    # -----------------------------
     sim_group = parser.add_argument_group("Similarity Calculation")
     sim_group.add_argument('--method_embeddings', type=str, default='l2',
                            choices=['l1', 'l2', 'cosine', 'mahalanobis'],
@@ -252,63 +216,54 @@ def get_parser():
     sim_group.add_argument('--method_pathways', type=str, default='l2',
                            choices=['l1', 'l2', 'cosine', 'mahalanobis'],
                            help='Method for calculating pathway similarities.')
-    sim_group.add_argument('--normalized_embeddings', action='store_true',
-                           help='If set, normalize embedding vectors.')
+    sim_group.add_argument('--normalized_embeddings', action='store_true', help='If set, normalize embedding vectors.')
 
-    # -----------------------------
-    # Output
-    # -----------------------------
     output_group = parser.add_argument_group("Output")
-    output_group.add_argument('--output_dir', type=str, required=True,
-                              help='Directory to save the output plots and results.')
+    output_group.add_argument('--output_dir', type=str, required=True, help='Directory to save the output plots and results.')
 
     return parser
 
 def normalize_embeddings_dict(embeddings):
-    # Stack to a matrix: shape (num_bacteria, embedding_dim)
     names = list(embeddings.keys())
     vectors = np.vstack([embeddings[name] for name in names])
-    
-    # Normalize each vector (row) to L2 norm=1
     normalized_vectors = normalize(vectors, norm='l2', axis=1)
-    
-    # Rebuild dictionary
     normalized_embeddings = {name: normalized_vectors[i] for i, name in enumerate(names)}
-    
     return normalized_embeddings
 
 def main():
-    
     parser = get_parser()
     args = parser.parse_args()
 
-    # Load gene abundance (test only), metadata (test only), model
-    # and pathway abundance (train and test, filtering is required)
     embedding = load_embedding(args.test_embedding).squeeze()
     embedding_metadata = load_embedding_metadata(args.test_metadata)
     pathway_abundance, pathway_metadata = load_pathway_data(args.pathway_data, args.pathway_bacteria)
 
+    # --- טעינת דאטה רקע (Full Embeddings) ---
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    full_emb_path = os.path.join(project_root, "full_embeddings_after_train", "full_embeddings_run5.npy")
+    
+    background_emb = None
+    if os.path.exists(full_emb_path):
+        print(f"DEBUG: Found background embeddings at: {full_emb_path}")
+        background_emb = np.load(full_emb_path)
+    else:
+        print(f"WARNING: Could not find background embeddings at {full_emb_path}")
+    # ----------------------------------------
 
-    # Extract relevant pathways 
     pathway_abundance_reordered, pathway_abundance_metadata_reordered = sub_matrix(embedding_metadata,
                                                                                    pathway_abundance, pathway_metadata)
 
-    # Get embeddings from model - dict: {bacterium_name: embedding}
     embeddings = {name: embedding[i] for i, name in enumerate(embedding_metadata)}
 
-    # Get binary pathway vectors - dict: {bacterium_name: binary vector correspoing to participation at metabolic pathways}
     binary_pathway_vectors = compute_binary_pathway_vectors(pathway_abundance_reordered,
                                                             pathway_abundance_metadata_reordered, threshold=0)
     
     if args.normalized_embeddings:
-        normalize_embeddings_dict(embeddings)
+        embeddings = normalize_embeddings_dict(embeddings)
 
-    # Calculate similarities
-    embedding_sim = calculate_similarities(args.method_embeddings, embeddings)
+    # שליחת background_embeddings לפונקציה
+    embedding_sim = calculate_similarities(args.method_embeddings, embeddings, background_embeddings=background_emb)
     pathway_sim = calculate_similarities(args.method_pathways, binary_pathway_vectors)
-
-    #embedding_sim = normalize_similarities(embedding_sim)
-    #pathway_sim = normalize_similarities(pathway_sim)
 
     bacteria_names = list(embeddings.keys())
     n = len(bacteria_names)
@@ -320,13 +275,22 @@ def main():
             if emb_sim > 0.6 or path_sim > 0.4:
                 print(f"{bacteria_names[i]} - {bacteria_names[j]}: embedding_sim={emb_sim:.3f}, pathway_sim={path_sim:.3f}")
 
-    # Calculate correlations
     pearson_corr, spearman_corr, mantel_corr, mantel_p_value = calculate_correlations(embedding_sim, pathway_sim)
     print(f"Pearson Correlation: {pearson_corr:.4f}, Spearman Correlation: {spearman_corr:.4f}, Mantel Correlation: {mantel_corr:.4f}, Mantel p-value: {mantel_p_value:.4f}")
 
-    # Save paths for plotting
     save_path = get_save_path(args.output_dir, args.method_embeddings, args.method_pathways, args.normalized_embeddings)
     plot_similarities(embedding_sim, pathway_sim, pearson_corr, spearman_corr, mantel_corr, mantel_p_value, save_path)
 
 if __name__ == "__main__":
     main()
+
+# python evaluations/pathways_eval/pathway_eval.py \
+#     --test_embedding /home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/test_tensor_embeddings.npy \
+#     --test_metadata /home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/test_bacteria.npy \
+#     --pathway_data /home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/tensor.npy \
+#     --pathway_bacteria /home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/processed_data/pathways_processed/after_intersection/bacteria_list.npy \
+#     --embedding_dim 64 \
+#     --output_dir /home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/plots_pathways_eval/pathway_correlation_mahalanobis_l2_COV_1/ \
+#     --method_embeddings mahalanobis \
+#     --method_pathways l2 \
+#     --normalized_embeddings
