@@ -115,4 +115,4 @@ if __name__ == "__main__":
     for method in ["PCA", "PCoA", "tSNE"]:
         for level in ["phylum", "class", "order", "family", "genus"]:
             main(embedding_file, metadata_file, level, method=method, 
-                 save_dir=f"/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/plots/{method.lower()}/{level}")
+                 save_dir=f"/home/dsi/pintokf/Projects/Microbium/Bacteria-Metric/eval_results/HMP_Kfir/Run_5/plots_taxonomy_eval/{method.lower()}/{level}")
